@@ -1,5 +1,11 @@
-const rootReducer = {
-  //name : reducer,
-};
+import {combineReducers} from "redux";
+
+export interface IRootState {
+
+}
+
+const rootReducer = combineReducers<IRootState>({
+    //name : reducer,
+})
 
 export default rootReducer;

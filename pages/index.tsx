@@ -1,7 +1,11 @@
 import type { NextPage } from "next";
+import Header from "../components/seller/header";
+
 
 const Home: NextPage = () => {
-  return <>Dashboard cutomer</>;
-};
+  return (
+      <Header/>
+  )
+}
 
 export default Home;
