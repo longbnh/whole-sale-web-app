@@ -13,7 +13,7 @@ const Content = () => {
           <h3 className="text-base">Bắt đầu bán hàng qua XATAJP</h3>
         </div>
         <div className="flex justify-center py-7">
-          <Button content="Tạo cửa hàng" size="200px" />
+          <Button content="Tạo cửa hàng" size="large" />
         </div>
       </div>
     </div>
