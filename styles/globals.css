@@ -3,10 +3,24 @@
 body {
   font-family: Source Sans Pro;
 }
+
+#nprogress .bar {
+  background: rgba(211, 47, 47) !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px rgba(211, 47, 47), 0 0 5px rgba(211, 47, 47);
+}
+
+#nprogress .spinner-icon {
+  border-top-color: rgba(211, 47, 47);
+  border-left-color: rgba(211, 47, 47);
+}
+
 @tailwind components;
 @tailwind utilities;
 
 .required:after {
-    content: "*";
-    color: #FF0000;
+  content: "*";
+  color: #ff0000;
 }

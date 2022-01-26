@@ -1,6 +1,7 @@
 import { Popover } from "@headlessui/react";
 import classNames from "classnames";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import React from "react";
 
@@ -9,11 +10,14 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({}) => {
+  const router = useRouter();
   let welcome = false;
   return (
     <Popover
-      className={classNames("relative", {
+      className={classNames("w-full h-14 shadow-md z-30", {
         "bg-red-600": welcome,
+        "top-0 left-0 fixed": router.pathname !== "/seller/registerInfo",
+        relative: router.pathname === "/seller/registerInfo",
       })}
     >
       <div className=" mx-auto px-4 sm:px-6">
