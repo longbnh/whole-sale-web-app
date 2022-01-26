@@ -14,9 +14,9 @@ const Header: React.FC<HeaderProps> = ({}) => {
   let welcome = false;
   return (
     <Popover
-      className={classNames("w-full h-14 shadow-md z-30", {
+      className={classNames("w-full h-14 shadow-md z-30 bg-white", {
         "bg-red-600": welcome,
-        "top-0 left-0 fixed": router.pathname !== "/seller/registerInfo",
+        "top-0 sticky": router.pathname !== "/seller/registerInfo",
         relative: router.pathname === "/seller/registerInfo",
       })}
     >
