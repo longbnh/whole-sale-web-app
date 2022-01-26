@@ -1,8 +1,12 @@
-import type { NextPage } from "next";
+import { getSellerLayout } from "../../components/seller/LayoutSeller";
 import WelcomeSeller from "../../components/seller/welcome";
 
-const WelcomePage: NextPage = () => {
-  return <WelcomeSeller />;
-};
+import { ReactElement } from "react";
 
-export default WelcomePage;
+export default function WelcomePage() {
+  return <WelcomeSeller />;
+}
+
+WelcomePage.getLayout = function getLayout(page: ReactElement) {
+  return getSellerLayout(page);
+};

@@ -1,7 +1,12 @@
-import type { NextPage } from "next";
+import { getSellerLayout } from "../../components/seller/LayoutSeller";
 
-const index: NextPage = () => {
-  return <>Dashboard seller</>;
+import Dashboard from "../../components/seller/dashboard";
+import { ReactElement } from "react";
+
+export default function index() {
+  return <Dashboard />;
+}
+
+index.getLayout = function getLayout(page: ReactElement) {
+  return getSellerLayout(page);
 };
-
-export default index;

@@ -1,15 +1,31 @@
 import "../styles/globals.css";
+import "nprogress/nprogress.css";
+
+import NProgress from "nprogress";
 import type { AppProps } from "next/app";
+import Router from "next/router";
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
+
 import { Provider } from "react-redux";
 
 import store from "../app/store";
 
-function MyApp({ Component, pageProps }: AppProps) {
+Router.events.on("routeChangeStart", () => NProgress.start());
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());
+
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
+    <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
   );
 }
-
-export default MyApp;

@@ -1,26 +1,53 @@
 import { Popover } from "@headlessui/react";
-import { NextPage } from "next";
+import classNames from "classnames";
+import Image from "next/image";
 
-const Header: NextPage = () => {
+import React from "react";
+
+interface HeaderProps {
+  // welcome: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({}) => {
+  let welcome = false;
   return (
-    <Popover className="relative bg-red-600">
+    <Popover
+      className={classNames("relative", {
+        "bg-red-600": welcome,
+      })}
+    >
       <div className=" mx-auto px-4 sm:px-6">
-        <div className="flex justify-between border-gray-100 py-6 md:justify-start md:space-x-10">
-          <div className="flex justify-start items-center gap-10 lg:w-0 lg:flex-1">
-            <a href="#">
-              <span className="sr-only">Workflow</span>
-              <img className="h-10 w-auto sm:h-10" src="/Logo.svg" alt="Logo" />
-            </a>
-            <span className="font-bold text-2xl text-white">Kênh Bán Hàng</span>
+        <div className="flex justify-between border-gray-100 md:justify-start md:space-x-10">
+          <div
+            className={classNames(
+              "flex justify-start items-center gap-10 lg:w-0 lg:flex-1",
+              { "py-6": welcome }
+            )}
+          >
+            <span className="sr-only">Workflow</span>
+            <Image
+              src={welcome ? "/Logo.svg" : "/LogoRed.svg"}
+              width={50}
+              height={50}
+            />
+
+            <span
+              className={classNames("font-bold  ", {
+                "text-2xl text-white": welcome,
+                "text-xl": !welcome,
+              })}
+            >
+              Kênh Bán Hàng
+            </span>
           </div>
 
-          <div className="md:flex items-start justify-end md:flex-1 lg:w-0">
-            <div className="md:flex items-center gap-2 text-white">
-              <img
-                className="w-auto md:h-6 sm:h-4"
-                src="/User.svg"
-                alt="Logo"
-              />
+          <div className="md:flex items-center justify-end md:flex-1 lg:w-0">
+            <div
+              className={classNames("md:flex items-center gap-2 ", {
+                "text-white": welcome,
+              })}
+            >
+              <Image width={5} height={5} src="/User.svg" />
               <span className="whitespace-nowrap font-medium">User123</span>
               <span className="whitespace-nowrap font-medium">|</span>
               <a
