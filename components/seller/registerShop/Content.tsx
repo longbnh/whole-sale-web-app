@@ -24,7 +24,7 @@ const Content = () => {
                     Tạo Thông Tin Cửa Hàng
                 </h1>
             </div>
-            <div className="bg-white flex flex-col w-11/12 mt-5 h-16 p-10 h-full gap-10">
+            <div className="bg-white flex flex-col w-11/12 mt-5 h-16 p-10 h-auto gap-10">
                 <div className="flex flex-row">
                     <div className="flex items-center w-1/4">
                         <span className="flex required">Tên cửa hàng</span>
@@ -93,7 +93,7 @@ const Content = () => {
                             autoComplete="off"
                         >
 
-                            <Button content="Tùy chọn" size="150px" color="#FFFFFF" link="/seller/registerInfo"/>
+                            <Button content="Tùy chọn" size="small" color="#FFFFFF"/>
                         </Box>
                     </div>
                 </div>
@@ -104,8 +104,8 @@ const Content = () => {
                     </span>
                 </div>
                 <div className="flex flex-row-reverse gap-5">
-                    <Button content="Đặt lại" size="100px" color="#FFFFFF" link="/seller/registerInfo" />
-                    <Button content="Lưu" size="100px" link="/seller/registerInfo"/>
+                    <Button content="Đặt lại" size="small" color="#FFFFFF" />
+                    <Button content="Lưu" size="small"/>
                 </div>
             </div>
 

@@ -62,6 +62,10 @@ const AddressModal = (props:any) => {
     const [districtName, setDistrictName] = React.useState<string>('');
     const [wardName, setWardName] = React.useState<string>('');
 
+    const handleSave = () => {
+        props.customProps();
+    }
+
     const handleProvinceChange = (event: SelectChangeEvent<typeof provinceName>) => {
         const {
             target: { value },
@@ -234,8 +238,8 @@ const AddressModal = (props:any) => {
                             </div>
                         </div>
                         <div className="flex flex-row-reverse gap-5">
-                            <Button content="Đặt lại" size="100px" color="#FFFFFF" link="/seller/registerInfo" />
-                            <Button content="Lưu" size="100px" link="/seller/registerInfo"/>
+                            <Button content="Đặt lại" size="small" color="#FFFFFF" />
+                            <Button content="Lưu" size="small" onClick={handleSave}/>
                         </div>
                     </div>
                 </Typography>
