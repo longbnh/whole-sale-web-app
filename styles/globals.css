@@ -5,3 +5,8 @@ body {
 }
 @tailwind components;
 @tailwind utilities;
+
+.required:after {
+    content: "*";
+    color: #FF0000;
+}

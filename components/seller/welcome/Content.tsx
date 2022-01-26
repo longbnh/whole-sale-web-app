@@ -3,8 +3,10 @@ import Router from "next/router";
 import React from "react";
 
 import Button from "../../utils/CustomButton";
+import { useRouter } from "next/router";
 
 const Content = () => {
+  const router = useRouter();
   return (
     <div className=" w-full h-screen bg-gray-100 pt-4">
       <div className=" w-5/6 mx-auto bg-white ">
@@ -18,7 +20,7 @@ const Content = () => {
           <Button
             content="Tạo cửa hàng"
             size="large"
-            onClick={() => Router.push("/seller")}
+            onClick={() => router.push("/seller/registerInfo")}
           />
         </div>
       </div>
