@@ -1,7 +1,10 @@
 import type { NextPage } from "next";
+import Header from "../../components/seller/header";
 
 const index: NextPage = () => {
-  return <>Dashboard seller</>;
+  return (
+      <Header/>
+  )
 };
 
 export default index;
