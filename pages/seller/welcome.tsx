@@ -1,4 +1,4 @@
-import { getSellerLayout } from "../../components/seller/LayoutSeller";
+import { getSellerLayout } from "../../components/seller/UI/layoutSeller";
 import WelcomeSeller from "../../components/seller/welcome";
 
 import { ReactElement } from "react";
