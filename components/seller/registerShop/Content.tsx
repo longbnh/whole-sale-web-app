@@ -12,7 +12,7 @@ const Content = () => {
 
     return (
         <div className="flex flex-col items-center relative min-h-screen bg-gray-100">
-            <div className="bg-white flex w-11/12 mt-5 h-16 pl-5 pr-5">
+            <div className="bg-white flex w-11/12 mt-20 h-16 pl-5 pr-5">
                 <Link href="/seller/welcome">
                     <a className="text-blue-500 justify-start items-center flex">
                         Quay lại
@@ -76,24 +76,6 @@ const Content = () => {
                         >
 
                             <BasicModal btName="Tùy chọn" childComp={<AddressModal/>}/>
-                        </Box>
-                    </div>
-                </div>
-                <div className="flex flex-row">
-                    <div className="flex items-center w-1/4">
-                        <span className="flex required">Ngành hàng</span>
-                    </div>
-                    <div className="flex items-center">
-                        <Box
-                            component="form"
-                            sx={{
-                                '& > :not(style)': {m: 1, width: '25ch'},
-                            }}
-                            noValidate
-                            autoComplete="off"
-                        >
-
-                            <Button content="Tùy chọn" size="small" color="#FFFFFF"/>
                         </Box>
                     </div>
                 </div>
