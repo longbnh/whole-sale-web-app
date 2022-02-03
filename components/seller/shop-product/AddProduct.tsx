@@ -3,7 +3,10 @@ import {styled} from '@mui/material/styles';
 import {Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import Box from "@mui/material/Box";
-import CustomButtons from "../../utils/CustomButton";
+import CustomAutoComplete from "../../utils/CustomAutoComplete";
+import IBrand from "../../models/IBrand";
+import {BRAND_VALUE} from "../../enum";
+
 
 const AddProduct = () => {
     const Input = styled('input')({
@@ -13,6 +16,7 @@ const AddProduct = () => {
     const [pictures, setPictures] = useState([]);
     const [categoryOne, setCategoryOne] = useState('');
     const [categoryTwo, setCategoryTwo] = useState('');
+    const [brand, setBrand] = useState('')
 
 
     const onChangePicture = (e: any) => {
@@ -40,6 +44,11 @@ const AddProduct = () => {
     const handleCategoryTwo = (e: any) => {
         let index = e.target.value;
         setCategoryTwo(index);
+    }
+
+    const handleBrand = (e: any, val: IBrand) => {
+        //Handle brand here
+        console.log(val.name)
     }
 
     const handleSubmit = (e: any) => {
@@ -198,11 +207,15 @@ const AddProduct = () => {
                         <TextField
                             id="description"
                             label="Mô tả sản phẩm"
-                            className="w-full pb-9"
+                            className="w-full mb-5"
                             multiline
                             rows={4}
                             size="small"
                         />
+                        <CustomAutoComplete options={categoryOneList}
+                                            title="Thương hiệu"
+                                            displayValue={BRAND_VALUE.Name}
+                                            onChange={handleBrand}/>
                         <div className="flex justify-end">
                             <label htmlFor="submit-button">
                                 <Input
@@ -211,7 +224,7 @@ const AddProduct = () => {
                                 />
                                 <Button className="text-red-600"
                                         component="span">
-                                    Lưu
+                                    Thêm
                                 </Button>
                             </label>
                         </div>

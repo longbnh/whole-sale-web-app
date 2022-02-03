@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Router from "next/router";
 import React from "react";
 
 import Button from "../../utils/CustomButton";
