@@ -2,6 +2,7 @@ import { styled } from "@mui/material/styles";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import classNames from "classnames";
+import React from "react";
 
 interface CustomButtonsProps {
   content: string;
