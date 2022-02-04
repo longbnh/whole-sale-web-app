@@ -102,9 +102,9 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             let storageRef = ref(getStorage(),
                 `gs://wholesalesystem-7cf9b.appspot.com/Images/${Date.now()}-${index}-${picture.name}`);
             await uploadBytes(storageRef, picture)
-                .then((snapshot) => {
+                .then(async (snapshot) => {
                     console.log(snapshot)
-                    getDownloadURL(storageRef)
+                    await getDownloadURL(storageRef)
                         .then((url) => {
                             imgArray.push(url)
                         })
