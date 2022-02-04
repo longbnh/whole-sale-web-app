@@ -102,13 +102,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             let storageRef = ref(getStorage(),
                 `gs://wholesalesystem-7cf9b.appspot.com/Images/${Date.now()}-${index}-${picture.name}`);
             await uploadBytes(storageRef, picture)
-                .then(async (snapshot) => {
-                    console.log(snapshot)
-                    await getDownloadURL(storageRef)
-                        .then((url) => {
-                            imgArray.push(url)
-                        })
-                })
+            imgArray.push(await getDownloadURL(storageRef))
         }
 
         let product: Product = {
@@ -118,10 +112,10 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             originId: originId,
             brandId: brandId,
             categoryId: categoryId,
-            newImages: imgArray,
+            productImages: imgArray,
         }
 
-        console.log(product.newImages)
+        console.log(product.productImages)
 
         productApi.createProduct(product, 1)
             .then(() => {

@@ -8,7 +8,7 @@ export interface Product {
   originId: number;
   brandId: number;
   categoryId: number;
-  newImages?: Array<string>;
+  productImages?: Array<string>;
   removeImages?: number[];
 }
 
