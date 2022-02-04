@@ -1,21 +1,21 @@
 import { SHOP_API } from "../components/enum";
 import axiosClient from "./axiosClient";
 
-interface Product {
+export interface Product {
   name: string;
   description: string;
   originalPrice: number;
   originId: number;
   brandId: number;
   categoryId: number;
-  newImages?: string[];
+  newImages?: Array<string>;
   removeImages?: number[];
 }
 
 const productApi = {
   createProduct: (product: Product, shopId: number) => {
-    const url = SHOP_API.Shop;
-    return axiosClient.put(url, product);
+    const url = `${SHOP_API.Shop}/${shopId}/products`;
+    return axiosClient.post(url, product);
   },
 };
 
