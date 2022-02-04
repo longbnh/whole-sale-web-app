@@ -118,8 +118,8 @@ const AddProduct = () => {
 
     return (
         <div
-            className="w-full relative flex bg-gray-100 ml-56"
-            style={{height: "calc(100vh - 50px)"}}
+            className="w-full relative flex bg-gray-100 ml-56 h-full"
+            // style={{height: "calc(100vh - 14px)"}}
         >
             <div className="bg-white mt-5 mx-auto w-4/5 h-full overflow-y-auto overflow-x-hidden">
                 <div className="text-xl font-semibold p-4 ml-5">Thêm sản phẩm</div>
