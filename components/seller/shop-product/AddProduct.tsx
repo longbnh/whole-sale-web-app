@@ -136,6 +136,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={categoryOne}
+                  defaultValue={""}
                   label="Ngành hàng"
                   onChange={handleCategoryOne}
                 >
@@ -159,6 +160,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                   className="mb-5"
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
+                  defaultValue={""}
                   value={choice?.subCategories.filter(
                     (value) => value.id === categoryId
                   )}
