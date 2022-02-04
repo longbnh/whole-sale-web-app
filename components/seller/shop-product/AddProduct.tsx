@@ -13,12 +13,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import CustomAutoComplete from "../../utils/CustomAutoComplete";
 import IBrand from "../../models/IBrand";
-import { BRAND_VALUE } from "../../enum";
+import {BRAND_VALUE, ORIGIN_VALUE} from "../../enum";
 import ICategory from "../../models/ICategory";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import IOrigin from "../../models/IOrigin";
 
 interface IListCategory {
   categories: ICategory[];
   brands: IBrand[];
+  origins: IOrigin[];
 }
 
 const AddProduct: React.FC<IListCategory> = (props) => {
@@ -26,17 +29,23 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     display: "none",
   });
 
-  const [pictures, setPictures] = useState([]);
+  const [pictures, setPictures] = useState<File[]>([]);
   const [categoryOne, setCategoryOne] = useState<string>("");
   const [categoryId, setCategoryId] = useState<number>(-1);
+  const [price, setPrice] = useState<number>(-1);
   const [choice, setChoice] = useState<ICategory>();
   const [brandId, setBrandId] = useState<number>(-1);
+  const [originId, setOriginId] = useState<number>(-1);
+  const [name, setName] = useState<string>("");
+  const [des, setDes] = useState<string>("");
 
   const onChangePicture = (e: any) => {
-    let updatePictures = [...pictures] as [];
-    let newPictures = [...e.target.files] as [];
+    let updatePictures = [...pictures] as File[];
+    let newPictures = [...e.target.files] as File[];
     updatePictures = [...updatePictures, ...newPictures];
-    console.log(updatePictures);
+    updatePictures.forEach(picture => {
+      console.log(picture.name)
+    })
     if (updatePictures.length <= 5) setPictures(updatePictures);
   };
 
@@ -68,19 +77,44 @@ const AddProduct: React.FC<IListCategory> = (props) => {
   const handleBrand = (e: any, val: IBrand) => {
     setBrandId(val.id);
   };
+  const handleOrigin = (e: any, val: IOrigin) => {
+    setOriginId(val.id);
+  };
+
+  const handlePrice = (e: any) => {
+    setPrice(e.target.value);
+  }
+
+  const handleNameChange = (e: any) => {
+    setName(e.target.value);
+  }
+  const handleDesChange = (e: any) => {
+    setDes(e.target.value);
+  }
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     //Handle submit here
+    let imgArray = [];
+    pictures.forEach((picture, index) => {
+      let storageRef = ref(getStorage(),
+          `gs://wholesalesystem-7cf9b.appspot.com/Images/${Date.now()}-${index}-${picture.name}`);
+      uploadBytes(storageRef, picture)
+          .then((snapshot) => {
+            console.log(snapshot)
+            imgArray.push(snapshot.metadata.fullPath)
+          })
+    })
+    console.log(brandId, price, originId, name, des, categoryId)
     console.log("Submitted");
   };
 
   return (
     <div
-      className="w-full relative flex bg-gray-100 ml-56"
-      style={{ height: "calc(100vh - 50px)" }}
+      className="w-full relative flex bg-gray-100 ml-56 h-full"
+      // style={{ height: "calc(100vh - 50px)" }}
     >
-      <div className="bg-white mt-5 mx-auto w-4/5 h-full overflow-y-auto overflow-x-hidden">
+      <div className="bg-white mt-5 mx-auto w-4/5 overflow-y-auto overflow-x-hidden">
         <div className="text-xl font-semibold p-4 ml-5">Thêm sản phẩm</div>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-row align-center gap-5 justify-start p-4 mt-5 ml-5">
@@ -124,6 +158,17 @@ const AddProduct: React.FC<IListCategory> = (props) => {
               label="Tên sản phẩm"
               className="w-full mb-5"
               size="small"
+              onChange={handleNameChange}
+            />
+            <TextField
+                required
+                id="name"
+                label="Giá gốc"
+                className="w-full mb-5"
+                size="small"
+                onChange={handlePrice}
+                type="number"
+                InputProps={{ inputProps: { min: 0, step:500}}}
             />
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
@@ -160,7 +205,6 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                   className="mb-5"
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  defaultValue={""}
                   value={choice?.subCategories.filter(
                     (value) => value.id === categoryId
                   )}
@@ -185,12 +229,19 @@ const AddProduct: React.FC<IListCategory> = (props) => {
               multiline
               rows={4}
               size="small"
+              onChange={handleDesChange}
             />
             <CustomAutoComplete
               options={props.brands}
               title="Thương hiệu"
               displayValue={BRAND_VALUE.Name}
               onChange={handleBrand}
+            />
+            <CustomAutoComplete
+                options={props.origins}
+                title="Xuất xứ"
+                displayValue={ORIGIN_VALUE.Name}
+                onChange={handleOrigin}
             />
             <div className="flex justify-end">
               <label htmlFor="submit-button">

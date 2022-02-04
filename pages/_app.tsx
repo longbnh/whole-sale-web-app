@@ -8,9 +8,11 @@ import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
 
 import { Provider } from "react-redux";
+import { initializeApp } from "firebase/app";
+import { getStorage } from "firebase/storage";
 
 import store from "../app/store";
-
+import {firebaseConfig} from "../app/firebase";
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
@@ -25,6 +27,7 @@ type AppPropsWithLayout = AppProps & {
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
+  initializeApp(firebaseConfig);
   return (
     <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
   );
