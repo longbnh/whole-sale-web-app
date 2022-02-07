@@ -274,12 +274,14 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                             displayValue={BRAND_VALUE.Name}
                             onChange={handleBrand}
                         />
+                        <div className="mb-5"></div>
                         <CustomAutoComplete
                             options={props.origins}
                             title="Xuất xứ"
                             displayValue={ORIGIN_VALUE.Name}
                             onChange={handleOrigin}
                         />
+                        <div className="mb-5"></div>
                         <div className="flex justify-end">
                             <label htmlFor="submit-button">
                                 <Input id="submit-button" type="submit"/>
