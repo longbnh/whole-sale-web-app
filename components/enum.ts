@@ -15,3 +15,10 @@ export enum SHOP_API {
   Brand = "/brands",
   Origin = "/origins"
 }
+
+export enum POPUP_CREATE_PRODUCT {
+  Title = "Thông báo",
+  Ok = "Ok",
+  Cancel = "Hủy",
+  Success = "Bạn đã tạo sản phẩm thành công"
+}

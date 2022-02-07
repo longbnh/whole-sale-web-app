@@ -40,6 +40,7 @@ const CustomAutoComplete: React.FC<CustomAutoCompleteProps> = ({
                 )}
                 onChange={onChange}
                 options={options}
+                className="mb-5"
                 getOptionLabel={(option: any) =>
                     isString(option[displayValue]) ? option[displayValue] : ""
                 }

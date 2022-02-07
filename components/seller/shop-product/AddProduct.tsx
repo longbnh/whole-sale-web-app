@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {styled} from "@mui/material/styles";
 import {
-    Button,
+    Button, CircularProgress,
     FormControl,
     IconButton,
     InputLabel,
@@ -13,11 +13,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import CustomAutoComplete from "../../utils/CustomAutoComplete";
 import IBrand from "../../models/IBrand";
-import {BRAND_VALUE, ORIGIN_VALUE} from "../../enum";
+import {BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../enum";
 import ICategory from "../../models/ICategory";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import IOrigin from "../../models/IOrigin";
 import productApi, {Product} from "../../../api/productApi";
+import {CustomAlertDialog} from "../../utils/CustomAlertDialog";
 
 interface IListCategory {
     categories: ICategory[];
@@ -39,6 +40,12 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     const [originId, setOriginId] = useState<number>(-1);
     const [name, setName] = useState<string>("");
     const [des, setDes] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+    const [open, setOpen] = React.useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const onChangePicture = (e: any) => {
         let updatePictures = [...pictures] as File[];
@@ -96,6 +103,8 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         //Handle submit here
+        setLoading(true);
+
         let imgArray = [] as string[];
         for (const picture of pictures) {
             let index = pictures.indexOf(picture);
@@ -119,6 +128,8 @@ const AddProduct: React.FC<IListCategory> = (props) => {
 
         productApi.createProduct(product, 1)
             .then(() => {
+                    setLoading(false);
+                    setOpen(true);
                     console.log("Submitted");
                 }
             )
@@ -131,6 +142,11 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         >
             <div className="bg-white mt-5 mx-auto w-4/5 overflow-y-auto overflow-x-hidden">
                 <div className="text-xl font-semibold p-4 ml-5">Thêm sản phẩm</div>
+                <CustomAlertDialog title={POPUP_CREATE_PRODUCT.Title}
+                                   content={POPUP_CREATE_PRODUCT.Success}
+                                   btName={POPUP_CREATE_PRODUCT.Ok}
+                                   open={open}
+                                   handleClickClose={handleClose}/>
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-row align-center gap-5 justify-start p-4 mt-5 ml-5">
                         {Array.from(pictures).map((picture, index) => {
@@ -180,9 +196,15 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                             id="name"
                             label="Giá gốc"
                             className="w-full mb-5"
+                            inputMode="numeric"
                             size="small"
+                            onKeyPress={event => {
+                                if (event?.key < '0' || event?.key > '9') {
+                                    event.preventDefault();
+                                }
+                            }}
                             onChange={handlePrice}
-                            type="number"
+                            type="text"
                             InputProps={{inputProps: {min: 0, step: 500}}}
                         />
                         <Box sx={{minWidth: 120}}>
@@ -261,8 +283,12 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         <div className="flex justify-end">
                             <label htmlFor="submit-button">
                                 <Input id="submit-button" type="submit"/>
-                                <Button className="text-red-600" component="span">
-                                    Thêm
+                                <Button className="text-red-600" component="span" disabled={loading}>
+                                    {
+                                        loading
+                                            ? <CircularProgress />
+                                            : "Thêm"
+                                    }
                                 </Button>
                             </label>
                         </div>
