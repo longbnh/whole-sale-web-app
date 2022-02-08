@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 
-import Button from "../../utils/CustomButton";
+import Button from "../../commons/CustomButton";
 import { useRouter } from "next/router";
 
 const Content = () => {

@@ -1,5 +1,5 @@
-import { SHOP_API } from "../components/enum";
-import IBrand from "../components/models/IBrand";
+import { SHOP_API } from "../shared/enum/enum";
+import IBrand from "../shared/models/IBrand";
 import axiosClient from "./axiosClient";
 
 const brandApi = {

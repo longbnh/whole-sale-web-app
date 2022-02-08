@@ -1,5 +1,5 @@
-import { SHOP_API } from "../components/enum";
-import ICategory from "../components/models/ICategory";
+import { SHOP_API } from "../shared/enum/enum";
+import ICategory from "../shared/models/ICategory";
 import axiosClient from "./axiosClient";
 
 const categoryApi = {

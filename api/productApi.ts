@@ -1,4 +1,4 @@
-import { SHOP_API } from "../components/enum";
+import { SHOP_API } from "../shared/enum/enum";
 import axiosClient from "./axiosClient";
 
 export interface Product {

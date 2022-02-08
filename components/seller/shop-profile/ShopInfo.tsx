@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AvatarPicker from "../../utils/AvatarPicker";
+import AvatarPicker from "../../commons/AvatarPicker";
 import {
   Button,
   Checkbox,
@@ -13,7 +13,7 @@ import {
   Modal,
   Divider,
 } from "@mui/material";
-import CustomButtons from "../../utils/CustomButton";
+import CustomButtons from "../../commons/CustomButton";
 
 const ShopInfo = () => {
   const [open, setOpen] = useState<boolean>(false);

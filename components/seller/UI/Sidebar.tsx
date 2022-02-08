@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
-import ActiveLink from "../../utils/ActiveLink";
+import ActiveLink from "../../commons/ActiveLink";
 
 const Sidebar = () => {
   const route = useRouter();
@@ -39,9 +39,11 @@ const Sidebar = () => {
           </div>
           <div className="flex flex-col mx-5 pl-5">
             <ActiveLink activeKey={activeKey} content="Sản phẩm của tôi" />
-            <ActiveLink href={"shopProduct"}
-                        activeKey={activeKey}
-                        content="Thêm 1 sản phẩm" />
+            <ActiveLink
+              href={"shopProduct"}
+              activeKey={activeKey}
+              content="Thêm 1 sản phẩm"
+            />
             <ActiveLink activeKey={activeKey} content="Thêm loạt sản phẩm" />
             <ActiveLink activeKey={activeKey} content="Hướng dẫn" />
           </div>

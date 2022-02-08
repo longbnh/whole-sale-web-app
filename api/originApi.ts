@@ -1,12 +1,12 @@
-import {SHOP_API} from "../components/enum";
+import { SHOP_API } from "../shared/enum/enum";
+import IOrigin from "../shared/models/IOrigin";
 import axiosClient from "./axiosClient";
-import IOrigin from "../components/models/IOrigin";
 
 const originApi = {
-    getOrigin: () => {
-        const url = SHOP_API.Origin;
-        return axiosClient.get<IOrigin[]>(url);
-    },
+  getOrigin: () => {
+    const url = SHOP_API.Origin;
+    return axiosClient.get<IOrigin[]>(url);
+  },
 };
 
 export default originApi;

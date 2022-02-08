@@ -11,14 +11,14 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
-import CustomAutoComplete from "../../utils/CustomAutoComplete";
-import IBrand from "../../models/IBrand";
-import {BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../enum";
-import ICategory from "../../models/ICategory";
+import CustomAutoComplete from "../../commons/CustomAutoComplete";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
-import IOrigin from "../../models/IOrigin";
 import productApi, {Product} from "../../../api/productApi";
-import {CustomAlertDialog} from "../../utils/CustomAlertDialog";
+import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
+import ICategory from "../../../shared/models/ICategory";
+import IBrand from "../../../shared/models/IBrand";
+import IOrigin from "../../../shared/models/IOrigin";
+import { BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT } from "../../../shared/enum/enum";
 
 interface IListCategory {
     categories: ICategory[];
