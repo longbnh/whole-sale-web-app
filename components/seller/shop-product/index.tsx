@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 
 import brandApi from "../../../api/brandApi";
 import categoryApi from "../../../api/categoryApi";
-import IBrand from "../../models/IBrand";
-import ICategory from "../../models/ICategory";
-import IOrigin from "../../models/IOrigin";
 import AddProduct from "./AddProduct";
 import originApi from "../../../api/originApi";
+import ICategory from "../../../shared/models/ICategory";
+import IBrand from "../../../shared/models/IBrand";
+import IOrigin from "../../../shared/models/IOrigin";
 
 const ShopProduct = () => {
   const [category, setCategory] = useState<ICategory[]>([]);
@@ -25,7 +25,7 @@ const ShopProduct = () => {
   const getOriginList = async () => {
     const response = await originApi.getOrigin();
     setOrigin(response.data);
-  }
+  };
 
   useEffect(() => {
     getCategoryList();
