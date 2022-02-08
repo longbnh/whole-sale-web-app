@@ -13,12 +13,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import CustomAutoComplete from "../../commons/CustomAutoComplete";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
-import productApi, {Product} from "../../../api/productApi";
+import productApi from "../../../api/productApi";
 import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
 import ICategory from "../../../shared/models/ICategory";
 import IBrand from "../../../shared/models/IBrand";
 import IOrigin from "../../../shared/models/IOrigin";
 import { BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT } from "../../../shared/enum/enum";
+import {IProduct} from "../../../shared/models/IProduct";
 
 interface IListCategory {
     categories: ICategory[];
@@ -114,7 +115,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             imgArray.push(await getDownloadURL(storageRef))
         }
 
-        let product: Product = {
+        let product: IProduct = {
             name: name,
             description: des,
             originalPrice: price,

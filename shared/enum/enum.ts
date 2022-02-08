@@ -22,3 +22,14 @@ export enum POPUP_CREATE_PRODUCT {
   Cancel = "Hủy",
   Success = "Bạn đã tạo sản phẩm thành công"
 }
+
+export enum URL_LINK {
+  SHOP_PRODUCT = "shopProduct",
+  SHOP_LIST_PRODUCT = "shopListProduct",
+  SHOP_INFO = "shopInfo",
+}
+
+export enum SORT_TYPE {
+  ID_ASC = "id_asc",
+  ID_DES = "id_des",
+}
