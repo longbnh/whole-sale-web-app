@@ -8,5 +8,5 @@ export interface IProduct {
     categoryId?: number;
     productImages?: Array<string>;
     removeImages?: number[];
-    status: number;
+    status?: number;
 }

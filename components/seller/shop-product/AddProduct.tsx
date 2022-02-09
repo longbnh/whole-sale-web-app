@@ -18,8 +18,9 @@ import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
 import ICategory from "../../../shared/models/ICategory";
 import IBrand from "../../../shared/models/IBrand";
 import IOrigin from "../../../shared/models/IOrigin";
-import { BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT } from "../../../shared/enum/enum";
+import {BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
 import {IProduct} from "../../../shared/models/IProduct";
+import {string} from "prop-types";
 
 interface IListCategory {
     categories: ICategory[];
@@ -43,6 +44,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     const [des, setDes] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
+    const [notiContent, setNotiContent] = useState<string>("");
 
     const handleClose = () => {
         setOpen(false);
@@ -130,10 +132,16 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         productApi.createProduct(product, 1)
             .then(() => {
                     setLoading(false);
+                    setNotiContent(POPUP_CREATE_PRODUCT.Success);
                     setOpen(true);
                     console.log("Submitted");
                 }
             )
+            .catch(() => {
+                setLoading(false);
+                setNotiContent(POPUP_CREATE_PRODUCT.Failed);
+                setOpen(true);
+            })
     };
 
     return (
@@ -144,7 +152,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             <div className="bg-white mt-5 mx-auto w-4/5 overflow-y-auto overflow-x-hidden">
                 <div className="text-xl font-semibold p-4 ml-5">Thêm sản phẩm</div>
                 <CustomAlertDialog title={POPUP_CREATE_PRODUCT.Title}
-                                   content={POPUP_CREATE_PRODUCT.Success}
+                                   content={notiContent}
                                    btName={POPUP_CREATE_PRODUCT.Ok}
                                    open={open}
                                    handleClickClose={handleClose}/>
@@ -196,11 +204,20 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                             required
                             id="name"
                             label="Giá gốc"
+                            // error={true}
                             className="w-full mb-5"
                             inputMode="numeric"
                             size="small"
+                            autoComplete="off"
                             onKeyPress={event => {
-                                if (event?.key < '0' || event?.key > '9') {
+                                const regex = /\d/
+                                if (!regex.test(event.key)) {
+                                    event.preventDefault();
+                                }
+                            }}
+                            onPaste={event => {
+                                const regex = /\d/
+                                if (!regex.test(event.clipboardData.getData(""))) {
                                     event.preventDefault();
                                 }
                             }}
@@ -275,21 +292,21 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                             displayValue={BRAND_VALUE.Name}
                             onChange={handleBrand}
                         />
-                        <div className="mb-5"></div>
+                        <div className="mb-5"/>
                         <CustomAutoComplete
                             options={props.origins}
                             title="Xuất xứ"
                             displayValue={ORIGIN_VALUE.Name}
                             onChange={handleOrigin}
                         />
-                        <div className="mb-5"></div>
+                        <div className="mb-5"/>
                         <div className="flex justify-end">
                             <label htmlFor="submit-button">
                                 <Input id="submit-button" type="submit"/>
                                 <Button className="text-red-600" component="span" disabled={loading}>
                                     {
                                         loading
-                                            ? <CircularProgress />
+                                            ? <CircularProgress/>
                                             : "Thêm"
                                     }
                                 </Button>

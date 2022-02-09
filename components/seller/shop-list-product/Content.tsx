@@ -1,5 +1,5 @@
 import React, {ChangeEvent, ChangeEventHandler, useState} from "react";
-import useSWR  from 'swr'
+import useSWR from 'swr'
 import productApi from "../../../api/productApi";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -27,7 +27,8 @@ interface HeadCell {
     disablePadding: boolean;
     id: keyof IProduct;
     label: string;
-    numeric: boolean;}
+    numeric: boolean;
+}
 
 const headCells: readonly HeadCell[] = [
     {
@@ -51,7 +52,7 @@ const headCells: readonly HeadCell[] = [
 ];
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { order, orderBy, onRequestSort } =
+    const {order, orderBy, onRequestSort} =
         props;
     const createSortHandler =
         (property: keyof IProduct) => (event: React.MouseEvent<unknown>) => {
@@ -61,7 +62,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell>
+                <TableCell align="right">
                     #
                 </TableCell>
                 {headCells.map((headCell) => (
@@ -93,24 +94,20 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 const Content = () => {
     const [pageIndex, setPageIndex] = useState(1);
     const [sortType, setSortType] = useState(SORT_TYPE.ID_ASC);
+    const [order, setOrder] = React.useState<Order>('asc');
+    const [orderBy, setOrderBy] = React.useState<keyof IProduct>('name');
+    const [filter, setFilter] = React.useState<number>(0);
+
     const {data, error} = useSWR([
         1,
         pageIndex,
         sortType,
+        filter,
     ], productApi.getProducts, {
         revalidateOnFocus: true
     });
 
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof IProduct>('name');
-
-    const [filter, setFilter] = React.useState<number>(0);
-    // const [selected, setSelected] = React.useState<readonly string[]>([]);
-    // const [page, setPage] = React.useState(0);
-    // const [dense, setDense] = React.useState(false);
-    // const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-    const handlePaging = (e:any, page: number) => {
+    const handlePaging = (e: any, page: number) => {
         setPageIndex(page)
     }
 
@@ -138,27 +135,17 @@ const Content = () => {
     };
 
     const handleFilter = (e: any) => {
-
+        const filterValue = e.target.value;
+        setPageIndex(1)
+        setFilter(filterValue);
     }
-
-    function getStatus(status: number) {
-        switch (status) {
-            case 0:
-                return "Chưa bán";
-            case 1:
-                return "Đang bán";
-            default:
-                return "Chưa bán";
-        }
-    }
-
 
     return (
         <div
-            className="w-full relative flex bg-gray-100 ml-56 h-full"
+            className="w-full relative flex bg-gray-100 ml-56"
             // style={{ height: "calc(100vh - 50px)" }}
         >
-            <div className="bg-white mt-5 mx-auto w-4/5 overflow-y-auto overflow-x-hidden">
+            <div className="bg-white mt-5 mx-auto w-4/5 overflow-y-auto overflow-x-hidden min-h-screen">
                 <div className="flex flex-col align-center gap-5 justify-start p-4 mt-5 ml-5">
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Trạng thái</InputLabel>
@@ -170,54 +157,62 @@ const Content = () => {
                             onChange={handleFilter}
                         >
                             <MenuItem key={0} value={0}>
-                                Chưa bán
+                                Tất cả
                             </MenuItem>
                             <MenuItem key={1} value={1}>
+                                Chưa bán
+                            </MenuItem>
+                            <MenuItem key={2} value={2}>
                                 Đang bán
                             </MenuItem>
-
                         </Select>
                     </FormControl>
-                    <TableContainer component={Paper}>
-                        <Table sx={{minWidth: 650}} aria-label="simple table">
-                            <EnhancedTableHead
-                                order={order}
-                                orderBy={orderBy}
-                                onRequestSort={handleRequestSort}
-                            />
-                            <TableBody>
-                                {data && data.data.content?.map((product, index) => {
-                                    return (
-                                        <TableRow
-                                            key={product.id}
-                                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                {index + (pageIndex-1) * 10 + 1}
-                                            </TableCell>
-                                            <TableCell component="th" scope="row">
-                                                {product.name}
-                                            </TableCell>
-                                            <TableCell component="th" scope="row">
-                                                {product.description}
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                {product.originalPrice}
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <div className="flex justify-end">
-                        <Stack spacing={2}>
-                            <Pagination count={data?.data?.totalPage}
-                                        onChange={handlePaging}
-                                        variant="outlined"
-                                        shape="rounded"/>
-                        </Stack>
-                    </div>
+                    {data?.data?.content?.length !== 0 &&
+                        <div className="flex flex-col gap-10">
+                            <TableContainer component={Paper}>
+                                <Table sx={{minWidth: 650}} aria-label="simple table">
+                                    <EnhancedTableHead
+                                        order={order}
+                                        orderBy={orderBy}
+                                        onRequestSort={handleRequestSort}
+                                    />
+                                    <TableBody>
+                                        {data && data.data.content?.map((product, index) => {
+                                            return (
+                                                <TableRow
+                                                    style ={ index % 2? { background : "#f1efef" }:{ background : "white" }}
+                                                    key={product.id}
+                                                    sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                                >
+                                                    <TableCell component="th" scope="row" align="right">
+                                                        {index + (pageIndex - 1) * 10 + 1}
+                                                    </TableCell>
+                                                    <TableCell component="th" scope="row">
+                                                        {product.name}
+                                                    </TableCell>
+                                                    <TableCell component="th" scope="row">
+                                                        {product.description}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        {product.originalPrice}
+                                                    </TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <div className="flex justify-end">
+                                <Stack spacing={2}>
+                                    <Pagination count={data?.data?.totalPage}
+                                                page={pageIndex}
+                                                onChange={handlePaging}
+                                                variant="outlined"
+                                                shape="rounded"/>
+                                </Stack>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

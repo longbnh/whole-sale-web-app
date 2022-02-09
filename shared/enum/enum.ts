@@ -20,7 +20,8 @@ export enum POPUP_CREATE_PRODUCT {
     Title = "Thông báo",
     Ok = "Ok",
     Cancel = "Hủy",
-    Success = "Bạn đã tạo sản phẩm thành công"
+    Success = "Bạn đã tạo sản phẩm thành công",
+    Failed = "Đã có lỗi xảy ra"
 }
 
 export enum URL_LINK {

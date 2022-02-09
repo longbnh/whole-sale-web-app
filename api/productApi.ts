@@ -8,8 +8,8 @@ const productApi = {
     const url = `${SHOP_API.Shop}/${shopId}/products`;
     return axiosClient.post(url, product);
   },
-  getProducts: (shopId: number, pageIndex: number, sortType: string) => {
-    const url = `${SHOP_API.Shop}/${shopId}/products?Page=${pageIndex}&PageSize=${10}&Sort=${sortType}`;
+  getProducts: (shopId: number, pageIndex: number, sortType: string, status: number) => {
+    const url = `${SHOP_API.Shop}/${shopId}/products?Page=${pageIndex}&PageSize=${10}&Sort=${sortType}&Status=${status}`;
     return axiosClient.get<IPagination<IProduct>>(url);
   }
 };
