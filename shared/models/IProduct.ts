@@ -1,4 +1,5 @@
 export interface IProduct {
+    id?: string
     name?: string;
     description?: string;
     originalPrice?: number;
@@ -7,4 +8,5 @@ export interface IProduct {
     categoryId?: number;
     productImages?: Array<string>;
     removeImages?: number[];
+    status: number;
 }
