@@ -124,14 +124,14 @@ const Content = () => {
         return SORT_TYPE.ID_ASC
     }
 
-    const handleRequestSort = (
+    const handleRequestSort = async (
         event: React.MouseEvent<unknown>,
         property: keyof IProduct,
     ) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
-        setSortType(getSortType(order, orderBy))
+        setSortType(getSortType(isAsc ? 'desc' : 'asc', property))
     };
 
     const handleFilter = (e: any) => {
