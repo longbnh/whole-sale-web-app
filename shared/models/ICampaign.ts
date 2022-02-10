@@ -9,6 +9,6 @@ export interface ICampaign {
     inStockQuantity?: number;
     promotionPlanId?: number;
     status?: number;
-    basicInfo?: IProduct;
+    basicInfo: IProduct;
     milestones: Array<IMilestone>;
 }

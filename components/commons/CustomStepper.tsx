@@ -67,6 +67,7 @@ interface CustomStepperProps {
     milestones: Array<IMilestone>;
     activeMilestone: number;
     progress: number;
+    maxValue: number;
 }
 
 function CustomStepper(props: CustomStepperProps & WithStyles<typeof styles>) {
@@ -74,7 +75,11 @@ function CustomStepper(props: CustomStepperProps & WithStyles<typeof styles>) {
     const ProgressBar = (activeMilestone: number, currentMilestone: number, progress: number) => {
         let value = 0;
         if(activeMilestone+1 === currentMilestone) {
-            value = progress
+            const milestoneQuantity = props.milestones.map(milestone => milestone.quantity);
+            const difference = milestoneQuantity[activeMilestone + 1] - milestoneQuantity[activeMilestone];
+            const spareValue = progress - milestoneQuantity[activeMilestone];
+            value = spareValue / difference * 100
+            console.log(value)
         } else if(activeMilestone >= currentMilestone) {
             value = 100
         }
@@ -88,7 +93,7 @@ function CustomStepper(props: CustomStepperProps & WithStyles<typeof styles>) {
 
     function renderStep(label: string, currentMilestone: number) {
         const {activeMilestone, progress} = props;
-        const done = currentMilestone < activeMilestone;
+        const done = currentMilestone <= activeMilestone;
         const currentStep = currentMilestone === activeMilestone;
         const stepClasses = classNames({
             [props.classes.stepper__step__index]: true,

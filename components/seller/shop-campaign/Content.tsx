@@ -8,7 +8,7 @@ const Content = () => {
         id: 1,
         startDate: '10/2/2022',
         endDate: '20/2/2022',
-        currentSale: 50,
+        currentSale: 32,
         inStockQuantity: 100,
         promotionPlanId: 0,
         status: 0,
@@ -37,17 +37,27 @@ const Content = () => {
             },
         ]
     }
+    const originalValue = [{
+        price: campaign.basicInfo.originalPrice,
+        quantity: 0,
+    }]
+    const mergedMilestone = originalValue.concat(campaign.milestones);
 
     function getLastActiveMilestone(campaign: ICampaign): number {
 
-        const sortedMilestonesQuantity = campaign.milestones.map(milestone => milestone.quantity).sort();
+        const sortedMilestonesQuantity = mergedMilestone.map(milestone => milestone.quantity).sort();
         const arrayOfActiveMilestone = sortedMilestonesQuantity
-            .filter(quantity => quantity < campaign.currentSale);
+            .filter(quantity => quantity <= campaign.currentSale);
         const largestActiveMilestone = Math.max.apply(Math, arrayOfActiveMilestone);
         return sortedMilestonesQuantity.indexOf(largestActiveMilestone);
     }
 
-    console.log(getLastActiveMilestone(campaign))
+    function getMaxMilestone() : number {
+        const sortedMilestonesQuantity = mergedMilestone.map(milestone => milestone.quantity).sort();
+        return Math.max.apply(Math, sortedMilestonesQuantity);
+    }
+
+
     return (
         <div
             className="w-full relative flex bg-gray-100 ml-56"
@@ -56,9 +66,10 @@ const Content = () => {
                 <div className="flex flex-col w-5/6">
                     {campaign.basicInfo?.name}
                     <CustomStepper
-                        milestones={campaign.milestones}
+                        milestones={mergedMilestone}
                         activeMilestone={getLastActiveMilestone(campaign)}
                         progress={campaign.currentSale}
+                        maxValue={getMaxMilestone()}
                     />
                 </div>
             </div>

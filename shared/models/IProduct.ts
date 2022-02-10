@@ -2,7 +2,7 @@ export interface IProduct {
     id?: string
     name?: string;
     description?: string;
-    originalPrice?: number;
+    originalPrice: number;
     originId?: number;
     brandId?: number;
     categoryId?: number;
