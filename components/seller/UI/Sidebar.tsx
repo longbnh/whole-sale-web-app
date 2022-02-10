@@ -44,7 +44,11 @@ const Sidebar = () => {
               activeKey={activeKey}
               content="Thêm 1 sản phẩm"
             />
-            <ActiveLink activeKey={activeKey} content="Thêm loạt sản phẩm" />
+            <ActiveLink
+              href={"addListProduct"}
+              activeKey={activeKey}
+              content="Thêm loạt sản phẩm"
+            />
             <ActiveLink activeKey={activeKey} content="Hướng dẫn" />
           </div>
         </div>

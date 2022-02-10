@@ -1,4 +1,5 @@
 import { SHOP_API } from "../shared/enum/enum";
+import ISubmitProduct from "../shared/models/ISubmitProduct";
 import axiosClient from "./axiosClient";
 
 export interface Product {
@@ -16,6 +17,11 @@ const productApi = {
   createProduct: (product: Product, shopId: number) => {
     const url = `${SHOP_API.Shop}/${shopId}/products`;
     return axiosClient.post(url, product);
+  },
+
+  createListProduct: (listProduct: ISubmitProduct[], shopId: number) => {
+    const url = `${SHOP_API.Shop}/${shopId}/products/multiple`;
+    return axiosClient.post(url, listProduct);
   },
 };
 
