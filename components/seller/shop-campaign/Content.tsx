@@ -1,27 +1,8 @@
-import React, {ChangeEvent, ChangeEventHandler, useState} from "react";
-import useSWR from 'swr'
-import productApi from "../../../api/productApi";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import {SORT_TYPE} from "../../../shared/enum/enum";
-import {FormControl, InputLabel, MenuItem, Pagination, Select} from "@mui/material";
-import Stack from "@mui/material/Stack";
-import {IProduct} from "../../../shared/models/IProduct";
-import {Order} from "../../../shared/type/type";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Box from "@mui/material/Box";
-import {visuallyHidden} from "@mui/utils";
+import React from "react";
 import {ICampaign} from "../../../shared/models/ICampaign";
 import CustomStepper from "../../commons/CustomStepper";
-import Button from "@mui/material/Button";
 
 const Content = () => {
-    const [progress, setProgress] = React.useState(0);
 
     const campaign: ICampaign = {
         id: 1,
@@ -57,10 +38,6 @@ const Content = () => {
         ]
     }
 
-    function getProgress(campaign: ICampaign): number {
-        return Math.max.apply(Math, campaign.milestones.map(milestone => milestone.quantity));
-    }
-
     function getLastActiveMilestone(campaign: ICampaign): number {
 
         const sortedMilestonesQuantity = campaign.milestones.map(milestone => milestone.quantity).sort();
@@ -74,7 +51,6 @@ const Content = () => {
     return (
         <div
             className="w-full relative flex bg-gray-100 ml-56"
-            // style={{ height: "calc(100vh - 50px)" }}
         >
             <div className="bg-white mx-4 w-full overflow-y-auto overflow-x-hidden min-h-screen">
                 <div className="flex flex-col w-5/6">

@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-import PropTypes from "prop-types";
 import LinearProgress from '@mui/material/LinearProgress';
 import {withStyles, WithStyles} from '@mui/styles';
 import {IMilestone} from "../../shared/models/IMilestone";
@@ -103,7 +102,7 @@ function CustomStepper(props: CustomStepperProps & WithStyles<typeof styles>) {
           <span className={stepClasses}>
               {StepContent(done, currentMilestone)}
           </span>
-                    <p className={props.classes.stepper__step__label}>{label}</p>
+                    <p className={`${props.classes.stepper__step__label} ${done && "line-through"}`}>{label}đ</p>
                 </div>
                 {!!currentMilestone && ProgressBar(activeMilestone, currentMilestone, progress)}
             </li>
