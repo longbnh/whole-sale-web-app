@@ -93,7 +93,7 @@ function CustomStepper(props: CustomStepperProps & WithStyles<typeof styles>) {
 
     function renderStep(label: string, currentMilestone: number) {
         const {activeMilestone, progress} = props;
-        const done = currentMilestone <= activeMilestone;
+        const done = currentMilestone < activeMilestone;
         const currentStep = currentMilestone === activeMilestone;
         const stepClasses = classNames({
             [props.classes.stepper__step__index]: true,
