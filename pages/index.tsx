@@ -1,8 +1,10 @@
-import type { NextPage } from "next";
-import WelcomePage from "./seller/welcome";
+import { ReactElement } from "react";
+import { getCustomerLayout } from "../components/customer/UI/layoutCustomer";
 
-const Home: NextPage = () => {
-  return <WelcomePage/>
+export default function HomePage() {
+  return <></>;
+}
+
+HomePage.getLayout = function getLayout(page: ReactElement) {
+  return getCustomerLayout(page);
 };
-
-export default Home;
