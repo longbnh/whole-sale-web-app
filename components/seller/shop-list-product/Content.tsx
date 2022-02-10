@@ -1,4 +1,4 @@
-import React, {ChangeEvent, ChangeEventHandler, useState} from "react";
+import React, {useState} from "react";
 import useSWR from 'swr'
 import productApi from "../../../api/productApi";
 import Table from '@mui/material/Table';

@@ -28,6 +28,7 @@ export enum URL_LINK {
     SHOP_PRODUCT = "shopProduct",
     SHOP_LIST_PRODUCT = "shopListProduct",
     SHOP_INFO = "shopInfo",
+    SHOP_CAMPAIGN = "shopCampaign",
 }
 
 export enum SORT_TYPE {
