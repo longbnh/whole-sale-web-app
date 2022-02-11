@@ -5,6 +5,9 @@ const nextConfig = {
     BASE_URL: "https://api-wss.haseoleonard.tk",
     PAGE_SIZE: 5,
   },
+  images: {
+    domains: ["i.imgur.com"],
+  },
 };
 
 module.exports = nextConfig;

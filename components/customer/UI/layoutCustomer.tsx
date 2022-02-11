@@ -7,10 +7,10 @@ interface LayoutCustomerProps {
 
 const LayoutCustomer: React.FC<LayoutCustomerProps> = ({ children }) => {
   return (
-    <>
+    <div className="bg-gray-100">
       <Header />
       <div className="overflow-auto">{children}</div>
-    </>
+    </div>
   );
 };
 

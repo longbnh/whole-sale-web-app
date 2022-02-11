@@ -39,14 +39,16 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
   const router = useRouter();
   return (
     <Popover
-      className={classNames("w-full h-20 z-30 fixed px-5", {
+      className={classNames("w-full bg-white h-20 z-30 sticky px-5", {
         // "bg-red-600": welcome,
         // relative: router.pathname === "/seller/registerInfo",
       })}
     >
       <div className=" mx-auto w-full py-3 px-5 h-full sm:px-6">
         <div className="flex border-gray-100 h-full ">
-          <div className={classNames("w-1/6 flex justify-start items-center ")}>
+          <div
+            className={classNames("w-1/6 flex justify-end items-center pr-16")}
+          >
             <Image
               src={"/LogoRed.svg"}
               width={50}
@@ -58,7 +60,7 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
             />
           </div>
           <div className="w-full xl:w-2/4 lg:w-1/3 flex justify-start items-center">
-            <div className="h-4/5 w-full flex items-center">
+            <div className="h-4/5 w-5/6 mx-auto flex items-center">
               <Paper
                 component="form"
                 sx={{
@@ -91,7 +93,7 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
           </div>
 
           <div className="md:flex w-1/6 items-center justify-end md:flex-1 xl:w-1/4 lg:w-1/3">
-            <div className="flex items-center justify-end w-full my-auto text-lg">
+            <div className="flex items-center justify-start w-full my-auto text-lg">
               <div
                 className={classNames(
                   "w-1/4 md:flex items-center gap-1 mt-3 px-3 "
