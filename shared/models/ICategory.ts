@@ -1,4 +1,4 @@
-interface ISubCategory {
+export interface ISubCategory {
   id: number;
   name: string;
   priority: number;

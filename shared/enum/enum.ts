@@ -13,7 +13,8 @@ export enum SHOP_API {
     Category = "/categories",
     Product = "/products",
     Brand = "/brands",
-    Origin = "/origins"
+    Origin = "/origins",
+    Campaign = "/campaigns",
 }
 
 export enum POPUP_CREATE_PRODUCT {

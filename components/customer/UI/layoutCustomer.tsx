@@ -9,7 +9,7 @@ const LayoutCustomer: React.FC<LayoutCustomerProps> = ({ children }) => {
   return (
     <>
       <Header />
-      <div className="overflow-auto">{children}</div>
+      <div className="">{children}</div>
     </>
   );
 };

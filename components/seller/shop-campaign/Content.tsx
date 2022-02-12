@@ -1,6 +1,7 @@
 import React from "react";
 import {ICampaign} from "../../../shared/models/ICampaign";
 import CustomStepper from "../../commons/CustomStepper";
+import {getLastActiveMilestone, getMaxMilestone, getMergedMilestone} from "../../../shared/utils/CampaignUtils";
 
 const Content = () => {
 
@@ -37,25 +38,6 @@ const Content = () => {
             },
         ]
     }
-    const originalValue = [{
-        price: campaign.basicInfo.originalPrice,
-        quantity: 0,
-    }]
-    const mergedMilestone = originalValue.concat(campaign.milestones);
-
-    function getLastActiveMilestone(campaign: ICampaign): number {
-
-        const sortedMilestonesQuantity = mergedMilestone.map(milestone => milestone.quantity).sort();
-        const arrayOfActiveMilestone = sortedMilestonesQuantity
-            .filter(quantity => quantity <= campaign.currentSale);
-        const largestActiveMilestone = Math.max.apply(Math, arrayOfActiveMilestone);
-        return sortedMilestonesQuantity.indexOf(largestActiveMilestone);
-    }
-
-    function getMaxMilestone() : number {
-        const sortedMilestonesQuantity = mergedMilestone.map(milestone => milestone.quantity).sort();
-        return Math.max.apply(Math, sortedMilestonesQuantity);
-    }
 
 
     return (
@@ -63,13 +45,13 @@ const Content = () => {
             className="w-full relative flex bg-gray-100 ml-56"
         >
             <div className="bg-white mx-4 w-full overflow-y-auto overflow-x-hidden min-h-screen">
-                <div className="flex flex-col w-5/6">
+                <div className="flex flex-col w-2/6">
                     {campaign.basicInfo?.name}
                     <CustomStepper
-                        milestones={mergedMilestone}
+                        milestones={getMergedMilestone(campaign)}
                         activeMilestone={getLastActiveMilestone(campaign)}
                         progress={campaign.currentSale}
-                        maxValue={getMaxMilestone()}
+                        maxValue={getMaxMilestone(campaign)}
                     />
                 </div>
             </div>
