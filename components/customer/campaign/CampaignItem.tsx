@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {ICampaign} from "../../../shared/models/ICampaign";
-import {Avatar, ButtonGroup, Divider, TextField} from "@mui/material";
+import React, {useState} from "react";
+import {Avatar, Divider, TextField} from "@mui/material";
 import {getLastActiveMilestone, getMaxMilestone, getMergedMilestone} from "../../../shared/utils/CampaignUtils";
 import CustomStepper from "../../commons/CustomStepper";
 import Button from "@mui/material/Button";
@@ -19,40 +18,6 @@ import Link from 'next/link'
 interface CampaignItemProps {
     id: string | string[] | undefined;
 }
-
-// const campaign: ICampaign = {
-//     id: 1,
-//     startDate: '10/02/2022',
-//     endDate: '20/02/2022',
-//     currentSale: 32,
-//     inStockQuantity: 100,
-//     promotionPlanId: 0,
-//     status: 0,
-//     basicInfo: {
-//         id: "1",
-//         originalPrice: 50000,
-//         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-//         name: "Dien thoai",
-//     },
-//     milestones: [
-//         {
-//             price: 48000,
-//             quantity: 20
-//         },
-//         {
-//             price: 45000,
-//             quantity: 40
-//         },
-//         {
-//             price: 42000,
-//             quantity: 60
-//         },
-//         {
-//             price: 40000,
-//             quantity: 80
-//         },
-//     ]
-// }
 
 interface TimeRenderProps {
     days: number,
@@ -114,9 +79,18 @@ const CampaignItem = (props: CampaignItemProps) => {
         }
     }
 
+    const handleCheckOut = () => {
+        const order = [{
+            campaignId: id,
+            quantity: quantity,
+        }]
+
+        //call api here
+        //if success go to checkout page
+    }
+
     function getDateObject(date: string): number {
-        const time = Date.parse(date);
-        return time;
+        return Date.parse(date);
     }
 
     const slideShowProps = {
@@ -188,11 +162,11 @@ const CampaignItem = (props: CampaignItemProps) => {
                                         className="h-16 w-16">
                                     +
                                 </Button>
-                                <Button onClick={(e) => handleQuantityChange(e, +1)}
+                                <Button onClick={handleCheckOut}
                                         variant="outlined"
                                         style={{fontSize: '20px', backgroundColor: "#ff0000", color: "#FFFFFF"}}
                                         className="h-16 w-auto ml-16">
-                                    Thêm Vào Giỏ Hàng
+                                    Mua Hàng
                                 </Button>
                             </div>
                             {data &&
