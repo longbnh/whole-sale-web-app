@@ -11,6 +11,10 @@ import {useRouter} from "next/router";
 import 'react-slideshow-image/dist/styles.css'
 import {Slide} from 'react-slideshow-image';
 import ShowMoreText from "react-show-more-text";
+import InnerImageZoom from 'react-inner-image-zoom';
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
+import Link from 'next/link'
+
 
 interface CampaignItemProps {
     id: string | string[] | undefined;
@@ -58,11 +62,23 @@ interface TimeRenderProps {
 }
 
 const renderer = (props: TimeRenderProps) => {
+    const days = props.days.toLocaleString("en-US", {
+        minimumIntegerDigits: 2
+    })
+    const hours = props.hours.toLocaleString("en-US", {
+        minimumIntegerDigits: 2
+    })
+    const minutes = props.minutes.toLocaleString("en-US", {
+        minimumIntegerDigits: 2
+    })
+    const seconds = props.seconds.toLocaleString("en-US", {
+        minimumIntegerDigits: 2
+    })
     return (
         <div className="text-4xl text-red-500 font-bold">
-            {props.days} d &nbsp;
+            {days} d &nbsp;
             <span>
-        {props.hours}:{props.minutes}:{props.seconds}
+        {hours}:{minutes}:{seconds}
       </span>
         </div>
     )
@@ -103,17 +119,29 @@ const CampaignItem = (props: CampaignItemProps) => {
         return time;
     }
 
+    const slideShowProps = {
+        indicators: true,
+        scale: 2
+    }
+
     return (
         <div>
-            <div className="bg-white mt-5 mx-auto w-5/6 overflow-y-auto overflow-x-hidden max-h-full">
-                <div className="flex flex-col align-center gap-5 justify-start p-4 mt-20 ml-5">
+            <div className="bg-white mt-24 p-4 mx-auto w-5/6 max-h-full">
+                <span className="text-xl text-blue-600">
+                    <Link href="/">
+                        Trang chủ
+                    </Link>
+                </span>
+            </div>
+            <div className="bg-white mt-5 mx-auto w-5/6 max-h-full">
+                <div className="flex flex-col align-center gap-5 justify-start p-4 ml-5">
                     <div className="grid grid-cols-12">
                         <div className="col-start-1 col-span-4">
                             {data && <div className="slide-container mt-20">
-                                <Slide>
+                                <Slide {...slideShowProps}>
                                     {data.data.images.map((image, index) => (
                                         <div className="each-slide" key={index}>
-                                            <img src={image.url}/>
+                                            <InnerImageZoom src={image.url} zoomSrc={image.url}/>
                                         </div>
                                     ))}
                                 </Slide>

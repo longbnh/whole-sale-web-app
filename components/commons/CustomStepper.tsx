@@ -21,9 +21,9 @@ const styles = {
         width: "100%"
     },
     stepper__step__index: {
-        width: "30px",
-        height: "30px",
-        lineHeight: "30px",
+        width: "50px",
+        height: "50px",
+        lineHeight: "50px",
         borderRadius: "50%",
         background: "#dedede",
         color: "#999",
@@ -52,9 +52,9 @@ const styles = {
     linearProgress: {
         flex: "1 1 auto",
         position: 'absolute' as 'absolute',
-        top: 12,
-        left: 'calc(-50% - 20px)',
-        right: 'calc(50% + 54px)',
+        top: 22,
+        left: 'calc(-50% - 19px)',
+        right: 'calc(50% + 68px)',
         backgroundColor: "#ffd8ba61"
     },
     bar: {
