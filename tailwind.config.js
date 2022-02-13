@@ -8,7 +8,13 @@ module.exports = {
       fontFamily: {
         sfpro: "Source Sans Pro",
       },
+      height: {
+        "22/25": "88%",
+      },
+      width: {
+        "22%": "22%",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import categoryApi from "../../../api/categoryApi";
 import ICategory from "../../../shared/models/ICategory";
 import Category from "./Category";
+import Hotdeal from "./Hotdeal";
+
+import dashboard from "../../../public/json/dashboard.json";
 
 const DashboardCustomer = () => {
   const [category, setCategory] = useState<ICategory[]>([]);
@@ -17,8 +20,47 @@ const DashboardCustomer = () => {
 
   return (
     <div className="w-full relative">
-      <div className="mx-auto bg-white mt-5" style={{ width: "1200px" }}>
+      <div
+        className="mx-auto bg-white mt-5 rounded-lg"
+        style={{ width: "1200px" }}
+      >
         <Category categories={category} />
+      </div>
+      <div
+        className="mx-auto bg-white my-5 rounded-lg"
+        style={{ width: "1200px" }}
+      >
+        <Hotdeal
+          title={
+            <h3
+              className="text-3xl font-semibold text-black absolute top-5 "
+              style={{ left: "25.1%" }}
+            >
+              Deal ngon
+            </h3>
+          }
+          imgLink={
+            dashboard.find((item) => item.content === "hotDeal")?.imgLink || ""
+          }
+        />
+      </div>
+      <div
+        className="mx-auto bg-white my-5 rounded-lg"
+        style={{ width: "1200px" }}
+      >
+        <Hotdeal
+          title={
+            <h3
+              className="text-3xl font-semibold text-black absolute top-5 "
+              style={{ left: "30%" }}
+            >
+              Gần bạn
+            </h3>
+          }
+          imgLink={
+            dashboard.find((item) => item.content === "nearBy")?.imgLink || ""
+          }
+        />
       </div>
     </div>
   );

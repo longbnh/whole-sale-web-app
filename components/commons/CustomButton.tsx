@@ -5,7 +5,7 @@ import classNames from "classnames";
 import React from "react";
 
 interface CustomButtonsProps {
-  content: string;
+  content: string | any;
   color?: string;
   hoverColor?: string;
   size?: "small" | "medium" | "large";
