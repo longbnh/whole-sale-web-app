@@ -1,4 +1,5 @@
 export interface IMilestone {
-    price: number,
-    quantity: number,
+    price: number;
+    requiredSaleQuantity: number;
+    milestoneNumber: number;
 }
