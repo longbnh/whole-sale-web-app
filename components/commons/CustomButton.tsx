@@ -12,6 +12,7 @@ interface CustomButtonsProps {
   onClick?: () => void;
   borderRadius?: number;
   boxShadow?: boolean;
+  widthFull?: boolean;
 }
 
 const CustomButtons: React.FC<CustomButtonsProps> = ({
@@ -22,6 +23,7 @@ const CustomButtons: React.FC<CustomButtonsProps> = ({
   onClick,
   borderRadius = 4,
   boxShadow = true,
+  widthFull = false,
 }) => {
   const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
     color: theme.palette.getContrastText(color),
@@ -43,6 +45,7 @@ const CustomButtons: React.FC<CustomButtonsProps> = ({
           "font-normal": size === "small",
           "font-bold": size === "large",
           "font-semibold": size === "medium",
+          "w-full": widthFull,
         })}
         size={size}
         onClick={onClick}

@@ -8,6 +8,8 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import CustomButtons from "../../commons/CustomButton";
 
+import stickHeader from "../../../public/json/stickHeader.json";
+
 const styles = () => ({
   root: {
     "& $notchedOutline": {
@@ -37,11 +39,15 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
   const { classes } = props;
 
   const router = useRouter();
+
   return (
     <Popover
       className={classNames("w-full bg-white h-20 z-30 sticky px-5", {
         // "bg-red-600": welcome,
         // relative: router.pathname === "/seller/registerInfo",
+        "top-0": stickHeader.some(
+          (item: string) => `/${item}` === router.pathname
+        ),
       })}
     >
       <div className=" mx-auto w-full py-3 px-5 h-full sm:px-6">

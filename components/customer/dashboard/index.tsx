@@ -20,16 +20,10 @@ const DashboardCustomer = () => {
 
   return (
     <div className="w-full relative">
-      <div
-        className="mx-auto bg-white mt-5 rounded-lg"
-        style={{ width: "1200px" }}
-      >
+      <div className="mx-auto bg-white mt-5 rounded-lg w-1200">
         <Category categories={category} />
       </div>
-      <div
-        className="mx-auto bg-white my-5 rounded-lg"
-        style={{ width: "1200px" }}
-      >
+      <div className="mx-auto bg-white my-5 rounded-lg w-1200">
         <Hotdeal
           title={
             <h3
@@ -44,10 +38,7 @@ const DashboardCustomer = () => {
           }
         />
       </div>
-      <div
-        className="mx-auto bg-white my-5 rounded-lg"
-        style={{ width: "1200px" }}
-      >
+      <div className="mx-auto bg-white my-5 rounded-lg w-1200">
         <Hotdeal
           title={
             <h3
