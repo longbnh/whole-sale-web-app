@@ -8,16 +8,14 @@ import useSWR from "swr";
 import campaignApi from "../../../api/campaignApi";
 import {useRouter} from "next/router";
 import 'react-slideshow-image/dist/styles.css'
+//@ts-ignore
 import {Slide} from 'react-slideshow-image';
+//@ts-ignore
 import ShowMoreText from "react-show-more-text";
+//@ts-ignore
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import Link from 'next/link'
-
-
-interface CampaignItemProps {
-    id: string | string[] | undefined;
-}
 
 interface TimeRenderProps {
     days: number,
@@ -49,7 +47,7 @@ const renderer = (props: TimeRenderProps) => {
     )
 };
 
-const CampaignItem = (props: CampaignItemProps) => {
+const CampaignItem = () => {
     const [quantity, setQuantity] = useState(0);
     // const campaignId = props.id; hien chua co
     const router = useRouter();
@@ -107,7 +105,7 @@ const CampaignItem = (props: CampaignItemProps) => {
                     </Link>
                 </span>
             </div>
-            <div className="bg-white mt-5 mx-auto w-5/6 max-h-full">
+            <div className="bg-white mt-5 mx-auto w-5/6 max-h-full" >
                 <div className="flex flex-col align-center gap-5 justify-start p-4 ml-5">
                     <div className="grid grid-cols-12">
                         <div className="col-start-1 col-span-4">

@@ -13,6 +13,7 @@ module.exports = {
       },
       width: {
         "22%": "22%",
+        "1k2px": "1200px"
       },
     },
   },

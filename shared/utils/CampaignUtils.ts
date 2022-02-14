@@ -8,7 +8,9 @@ export function getMergedMilestone(campaign: ICampaign): IMilestone[] {
     // }]
     // return originalValue.concat(campaign.milestones);
     console.log(campaign)
-    return campaign.mileStones;
+    return campaign.mileStones.sort(function (a, b) {
+        return a.milestoneNumber - b.milestoneNumber;
+    });
 }
 
 export function getLastActiveMilestone(campaign: ICampaign): number {
