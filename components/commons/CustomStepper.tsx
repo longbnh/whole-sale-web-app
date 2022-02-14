@@ -12,54 +12,62 @@ const styles = {
         padding: 0,
         width: "100%"
     },
+
     stepper__step: {
         position: "relative" as "relative",
         display: "flex",
         flexFlow: "row nowrap",
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         alignItems: "center",
         width: "100%"
     },
+
     stepper__step__index: {
-        width: "50px",
-        height: "50px",
-        lineHeight: "50px",
+        width: "3rem",
+        height: "3rem",
+        lineHeight: "3rem",
         borderRadius: "50%",
         background: "#dedede",
         color: "#999",
         textAlign: "center" as "center",
         marginBottom: "5px",
     },
+
+    stepper__step__label: {
+        color: "#999",
+        margin: 0
+    },
+
+    labelContainer: {
+        display: "flex",
+        flexFlow: "column nowrap",
+        alignItems: "center" as "center"
+    },
+
+    linearProgress: {
+        flex: "1 1 auto",
+        position: 'absolute' as "absolute",
+        top: 22,
+        left: 'calc(-100% + 4rem)',
+        right: 'calc(100% - 2rem)',
+        backgroundColor: "#ffd8ba61"
+    },
+
+    bar: {
+        backgroundColor: "red"
+    },
+
     currentStep: {
         backgroundColor: "red !important",
         color: "#fff",
         fontWeight: "500"
     },
+
     done: {
         backgroundColor: "red !important",
         color: "#fff",
         fontWeight: "500"
-    },
-    labelContainer: {
-        display: "flex",
-        flexFlow: "column nowrap",
-        alignItems: "center"
-    },
-    stepper__step__label: {
-        color: "#999",
-        margin: 0
-    },
-    linearProgress: {
-        flex: "1 1 auto",
-        position: 'absolute' as 'absolute',
-        top: 22,
-        left: 'calc(-50% - 19px)',
-        right: 'calc(50% + 68px)',
-        backgroundColor: "#ffd8ba61"
-    },
-    bar: {
-        backgroundColor: "red"
-    },
+    }
 };
 
 
