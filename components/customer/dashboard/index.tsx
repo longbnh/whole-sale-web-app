@@ -5,17 +5,31 @@ import Category from "./Category";
 import Hotdeal from "./Hotdeal";
 
 import dashboard from "../../../public/json/dashboard.json";
+import campaignApi from "../../../api/campaignApi";
+import { IRequestPage } from "../../../shared/models/IRequestPage";
+import { ICampaignItem } from "../../../shared/models/ICampaignItem";
 
 const DashboardCustomer = () => {
   const [category, setCategory] = useState<ICategory[]>([]);
+  const [listHotDeal, setListHotDeal] = useState<ICampaignItem[]>([]);
+  const [listNearby, setListNearby] = useState<ICampaignItem[]>([]);
 
   const getCategoryList = async () => {
     const response = await categoryApi.getCategory();
     setCategory(response.data);
   };
 
+  const getCampaignByCategory = async () => {
+    let page: IRequestPage = { Page: 1, PageSize: 500, Sort: "id_asc" };
+    const response = await campaignApi.getCampaignByCategory(7, "", page);
+    setListHotDeal(response.data.content);
+    setListNearby(response.data.content);
+    console.log(response.data.content);
+  };
+
   useEffect(() => {
     getCategoryList();
+    getCampaignByCategory();
   }, []);
 
   return (
@@ -36,6 +50,7 @@ const DashboardCustomer = () => {
           imgLink={
             dashboard.find((item) => item.content === "hotDeal")?.imgLink || ""
           }
+          listCampaign={listHotDeal}
         />
       </div>
       <div className="mx-auto bg-white my-5 rounded-lg w-1200">
@@ -51,6 +66,7 @@ const DashboardCustomer = () => {
           imgLink={
             dashboard.find((item) => item.content === "nearBy")?.imgLink || ""
           }
+          listCampaign={listNearby}
         />
       </div>
     </div>

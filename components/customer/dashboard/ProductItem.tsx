@@ -5,32 +5,38 @@ import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 
 import NumberFormat from "../../../utils/NumberFormat";
 import CustomButtons from "../../commons/CustomButton";
+import { ICampaignItem } from "../../../shared/models/ICampaignItem";
+import { useRouter } from "next/router";
 
-interface ProductItemProps {}
+interface ProductItemProps {
+  listCampaign: ICampaignItem[];
+}
 
-const ProductItem: React.FC<ProductItemProps> = ({}) => {
-  const products: any[] = [
-    {
-      name: "Electric knife sharpener 2 Stage home use double stage for Ceramic Knives and Stainless Steel Knives",
-      originPrice: 5000000,
-      currentPrice: 4500000,
-    },
-    {
-      name: "Khẩu trang vải 2 lớp",
-      originPrice: 5000000,
-      currentPrice: 4500000,
-    },
-    { name: "Khẩu trang vải 2 lớp", originPrice: 10000, currentPrice: 8000 },
-    { name: "Khẩu trang vải 2 lớp", originPrice: 400000, currentPrice: 120000 },
-  ];
+const ProductItem: React.FC<ProductItemProps> = (props) => {
+  const route = useRouter();
   return (
     <ul className="w-4/5 flex flex-wrap overflow-hidden flex-row mr-5">
-      {products.map((item, key) => {
+      {props.listCampaign.map((item, key) => {
+        let currentPrice = item.mileStones
+          .sort((a, b) => a.requiredSaleQuantity - b.requiredSaleQuantity)
+          .reverse()
+          .find(
+            (milestone) =>
+              milestone.requiredSaleQuantity <= item.currentSaleQuantity
+          )?.price;
+        let originPrice = item.mileStones.find(
+          (item) => item.milestoneNumber === 0
+        )?.price;
+
         return (
-          <li key={key} className="w-22% h-22/25 my-5 ml-5 relative">
+          <li
+            key={key}
+            className="w-22% h-22/25 my-5 ml-5 relative cursor-pointer"
+            onClick={() => route.push(`campaign/${item.id}`)}
+          >
             <div className="break-words text-sm">
               <Image
-                src={"https://i.imgur.com/Jcls8b5.png"}
+                src={item.imageUrl}
                 className={
                   "rounded-md cursor-pointer mb-3 hover:scale-110 ease-in-out duration-300"
                 }
@@ -55,9 +61,9 @@ const ProductItem: React.FC<ProductItemProps> = ({}) => {
                 </div>
                 <div className="mt-3 flex w-full">
                   <div className="text-red-500 font-semibold text-xl relative">
-                    {NumberFormat(item.currentPrice)}đ
+                    {NumberFormat(currentPrice as number)}đ
                     <div className="text-black font-normal text-sm line-through decoration-2 flex items-end">
-                      {NumberFormat(item.originPrice)}đ
+                      {NumberFormat(originPrice as number)}đ
                     </div>
                   </div>
 
@@ -67,7 +73,11 @@ const ProductItem: React.FC<ProductItemProps> = ({}) => {
                         <Image src={"/fire.svg"} width={43} height={43} />
                       </div>
                       <div className="absolute text-white font-semibold text-xs z-30 top-4 right-2">
-                        10%
+                        {
+                          //@ts-ignore
+                          NumberFormat((1 - currentPrice / originPrice) * 100)
+                        }
+                        %
                       </div>
                     </div>
                   </div>

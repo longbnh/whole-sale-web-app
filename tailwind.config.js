@@ -17,7 +17,6 @@ module.exports = {
         "70%": "70%",
         "30%": "30%",
         1000: "1000px",
-        "1k2px": "1200px",
       },
       letterSpacing: {
         input: "0.00938em",
