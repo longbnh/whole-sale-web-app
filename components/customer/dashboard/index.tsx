@@ -20,7 +20,7 @@ const DashboardCustomer = () => {
   };
 
   const getCampaignByCategory = async () => {
-    let page: IRequestPage = { Page: 1, PageSize: 500, Sort: "id_asc" };
+    let page: IRequestPage = { Page: 1, PageSize: 5, Sort: "id_asc" };
     const response = await campaignApi.getCampaignByCategory(7, "", page);
     setListHotDeal(response.data.content);
     setListNearby(response.data.content);

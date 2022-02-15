@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import CustomButtons from "../../commons/CustomButton";
 
 import stickHeader from "../../../public/json/stickHeader.json";
+import Link from "next/link";
 
 const styles = () => ({
   root: {
@@ -100,24 +101,26 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
 
           <div className="md:flex w-1/6 items-center justify-end md:flex-1 xl:w-1/4 lg:w-1/3">
             <div className="flex items-center justify-start w-full my-auto text-lg">
-              <div
-                className={classNames(
-                  "w-1/4 md:flex items-center gap-1 mt-3 px-3 "
-                )}
-              >
-                <Image
-                  width={30}
-                  height={30 / cartIcon}
-                  src="/Shopping Cart.svg"
-                  layout="fixed"
-                  onLoadingComplete={({ naturalWidth, naturalHeight }) =>
-                    setCartIcon(naturalWidth / naturalHeight)
-                  }
-                />
-                <span className="whitespace-nowrap font-normal my-auto">
-                  Giỏ hàng
-                </span>
-              </div>
+              <Link href={"/cart"}>
+                <div
+                  className={classNames(
+                    "w-1/4 md:flex items-center gap-1 mt-3 px-3 cursor-pointer hover:opacity-75"
+                  )}
+                >
+                  <Image
+                    width={30}
+                    height={30 / cartIcon}
+                    src="/Shopping Cart.svg"
+                    layout="fixed"
+                    onLoadingComplete={({ naturalWidth, naturalHeight }) =>
+                      setCartIcon(naturalWidth / naturalHeight)
+                    }
+                  />
+                  <span className="whitespace-nowrap font-normal my-auto">
+                    Giỏ hàng
+                  </span>
+                </div>
+              </Link>
               <div
                 className={classNames(
                   "w-1/4 md:flex items-center gap-1 mt-3 px-3"
