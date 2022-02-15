@@ -33,10 +33,11 @@ const Content = () => {
     const [paymentType, setPaymentType] = useState<number>(0);
     const [paymentInfo, setPaymentInfo] = useState<IVNPayOrder>();
     const [campaignInfo, setCampaignInfo] = useState<orderInfo[]>([]);
-    // const orderInfo: orderInfo[] = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM) || "[]");
-    // const listCampaignId = orderInfo.map(order => order.id);
-    const {query} = router;
-    console.log(query.data)
+    const orderInfo: orderInfo[] = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM) || "[]");
+    console.log(orderInfo)
+    const listCampaignId = orderInfo.map(order => order.campaignId);
+    // const {query} = router;
+    // console.log(query.data)
 
     const getPaymentList = async () => {
         const response = await orderApi.getPaymentType();
@@ -45,15 +46,15 @@ const Content = () => {
     useEffect(() => {
         getPaymentList();
 
-        let data = query.data;
-        if (typeof data === "string") {
-            let tmp: orderInfo[] = JSON.parse(data)
-            setCampaignInfo(tmp);
-        }
+        // let data = query.data;
+        // if (typeof data === "string") {
+        //     let tmp: orderInfo[] = JSON.parse(data)
+        //     setCampaignInfo(tmp);
+        // }
     }, [])
-    const listId = campaignInfo.map(campaign => campaign.campaignId)
-    console.log(listId)
-    const campaignsSWR = useSWR(listId, campaignApi.getCampaigns, {
+    // const listId = campaignInfo.map(campaign => campaign.campaignId)
+    // console.log(listId)
+    const campaignsSWR = useSWR(listCampaignId, campaignApi.getCampaigns, {
         revalidateOnFocus: true,
         refreshInterval: 5000,
     });

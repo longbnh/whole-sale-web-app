@@ -84,47 +84,29 @@ const CampaignItem = () => {
     }
 
     const handleCheckOut = () => {
-        // const myStorage = window.localStorage;
-        // const myCampaign = {
-        //     id,
-        //     quantity,
-        // }
-        // myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify(myCampaign));
-        // router.push("/checkout-step3")
-
         if (typeof id === "string") {
-            // const order: IOrder = {
-            //     addressId: 1,
-            //     campaignId: parseInt(id),
-            //     paymentType: 2,
-            //     quantity: quantity,
-            //     returnUrl: `http://localhost:3000/campaign/${id}`,
-            // }
-            // orderApi.createOrder(order)
-            //     .then(
-            //         response => {
-            //             router.push({
-            //                 pathname: "/checkout-step3",
-            //                 query: {
-            //                     data: JSON.stringify(response.data)
-            //                 }
-            //             })
-            //         }
-            //     )
-            //     .catch(error => {
-            //         console.log(error)
-            //     })
-            const campaignId : number = parseInt(id);
-            router.push({
-                pathname: "/checkout-step3",
-                query: {
-                    data: JSON.stringify([{
-                        campaignId,
-                        quantity
-                    }])
-                }
-            })
+            const myStorage = window.localStorage;
+            const campaignId: number = parseInt(id);
+            const myCampaign = {
+                campaignId,
+                quantity,
+            }
+            myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify([myCampaign]));
+            router.push("/checkout-step3")
         }
+
+        // if (typeof id === "string") {
+        //     const campaignId : number = parseInt(id);
+        //     router.push({
+        //         pathname: "/checkout-step3",
+        //         query: {
+        //             data: JSON.stringify([{
+        //                 campaignId,
+        //                 quantity
+        //             }])
+        //         }
+        //     })
+        // }
     }
 
     function getDateObject(date: string): number {
