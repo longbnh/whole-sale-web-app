@@ -12,6 +12,15 @@ const campaignApi = {
         }/${campaignId}`;
         return axiosClient.get<ICampaign>(url);
     },
+    getCampaigns: (
+        ...idArray: number[]
+    ) => {
+        const f = (id : number) => campaignApi.getCampaign(id)
+            .then((response) => {
+                return response.data
+            });
+        return Promise.all(idArray.map(f))
+    }
 }
 
 export default campaignApi

@@ -17,15 +17,15 @@ const styles = {
         position: "relative" as "relative",
         display: "flex",
         flexFlow: "row nowrap",
-        justifyContent: "flex-start",
+        justifyContent: "space-around",
         alignItems: "center",
         width: "100%"
     },
 
     stepper__step__index: {
-        width: "3rem",
-        height: "3rem",
-        lineHeight: "3rem",
+        width: "30px",
+        height: "30px",
+        lineHeight: "30px",
         borderRadius: "50%",
         background: "#dedede",
         color: "#999",
@@ -47,9 +47,9 @@ const styles = {
     linearProgress: {
         flex: "1 1 auto",
         position: 'absolute' as "absolute",
-        top: 22,
-        left: 'calc(-100% + 4rem)',
-        right: 'calc(100% - 2rem)',
+        top: 12,
+        left: 'calc(-50% + 20px)',
+        right: 'calc(50% + 20px)',
         backgroundColor: "#ffd8ba61"
     },
 

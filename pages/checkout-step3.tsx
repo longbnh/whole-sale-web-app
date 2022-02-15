@@ -1,11 +1,11 @@
 import {ReactElement} from "react";
 import {getCustomerLayout} from "../components/customer/UI/layoutCustomer";
-import CheckOutPage from "../components/customer/checkout";
+import CheckOutPage from "../components/customer/checkout-step3";
 
-export default function Checkout() {
+export default function CheckoutStep3() {
     return <CheckOutPage/>
 }
 
-Checkout.getLayout = function getLayout(page: ReactElement) {
+CheckoutStep3.getLayout = function getLayout(page: ReactElement) {
     return getCustomerLayout(page);
 };

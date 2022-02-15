@@ -15,6 +15,8 @@ export enum SHOP_API {
     Brand = "/brands",
     Origin = "/origins",
     Campaign = "/campaigns",
+    Order = "/orders",
+    PaymentType = "/paymentTypes",
 }
 
 export enum POPUP_CREATE_PRODUCT {

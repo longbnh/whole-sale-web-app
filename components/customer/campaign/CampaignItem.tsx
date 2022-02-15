@@ -16,6 +16,9 @@ import ShowMoreText from "react-show-more-text";
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import Link from 'next/link'
+import {IOrder} from "../../../shared/models/IOrder";
+import orderApi from "../../../api/orderApi";
+import {ICampaign} from "../../../shared/models/ICampaign";
 
 interface TimeRenderProps {
     days: number,
@@ -60,6 +63,8 @@ const CampaignItem = () => {
         refreshInterval: 5000,
     });
 
+
+
     const handleQuantityChange = (e: any, actionIndex: number) => {
         let q = quantity;
         switch (actionIndex) {
@@ -78,13 +83,30 @@ const CampaignItem = () => {
     }
 
     const handleCheckOut = () => {
-        const order = [{
-            campaignId: id,
-            quantity: quantity,
-        }]
-
-        //call api here
-        //if success go to checkout page
+        // console.log(id)
+        // if (typeof id === "string") {
+        //     const order: IOrder = {
+        //         addressId: 1,
+        //         campaignId: parseInt(id),
+        //         paymentType: 2,
+        //         quantity: quantity,
+        //         returnUrl: `http://localhost:3000/campaign/${id}`,
+        //     }
+        //     orderApi.createOrder(order)
+        //         .then(
+        //             response => {
+        //                 router.push({
+        //                     pathname: "/checkout-step3",
+        //                     query: {
+        //                         data: JSON.stringify(response.data)
+        //                     }
+        //                 })
+        //             }
+        //         )
+        //         .catch(error => {
+        //             console.log(error)
+        //         })
+        // }
     }
 
     function getDateObject(date: string): number {
