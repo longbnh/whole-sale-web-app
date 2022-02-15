@@ -15,10 +15,8 @@ export enum SHOP_API {
   Brand = "/brands",
   Origin = "/origins",
   Campaign = "/campaigns",
-}
-
-export enum CUSTOMER_API {
-  order = "/orders",
+  Order = "/orders",
+  PaymentType = "/paymentTypes",
 }
 
 export enum POPUP_CREATE_PRODUCT {
@@ -47,4 +45,8 @@ export enum SORT_TYPE {
   DESCRIPTION_DESC = "description_desc",
   STATUS_ASC = "status_asc",
   STATUS_DESC = "status_desc",
+}
+
+export enum LOCAL_STORAGE {
+  CART_ITEM = "cartItem",
 }

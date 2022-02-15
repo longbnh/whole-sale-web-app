@@ -16,6 +16,10 @@ import ShowMoreText from "react-show-more-text";
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import Link from 'next/link'
+import {IOrder} from "../../../shared/models/IOrder";
+import orderApi from "../../../api/orderApi";
+import {ICampaign} from "../../../shared/models/ICampaign";
+import {LOCAL_STORAGE} from "../../../shared/enum/enum";
 
 interface TimeRenderProps {
     days: number,
@@ -60,6 +64,8 @@ const CampaignItem = () => {
         refreshInterval: 5000,
     });
 
+
+
     const handleQuantityChange = (e: any, actionIndex: number) => {
         let q = quantity;
         switch (actionIndex) {
@@ -78,13 +84,29 @@ const CampaignItem = () => {
     }
 
     const handleCheckOut = () => {
-        const order = [{
-            campaignId: id,
-            quantity: quantity,
-        }]
+        if (typeof id === "string") {
+            const myStorage = window.localStorage;
+            const campaignId: number = parseInt(id);
+            const myCampaign = {
+                campaignId,
+                quantity,
+            }
+            myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify([myCampaign]));
+            router.push("/checkout-step3")
+        }
 
-        //call api here
-        //if success go to checkout page
+        // if (typeof id === "string") {
+        //     const campaignId : number = parseInt(id);
+        //     router.push({
+        //         pathname: "/checkout-step3",
+        //         query: {
+        //             data: JSON.stringify([{
+        //                 campaignId,
+        //                 quantity
+        //             }])
+        //         }
+        //     })
+        // }
     }
 
     function getDateObject(date: string): number {
