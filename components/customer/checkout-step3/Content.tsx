@@ -102,7 +102,7 @@ const Content = () => {
                             />
                         </div>
                         <div className="col-start-3">
-                            {/*{orderInfo[index].quantity}*/}
+                            {orderInfo[index].quantity}
                         </div>
                     </div>
                     <div className="grid grid-cols-3">
@@ -122,7 +122,7 @@ const Content = () => {
                             />
                         </div>
                         <div className="col-start-3">
-                            {(getCurrentPrice(campaign) * 5).toLocaleString()} Đồng
+                            {(getCurrentPrice(campaign) * orderInfo[index].quantity).toLocaleString()} Đồng
                         </div>
                     </div>
                 </div>
@@ -192,7 +192,7 @@ const Content = () => {
                                 <span className="font-bold text-xl">Thành tiền: </span>
                                 <div className="col-start-3 col-span-1">
                                     {campaignsInfo
-                                        .map((campaign) => getCurrentPrice(campaign) * 5)
+                                        .map((campaign, index) => getCurrentPrice(campaign) * orderInfo[index].quantity)
                                         .reduce(function (previousValue, currentValue) {
                                             return previousValue + currentValue;
                                         }).toLocaleString()
