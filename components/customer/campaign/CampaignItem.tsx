@@ -19,6 +19,7 @@ import Link from 'next/link'
 import {IOrder} from "../../../shared/models/IOrder";
 import orderApi from "../../../api/orderApi";
 import {ICampaign} from "../../../shared/models/ICampaign";
+import {LOCAL_STORAGE} from "../../../shared/enum/enum";
 
 interface TimeRenderProps {
     days: number,
@@ -83,30 +84,47 @@ const CampaignItem = () => {
     }
 
     const handleCheckOut = () => {
-        // console.log(id)
-        // if (typeof id === "string") {
-        //     const order: IOrder = {
-        //         addressId: 1,
-        //         campaignId: parseInt(id),
-        //         paymentType: 2,
-        //         quantity: quantity,
-        //         returnUrl: `http://localhost:3000/campaign/${id}`,
-        //     }
-        //     orderApi.createOrder(order)
-        //         .then(
-        //             response => {
-        //                 router.push({
-        //                     pathname: "/checkout-step3",
-        //                     query: {
-        //                         data: JSON.stringify(response.data)
-        //                     }
-        //                 })
-        //             }
-        //         )
-        //         .catch(error => {
-        //             console.log(error)
-        //         })
+        // const myStorage = window.localStorage;
+        // const myCampaign = {
+        //     id,
+        //     quantity,
         // }
+        // myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify(myCampaign));
+        // router.push("/checkout-step3")
+
+        if (typeof id === "string") {
+            // const order: IOrder = {
+            //     addressId: 1,
+            //     campaignId: parseInt(id),
+            //     paymentType: 2,
+            //     quantity: quantity,
+            //     returnUrl: `http://localhost:3000/campaign/${id}`,
+            // }
+            // orderApi.createOrder(order)
+            //     .then(
+            //         response => {
+            //             router.push({
+            //                 pathname: "/checkout-step3",
+            //                 query: {
+            //                     data: JSON.stringify(response.data)
+            //                 }
+            //             })
+            //         }
+            //     )
+            //     .catch(error => {
+            //         console.log(error)
+            //     })
+            const campaignId : number = parseInt(id);
+            router.push({
+                pathname: "/checkout-step3",
+                query: {
+                    data: JSON.stringify([{
+                        campaignId,
+                        quantity
+                    }])
+                }
+            })
+        }
     }
 
     function getDateObject(date: string): number {

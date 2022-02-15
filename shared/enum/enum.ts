@@ -46,3 +46,7 @@ export enum SORT_TYPE {
     STATUS_ASC = "status_asc",
     STATUS_DESC = "status_desc",
 }
+
+export enum LOCAL_STORAGE {
+    CART_ITEM = "cartItem"
+}

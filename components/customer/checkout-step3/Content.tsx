@@ -20,20 +20,23 @@ import campaignApi from "../../../api/campaignApi";
 import useSWR from "swr";
 import {ICampaign} from "../../../shared/models/ICampaign";
 import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
+import {LOCAL_STORAGE} from "../../../shared/enum/enum";
 
+interface orderInfo {
+    campaignId: number;
+    quantity: number;
+}
 
 const Content = () => {
     const router = useRouter();
     const [paymentTypes, setPaymentTypes] = useState<IPaymentType[]>([]);
     const [paymentType, setPaymentType] = useState<number>(0);
     const [paymentInfo, setPaymentInfo] = useState<IVNPayOrder>();
+    const [campaignInfo, setCampaignInfo] = useState<orderInfo[]>([]);
+    // const orderInfo: orderInfo[] = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM) || "[]");
+    // const listCampaignId = orderInfo.map(order => order.id);
     const {query} = router;
-
-    const campaignsSWR = useSWR([1, 4], campaignApi.getCampaigns, {
-        revalidateOnFocus: true,
-        refreshInterval: 5000,
-    });
-    const campaignsInfo = campaignsSWR.data;
+    console.log(query.data)
 
     const getPaymentList = async () => {
         const response = await orderApi.getPaymentType();
@@ -44,10 +47,17 @@ const Content = () => {
 
         let data = query.data;
         if (typeof data === "string") {
-            let tmp: IVNPayOrder = JSON.parse(data)
-            setPaymentInfo(tmp)
+            let tmp: orderInfo[] = JSON.parse(data)
+            setCampaignInfo(tmp);
         }
     }, [])
+    const listId = campaignInfo.map(campaign => campaign.campaignId)
+    console.log(listId)
+    const campaignsSWR = useSWR(listId, campaignApi.getCampaigns, {
+        revalidateOnFocus: true,
+        refreshInterval: 5000,
+    });
+    const campaignsInfo = campaignsSWR.data;
 
     const handlePaymentType = (paymentId: number) => {
         setPaymentType(paymentId)
@@ -65,7 +75,7 @@ const Content = () => {
         }
     }
 
-    function getListItem(campaign: ICampaign) {
+    function getListItem(campaign: ICampaign, index: number) {
         return (
             <ListItem className="grid grid-cols-4 mb-5">
                 <ListItemIcon>
@@ -91,7 +101,7 @@ const Content = () => {
                             />
                         </div>
                         <div className="col-start-3">
-                            5
+                            {/*{orderInfo[index].quantity}*/}
                         </div>
                     </div>
                     <div className="grid grid-cols-3">
@@ -123,7 +133,7 @@ const Content = () => {
         <div
             className="w-full relative bg-gray-100 min-h-screen"
         >
-            <div className="bg-white mt-5 mx-auto w-4/5 h-full p-5">
+            {campaignsInfo && <div className="bg-white mt-5 mx-auto w-4/5 h-full p-5">
                 <div className="grid grid-cols-12">
                     <div className="col-span-6">
                         <div className="flex flex-col">
@@ -173,16 +183,16 @@ const Content = () => {
                     <div className="col-span-6">
                         <span className="text-2xl font-bold mb-16">Thông tin thanh toán:</span>
                         <List dense>
-                            {campaignsInfo?.map(
-                                campaign =>
-                                    getListItem(campaign)
+                            {campaignsInfo.map(
+                                (campaign, index) =>
+                                    getListItem(campaign, index)
                             )}
                             <ListItem className="grid grid-cols-4 mt-10">
                                 <span className="font-bold text-xl">Thành tiền: </span>
                                 <div className="col-start-3 col-span-1">
                                     {campaignsInfo
-                                        ?.map((campaign) => getCurrentPrice(campaign) * 5)
-                                        .reduce(function(previousValue, currentValue) {
+                                        .map((campaign) => getCurrentPrice(campaign) * 5)
+                                        .reduce(function (previousValue, currentValue) {
                                             return previousValue + currentValue;
                                         }).toLocaleString()
                                     } Đồng
@@ -202,6 +212,8 @@ const Content = () => {
                     </div>
                 </div>
             </div>
+
+            }
         </div>
     );
 };

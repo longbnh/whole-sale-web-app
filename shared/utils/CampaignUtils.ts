@@ -7,7 +7,6 @@ export function getMergedMilestone(campaign: ICampaign): IMilestone[] {
     //     quantity: 0,
     // }]
     // return originalValue.concat(campaign.milestones);
-    console.log(campaign)
     return campaign.mileStones.sort(function (a, b) {
         return a.requiredSaleQuantity - b.requiredSaleQuantity;
     });
