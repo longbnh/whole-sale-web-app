@@ -17,6 +17,7 @@ export enum SHOP_API {
     Campaign = "/campaigns",
     Order = "/orders",
     PaymentType = "/paymentTypes",
+    Address = "/customers/addresses"
 }
 
 export enum POPUP_CREATE_PRODUCT {
@@ -48,5 +49,6 @@ export enum SORT_TYPE {
 }
 
 export enum LOCAL_STORAGE {
-    CART_ITEM = "cartItem"
+    CART_ITEM = "cartItem",
+    ADDRESS = "address",
 }

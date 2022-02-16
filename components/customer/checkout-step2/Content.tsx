@@ -1,72 +1,41 @@
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import {IAddress} from "../../../shared/models/IAddress";
+import addressApi from "../../../api/addressApi";
 import {
     FormControl,
     FormControlLabel,
-    Grid,
-    List,
+    FormLabel, List,
     ListItem,
-    ListItemButton,
     ListItemIcon,
     ListItemText,
     Radio,
     RadioGroup
 } from "@mui/material";
-import {IPaymentType} from "../../../shared/models/IPaymentType";
-import orderApi from "../../../api/orderApi";
-import Button from "@mui/material/Button";
-import {IVNPayOrder} from "../../../shared/models/IVNPayOrder";
-import campaignApi from "../../../api/campaignApi";
+import {LOCAL_STORAGE} from "../../../shared/enum/enum";
 import useSWR from "swr";
+import campaignApi from "../../../api/campaignApi";
 import {ICampaign} from "../../../shared/models/ICampaign";
 import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
-import {LOCAL_STORAGE} from "../../../shared/enum/enum";
-import {IOrder, orderInfo} from "../../../shared/models/IOrder";
+import Button from "@mui/material/Button";
+
+
+interface orderInfo {
+    campaignId: number;
+    quantity: number;
+}
 
 const Content = () => {
-    const router = useRouter();
-    const [paymentTypes, setPaymentTypes] = useState<IPaymentType[]>([]);
-    const [paymentType, setPaymentType] = useState<number>(0);
+    const [addresses, setAddresses] = useState<IAddress[]>([])
+    const [addressSet, setAddressSet] = useState<number>();
     const [orderInfo, setOrderInfo] = useState<orderInfo[]>([]);
-    const [addressInfo, setAddressInfo] = useState<string>("");
     const listCampaignId = orderInfo.map(order => order.campaignId);
-
-    const getPaymentList = async () => {
-        const response = await orderApi.getPaymentType();
-        setPaymentTypes(response.data);
-    };
-    useEffect(() => {
-        setOrderInfo(JSON.parse(window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM) || "[]"))
-        setAddressInfo(JSON.parse(window.localStorage.getItem(LOCAL_STORAGE.ADDRESS) || ""))
-        getPaymentList()
-            .then(response => {
-                setPaymentType(2)
-            })
-    }, [])
+    const router = useRouter();
     const campaignsSWR = useSWR(listCampaignId, campaignApi.getCampaigns, {
         revalidateOnFocus: true,
         refreshInterval: 5000,
     });
     const campaignsInfo = campaignsSWR.data;
-
-    const handlePaymentType = (paymentId: number) => {
-        setPaymentType(paymentId)
-    }
-
-    const handlePayment = () => {
-        const aId: number = parseInt(addressInfo);
-        const order: IOrder = {
-            campaigns: orderInfo,
-            addressId: aId,
-            returnUrl: "http://localhost:3000/",
-            paymentType: paymentType,
-        }
-
-        orderApi.createOrder(order)
-            .then(response => {
-                router.push(response.data[0].paymentUrl)
-            })
-    }
 
     function getListItem(campaign: ICampaign, index: number) {
         return (
@@ -122,55 +91,78 @@ const Content = () => {
         )
     }
 
+    useEffect(() => {
+        setOrderInfo(JSON.parse(window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM) || "[]"))
+        console.log(orderInfo)
+        addressApi.getAddresses()
+            .then(response => {
+                setAddresses(response.data)
+                console.log(response.data)
+                console.log(response.data.filter(address => address.isPrimary)[0].id)
+                setAddressSet(response.data.filter(address => address.isPrimary)[0].id);
+            })
+            .catch(error => console.log(error));
+    }, [])
+
+    function getLabel(address: IAddress) {
+        return (
+            <div>
+                <span className="font-bold mr-2">
+                    {address.receiverName}
+                </span>
+                <span className="font-bold mr-2">
+                    {address.phoneNumber}
+                </span>
+                <span className="mr-5">
+                    {address.detailAddress}, {address.ward.name}, {address.district.name}, {address.city.name}
+                </span>
+                {address.isPrimary && <span className="text-gray-500">
+                    Mặc định
+                </span>}
+            </div>
+        )
+    }
+
+    const handleRadioCheck = (e: any) => {
+        let idCheck = e.target.value;
+        console.log(idCheck)
+        setAddressSet(idCheck);
+    }
+
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        console.log(addressSet)
+        const myStorage = window.localStorage;
+
+        myStorage.setItem(LOCAL_STORAGE.ADDRESS, JSON.stringify(addressSet));
+        router.push("/checkout-step3")
+    }
+
     return (
         <div
             className="w-full relative bg-gray-100 min-h-screen"
         >
-            {campaignsInfo && <div className="bg-white mt-5 mx-auto w-4/5 h-full p-5">
+            {campaignsInfo && <div className="bg-white mt-5 mx-auto w-4/5 h-screen p-5">
                 <div className="grid grid-cols-12">
                     <div className="col-span-6">
-                        <div className="flex flex-col">
-                            <span className="text-2xl font-bold mb-16">Chọn phương thức thanh toán:</span>
-                            {paymentType && <FormControl>
-                                <RadioGroup
-                                    aria-labelledby="demo-radio-buttons-group-label"
-                                    defaultValue={paymentType}
-                                    name="radio-buttons-group"
-                                >
-                                    <List sx={{
-                                        width: '100%', maxWidth: 360, bgcolor: 'white',
-                                        padding: 0
-                                    }}>
-                                        {paymentTypes.map((paymentType) => {
-                                            return (
-                                                <ListItem
-                                                    key={paymentType.id}
-                                                    disablePadding
-                                                    className="bg-gray-100 h-16"
-                                                >
-                                                    <ListItemButton role={undefined} dense
-                                                                    disabled={paymentType.id === 1}
-                                                                    onClick={() => handlePaymentType(paymentType.id)}>
-                                                        <ListItemIcon>
-                                                            <FormControlLabel value={paymentType.id} control={<Radio/>}
-                                                                              label={
-                                                                                  <img alt={`logo-${paymentType.name}`}
-                                                                                       width={120}
-                                                                                       height={60}
-                                                                                       src={`${paymentType.name}Logo.svg`}/>
-                                                                              }/>
-                                                        </ListItemIcon>
-                                                        <ListItemText id={paymentType.id.toString()}
-                                                                      className="ml-5"
-                                                                      primary={`${paymentType.name}`}/>
-                                                    </ListItemButton>
-                                                </ListItem>
-                                            );
-                                        })}
-                                    </List>
-                                </RadioGroup>
-                            </FormControl>}
-                        </div>
+                        <span className="text-2xl font-bold">
+                    Chọn địa chỉ nhận hàng
+                </span>
+                        {addressSet && <FormControl className="mt-10">
+                            <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                defaultValue={addressSet}
+                                name="radio-buttons-group"
+                            >
+                                {addresses.map(address =>
+                                    <FormControlLabel value={address.id}
+                                                      key={address.id}
+                                                      onChange={handleRadioCheck}
+                                                      control={<Radio/>}
+                                                      label={getLabel(address)}/>
+                                )}
+                            </RadioGroup>
+                        </FormControl>}
                     </div>
                     <div className="col-span-6">
                         <span className="text-2xl font-bold mb-16">Thông tin thanh toán:</span>
@@ -195,11 +187,12 @@ const Content = () => {
                 </div>
                 <div className="grid grid-cols-12 mt-16">
                     <div className="col-start-7 col-span-6">
-                        <Button onClick={handlePayment}
+                        <Button onClick={handleSubmit}
                                 variant="outlined"
+                                type="submit"
                                 style={{fontSize: '20px', backgroundColor: "#ff0000", color: "#FFFFFF"}}
                                 className="h-16 w-48 ml-0">
-                            Thanh Toán
+                            Tiếp Tục
                         </Button>
                         <Button onClick={() => router.back()}
                                 variant="outlined"
@@ -209,9 +202,7 @@ const Content = () => {
                         </Button>
                     </div>
                 </div>
-            </div>
-
-            }
+            </div>}
         </div>
     );
 };

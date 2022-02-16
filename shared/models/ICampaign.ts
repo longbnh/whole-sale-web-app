@@ -14,7 +14,7 @@ export interface ICampaign {
     inStockQuantity?: number;
     promotionPlanId?: number;
     status?: number;
-    // basicInfo: IProduct;
+    catePath: string;
     category: ISubCategory;
     origin: string;
     brand: IBrand;

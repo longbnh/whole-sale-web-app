@@ -52,7 +52,7 @@ const renderer = (props: TimeRenderProps) => {
 };
 
 const CampaignItem = () => {
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState<number>(1);
     // const campaignId = props.id; hien chua co
     const router = useRouter();
     const {id} = router.query;
@@ -65,15 +65,17 @@ const CampaignItem = () => {
     });
 
 
-
     const handleQuantityChange = (e: any, actionIndex: number) => {
-        let q = quantity;
+        let q: number = quantity;
         switch (actionIndex) {
             case -1:
-                setQuantity(q - 1);
+                if (q > 1)
+                    setQuantity(--q);
                 break;
             case +1:
-                setQuantity(q + 1);
+                if (q < 10) {
+                    setQuantity(++q);
+                }
                 break;
             case 0:
                 setQuantity(e.target.value);
@@ -92,25 +94,14 @@ const CampaignItem = () => {
                 quantity,
             }
             myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify([myCampaign]));
-            router.push("/checkout-step3")
+            router.push("/checkout-step2")
         }
-
-        // if (typeof id === "string") {
-        //     const campaignId : number = parseInt(id);
-        //     router.push({
-        //         pathname: "/checkout-step3",
-        //         query: {
-        //             data: JSON.stringify([{
-        //                 campaignId,
-        //                 quantity
-        //             }])
-        //         }
-        //     })
-        // }
     }
 
     function getDateObject(date: string): number {
-        return Date.parse(date);
+        let myDate = new Date(date);
+        let timezoneOffset = myDate.getTimezoneOffset() * 60 * 1000; //mins to milisec
+        return Date.parse(date) - timezoneOffset;
     }
 
     const slideShowProps = {
@@ -118,16 +109,41 @@ const CampaignItem = () => {
         scale: 2
     }
 
+    const getCatePath = (catePath: string) => {
+        const cateArr = catePath.split(";");
+        console.log(cateArr)
+        const formatReturn = (content: string) => {
+            return (
+                <>
+                    <span className="text-xl ml-5 mr-5">
+                        &gt;
+                    </span>
+                    <span className="text-xl">
+                        {content}
+                    </span>
+                </>
+            )
+        }
+        return (
+            <>
+                {cateArr
+                    .filter(cate => cate.length > 0)
+                    .map((cate, index) => formatReturn(cate))}
+            </>
+        )
+    }
+
     return (
         <div>
-            <div className="bg-white mt-24 p-4 mx-auto w-5/6 max-h-full">
+            <div className="bg-white mt-10 p-4 mx-auto w-5/6 max-h-full">
                 <span className="text-xl text-blue-600">
                     <Link href="/">
                         Trang chủ
                     </Link>
                 </span>
+                {data && getCatePath(data.data.catePath)}
             </div>
-            <div className="bg-white mt-5 mx-auto w-5/6 max-h-full" >
+            <div className="bg-white mt-5 mx-auto w-5/6 max-h-full">
                 <div className="flex flex-col align-center gap-5 justify-start p-4 ml-5">
                     <div className="grid grid-cols-12">
                         <div className="col-start-1 col-span-4">
@@ -228,7 +244,7 @@ const CampaignItem = () => {
                         Tên sản phẩm:
                     </span>
                         </div>
-                        <div className="col-span-2">
+                        <div className="col-span-10">
                             <span className="text-xl">
                                 {data.data.name}
                     </span>
@@ -243,7 +259,7 @@ const CampaignItem = () => {
                         Xuất xứ:
                     </span>
                         </div>
-                        <div className="col-span-2">
+                        <div className="col-span-10">
                             <span className="text-xl">
                                 {data.data.origin}
                     </span>
@@ -258,7 +274,7 @@ const CampaignItem = () => {
                         Thương hiệu:
                     </span>
                         </div>
-                        <div className="col-span-2">
+                        <div className="col-span-10">
                             <span className="text-xl">
                                 {data.data.brand.name}
                     </span>
