@@ -6,7 +6,7 @@ const nextConfig = {
     PAGE_SIZE: 5,
   },
   images: {
-    domains: ["i.imgur.com"],
+    domains: ["i.imgur.com", "firebasestorage.googleapis.com"],
   },
 };
 
