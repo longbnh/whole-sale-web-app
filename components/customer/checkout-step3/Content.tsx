@@ -70,16 +70,18 @@ const Content = () => {
 
     function getListItem(campaign: ICampaign, index: number) {
         return (
-            <ListItem className="grid grid-cols-4 mb-5">
-                <ListItemIcon>
-                    <img alt={`campaign-${campaign?.images[0].id}`}
-                         width={90}
-                         height={90}
-                         src={campaign?.images[0].url}/>
-                </ListItemIcon>
+            <ListItem className="grid grid-cols-4 mb-5 items-start">
+                <div className="col-span-1">
+                    <ListItemIcon>
+                        <img alt={`campaign-${campaign?.images[0].id}`}
+                             width={90}
+                             height={90}
+                             src={campaign?.images[0].url}/>
+                    </ListItemIcon>
+                </div>
                 <div className="col-span-3">
                     <div className="grid grid-cols-3">
-                        <div className="col-start-2 col-span-3">
+                        <div className="col-start-1 col-span-3">
                             <div className="col-start-1">
                                 <ListItemText
                                     primary={campaign?.name}
@@ -88,32 +90,26 @@ const Content = () => {
                         </div>
                     </div>
                     <div className="grid grid-cols-3">
-                        <div className="col-start-2 col-span-1">
-                            <ListItemText
-                                primary={"Số lượng: "}
-                            />
+                        <div className="col-start-1 col-span-1 font-bold">
+                            Số lượng:
                         </div>
-                        <div className="col-start-3">
+                        <div className="grid col-start-2 justify-items-end">
                             {orderInfo[index].quantity}
                         </div>
                     </div>
                     <div className="grid grid-cols-3">
-                        <div className="col-start-2">
-                            <ListItemText
-                                primary={"Đơn giá: "}
-                            />
+                        <div className="col-start-1 col-span-1 font-bold">
+                            Đơn giá:
                         </div>
-                        <div className="col-start-3">
+                        <div className="col-start-2 grid justify-items-end">
                             {getCurrentPrice(campaign).toLocaleString()} Đồng
                         </div>
                     </div>
                     <div className="grid grid-cols-3">
-                        <div className="col-start-2">
-                            <ListItemText
-                                primary={"Tổng: "}
-                            />
+                        <div className="col-start-1 col-span-1 font-bold">
+                            Tổng:
                         </div>
-                        <div className="col-start-3">
+                        <div className="col-start-2 grid justify-items-end">
                             {(getCurrentPrice(campaign) * orderInfo[index].quantity).toLocaleString()} Đồng
                         </div>
                     </div>
@@ -126,7 +122,7 @@ const Content = () => {
         <div
             className="w-full relative bg-gray-100 min-h-screen"
         >
-            {campaignsInfo && <div className="bg-white mt-5 mx-auto w-4/5 h-full p-5">
+            {campaignsInfo && <div className="bg-white mt-5 mx-auto w-4/5 min-h-screen p-5">
                 <div className="grid grid-cols-12">
                     <div className="col-span-6">
                         <div className="flex flex-col">
@@ -181,7 +177,7 @@ const Content = () => {
                             )}
                             <ListItem className="grid grid-cols-4 mt-10">
                                 <span className="font-bold text-xl">Thành tiền: </span>
-                                <div className="col-start-3 col-span-1">
+                                <div className="col-start-3 col-span-1 grid justify-items-end text-xl">
                                     {campaignsInfo
                                         .map((campaign, index) => getCurrentPrice(campaign) * orderInfo[index].quantity)
                                         .reduce(function (previousValue, currentValue) {
