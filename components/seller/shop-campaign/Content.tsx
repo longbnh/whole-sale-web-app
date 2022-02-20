@@ -1,59 +1,57 @@
-import React from "react";
-import {ICampaign} from "../../../shared/models/ICampaign";
-import CustomStepper from "../../commons/CustomStepper";
-import {getLastActiveMilestone, getMaxMilestone, getMergedMilestone} from "../../../shared/utils/CampaignUtils";
+import React, {useState} from "react";
+import {Button} from "@mui/material";
+import {CustomSelect, StyledOption} from "../../commons/CustomSelect";
 
 const Content = () => {
 
-    const campaign: ICampaign = {
-        id: 1,
-        startDate: '10/2/2022',
-        endDate: '20/2/2022',
-        currentSale: 32,
-        inStockQuantity: 100,
-        promotionPlanId: 0,
-        status: 0,
-        basicInfo: {
-            id: "1",
-            originalPrice: 50000,
-            description: "abcdef",
-            name: "Dien thoai",
-        },
-        milestones: [
-            {
-                price: 48000,
-                quantity: 20
-            },
-            {
-                price: 45000,
-                quantity: 40
-            },
-            {
-                price: 42000,
-                quantity: 60
-            },
-            {
-                price: 40000,
-                quantity: 80
-            },
-        ]
+    interface SortDirection {
+        name: string;
+        value: string;
     }
 
+    const options: SortDirection[] = [
+        {
+            name: "low to high",
+            value: "asc"
+        },
+        {
+            name: "high to low",
+            value: "dec"
+        },
+    ]
+
+    const [campaign, setCampaign] = React.useState<SortDirection | null>(options[0]);
+    const [sortBy, setSortBy] = useState("name")
 
     return (
         <div
-            className="w-full relative flex bg-gray-100 ml-56"
+            className="w-full relative bg-gray-100 ml-56"
         >
             <div className="bg-white mx-4 w-full overflow-y-auto overflow-x-hidden min-h-screen">
-                <div className="flex flex-col w-2/6">
-                    {campaign.basicInfo?.name}
-                    <CustomStepper
-                        milestones={getMergedMilestone(campaign)}
-                        activeMilestone={getLastActiveMilestone(campaign)}
-                        progress={campaign.currentSale}
-                        maxValue={getMaxMilestone(campaign)}
-                    />
+                <div className="flex mx-4 max-h-full border rounded-xl p-2 items-center gap-5">
+                    <span>Sắp xếp theo</span>
+                    <Button className={`${sortBy === "name" 
+                        ? "bg-red-600 text-white hover:bg-red-300 hover:text-black" 
+                        : "bg-white"}`}>Tên sản phẩm</Button>
+                    <Button className={`${sortBy === "revenue"
+                        ? "bg-red-600 text-white hover:bg-red-300 hover:text-black"
+                        : "bg-white"}`}>Doanh số</Button>
+                    <Button className={`${sortBy === "endDate"
+                        ? "bg-red-600 text-white hover:bg-red-300 hover:text-black"
+                        : "bg-white"}`}>Thời gian kết thúc</Button>
+                    <CustomSelect value={campaign}
+                                  className="ml-auto"
+                                  onChange={setCampaign}>
+                        {
+                            options.map((option) => (
+                                <StyledOption value={option} key={option.value}>
+                                    {option.name}
+                                </StyledOption>
+                            ))
+                        }
+                    </CustomSelect>
                 </div>
+
             </div>
         </div>
     );
