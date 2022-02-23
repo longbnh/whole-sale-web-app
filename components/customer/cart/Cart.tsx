@@ -1,15 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Checkbox, Divider } from "@mui/material";
+import { Checkbox, Divider, Skeleton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ItemCart from "./ItemCart";
+import { ICartItem } from "../../../shared/models/ICartItem";
+import { ITotal } from ".";
 
-interface CartProps {}
+interface CartProps {
+  cartList?: ICartItem[];
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  setListTotal: React.Dispatch<React.SetStateAction<ITotal[]>>;
+  listTotal: ITotal[];
+}
 
 const Cart: React.FC<CartProps> = (props) => {
   const router = useRouter();
   // const orderId = router.query.id;
-  const temp = ["", "", "", "", "", ""];
+
+  // console.log(props.cartList);
+  // const [listCampaign, setListCampaign] = useState<ICartItem[]>([]);
+  // useEffect(() => {
+  //   if (listCampaign.length === 0) {
+  //     setListCampaign(props.cartList as ICartItem[]);
+  //   } else {
+  //     setListCampaign([
+  //       ...(listCampaign as ICartItem[]),
+  //       ...(props.cartList as ICartItem[]),
+  //     ]);
+  //   }
+  // }, [props.page]);
+
   return (
     <div className="w-full px-2">
       <div className="w-ful flex items-center">
@@ -30,18 +51,26 @@ const Cart: React.FC<CartProps> = (props) => {
       </div>
       <Divider />
       <div className="my-4">
-        {temp.map((item, key) => {
-          return (
-            <div key={key} className="py-2">
-              <ItemCart />
-              {key !== temp.length - 1 ? (
-                <Divider sx={{ margin: "12px 0px" }} />
-              ) : (
-                <></>
-              )}
-            </div>
-          );
-        })}
+        {props.cartList !== undefined ? (
+          props.cartList!.map((item, key) => {
+            return (
+              <div key={key} className="py-2">
+                <ItemCart
+                  item={item}
+                  setListTotal={props.setListTotal}
+                  listTotal={props.listTotal}
+                />
+                {key !== props.cartList!.length - 1 ? (
+                  <Divider sx={{ margin: "12px 0px" }} />
+                ) : (
+                  <></>
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <Skeleton animation="wave" />
+        )}
       </div>
     </div>
   );

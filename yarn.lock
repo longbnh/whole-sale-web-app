@@ -1046,6 +1046,13 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
   integrity sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==
 
+"@types/react-inner-image-zoom@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-inner-image-zoom/-/react-inner-image-zoom-2.0.1.tgz#4b723d44c5529d64b11b569fc3dcf1b3db51b9fc"
+  integrity sha512-pADorue3ZydfJOEpe3FJUs2Tc4iz5RByQ+H+N0IRLUYtUWOJ5TyfujJJiXU5xdHyD0GruqBl7fRev6cWJWkZeA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-is@^16.7.1 || ^17.0.0":
   version "17.0.3"
   resolved "https://registry.yarnpkg.com/@types/react-is/-/react-is-17.0.3.tgz#2d855ba575f2fc8d17ef9861f084acc4b90a137a"
@@ -1062,6 +1069,13 @@
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
     redux "^4.0.0"
+
+"@types/react-show-more-text@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@types/react-show-more-text/-/react-show-more-text-1.4.2.tgz#0a704838ee750b749592ce04bd1d365de7da4846"
+  integrity sha512-CinPPhpxYFVKx4V0yqQGK0HUbHdlvLH8fQ/Ccp5XNKuQyIyc6bDMQz5b8bIBqmhMcCvn6AvSz3MmPpwNVCjmHQ==
+  dependencies:
+    "@types/react" "*"
 
 "@types/react-transition-group@^4.4.4":
   version "4.4.4"

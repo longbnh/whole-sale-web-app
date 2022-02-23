@@ -7,17 +7,21 @@ export enum ORIGIN_VALUE {
   Name = "countryName",
   Id = "id",
 }
+export enum CUSTOMER_API {
+  Customer = "/customers",
+  Cart = "/cart",
+}
 
 export enum SHOP_API {
-    Shop = "/shops",
-    Category = "/categories",
-    Product = "/products",
-    Brand = "/brands",
-    Origin = "/origins",
-    Campaign = "/campaigns",
-    Order = "/orders",
-    PaymentType = "/paymentTypes",
-    Address = "/customers/addresses"
+  Shop = "/shops",
+  Category = "/categories",
+  Product = "/products",
+  Brand = "/brands",
+  Origin = "/origins",
+  Campaign = "/campaigns",
+  Order = "/orders",
+  PaymentType = "/paymentTypes",
+  Address = "/customers/addresses",
 }
 
 export enum POPUP_CREATE_PRODUCT {
@@ -49,6 +53,6 @@ export enum SORT_TYPE {
 }
 
 export enum LOCAL_STORAGE {
-    CART_ITEM = "cartItem",
-    ADDRESS = "address",
+  CART_ITEM = "cartItem",
+  ADDRESS = "address",
 }
