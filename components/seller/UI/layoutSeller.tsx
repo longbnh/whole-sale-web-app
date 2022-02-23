@@ -9,7 +9,7 @@ const LayoutSeller: React.FC<LayoutSellerProps> = ({children}) => {
     return (
         <>
             <Header/>
-            <div className="overflow-auto">{children}</div>
+            <div className="overflow-auto relative">{children}</div>
         </>
     );
 };

@@ -1,26 +1,63 @@
 import React, {useState} from "react";
-import {Avatar, Button, Divider, IconButton, Input, List, ListItem, MenuItem, Pagination, Select} from "@mui/material";
+import {Avatar, Button, IconButton, Input, List, ListItem, MenuItem, Pagination, Select} from "@mui/material";
 import {ArrowCircleDownIcon, ArrowCircleUpIcon, ChevronRightIcon, SearchIcon} from "@heroicons/react/solid";
 import Stack from "@mui/material/Stack";
 import useSWR from "swr";
 import shopApi from "../../../api/shopApi";
-import {CAMPAIGN_SORT_DIRECTION, CAMPAIGN_SORT_TYPE, CAMPAIGN_STATUS} from "../../../shared/enum/enum";
+import {
+    CAMPAIGN_DISPLAY_STATUS,
+    CAMPAIGN_SORT_DIRECTION,
+    CAMPAIGN_SORT_TYPE,
+    CAMPAIGN_STATUS
+} from "../../../shared/enum/enum";
 import {getCurrentPrice2} from "../../../shared/utils/CampaignUtils";
+import {IRequestPageAlter} from "../../../shared/models/IRequestPage";
+import {useRouter} from "next/router";
 
+
+interface ICampaignStatus {
+    id: number;
+    name: string;
+}
+
+const campaignStatuses: ICampaignStatus[] = [
+    {
+        id: CAMPAIGN_STATUS.NO_SEARCH,
+        name: "Tất cả"
+    },
+    {
+        id: CAMPAIGN_STATUS.ACTIVE,
+        name: "Đang bán"
+    },
+    {
+        id: CAMPAIGN_STATUS.HIDDEN,
+        name: "Đã ẩn"
+    },
+    {
+        id: CAMPAIGN_STATUS.COMPLETE,
+        name: "Hoàn thành"
+    }
+]
 const Content = () => {
     const [page, setPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(5);
     const [productName, setProductName] = useState<string>("");
     const [sortBy, setSortBy] = useState<number>(CAMPAIGN_SORT_TYPE.DEFAULT);
-    const [status, setStatus] = useState<ICampaignStatus | "">("");
-    const [sortDirection, setSortDirection] = useState<number | null>(null);
+    const [status, setStatus] = useState<number>(CAMPAIGN_STATUS.NO_SEARCH);
+    const [sortDirection, setSortDirection] = useState<number>(CAMPAIGN_SORT_DIRECTION.ASC);
+
+    const router = useRouter();
+    let pageParam : IRequestPageAlter = {
+        Page: page,
+        PageSize: pageSize,
+        Sort: sortBy,
+    }
     const {data, error} = useSWR([
         1,
-        page,
-        pageSize,
         productName,
-        sortBy,
-        sortDirection
+        status,
+        sortDirection,
+        pageParam
     ], shopApi.getCampaigns, {
         revalidateOnFocus: true
     });
@@ -47,22 +84,6 @@ const Content = () => {
         setSortDirection(CAMPAIGN_SORT_DIRECTION.ASC)
         setSortBy(sortType);
     }
-
-    interface ICampaignStatus {
-        id: number;
-        name: string;
-    }
-
-    const campaignStatuses: ICampaignStatus[] = [
-        {
-            id: CAMPAIGN_STATUS.ACTIVE,
-            name: "Đang bán"
-        },
-        {
-            id: CAMPAIGN_STATUS.EXPIRED,
-            name: "Hết hạn"
-        }
-    ]
 
     return (
         <div
@@ -99,7 +120,7 @@ const Content = () => {
                                     onClick={() => handleSortOrder(CAMPAIGN_SORT_DIRECTION.ASC)}
                                     disabled={sortBy === CAMPAIGN_SORT_TYPE.DEFAULT}>
                         <ArrowCircleUpIcon className={`h-10 w-10 
-                        ${sortDirection === CAMPAIGN_SORT_DIRECTION.ASC ? "text-green-500" : "text-gray-500"}`}/>
+                        ${sortDirection === CAMPAIGN_SORT_DIRECTION.ASC && sortBy !== CAMPAIGN_SORT_TYPE.DEFAULT ? "text-green-500" : "text-gray-500"}`}/>
                         </IconButton>
 
                         <IconButton aria-label="down"
@@ -146,7 +167,11 @@ const Content = () => {
                 <div className="bg-white mx-4 mt-5 overflow-y-auto p-2 overflow-x-hidden min-h-screen border rounded-xl">
                     <List className="h-auto">
                         {data.data.content.map((campaign, index) => (
-                            <ListItem button key={campaign.id} divider className="my-5 p-5 relative flex gap-16">
+                            <ListItem button
+                                      onClick={() => router.push(`/seller/campaign/${campaign.id}`)}
+                                      key={campaign.id}
+                                      divider
+                                      className="my-5 p-5 relative flex gap-16">
                                 <Avatar sx={{width: 100, height: 100}} variant="square">
                                     <img src={campaign.imageUrl}/>
                                 </Avatar>
@@ -178,14 +203,12 @@ const Content = () => {
                                             Trạng thái:
                                         </div>
                                         <div>
-                                            {campaign.status === CAMPAIGN_STATUS.ACTIVE
-                                                ? <span className="font-bold text-green-500">ĐANG BÁN</span>
-                                                :
-                                                campaign.status === CAMPAIGN_STATUS.EXPIRED
-                                                    ? <span className="font-bold text-red-500">HẾT HẠN</span>
-                                                    : <span className="font-bold text-red-500">ĐÃ ẨN</span>
-
-                                            }
+                                            {campaign.status === CAMPAIGN_DISPLAY_STATUS.ACTIVE
+                                            && <span className="font-bold text-green-500">ĐANG BÁN</span>}
+                                            {campaign.status === CAMPAIGN_DISPLAY_STATUS.HIDDEN
+                                            && <span className="font-bold text-red-500">ĐÃ ẨN</span>}
+                                            {campaign.status === CAMPAIGN_DISPLAY_STATUS.COMPLETE
+                                            && <span className="font-bold text-blue-500">HOÀN THÀNH</span>}
                                         </div>
                                     </div>
                                 </div>

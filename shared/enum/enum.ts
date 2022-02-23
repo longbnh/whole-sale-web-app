@@ -61,10 +61,16 @@ export enum CAMPAIGN_SORT_TYPE {
 }
 
 export enum CAMPAIGN_STATUS {
-    DEFAULT = -1,
     ACTIVE = 0,
     HIDDEN = 1,
-    EXPIRED = 3,
+    COMPLETE = 2,
+    NO_SEARCH = 3,
+}
+
+export enum CAMPAIGN_DISPLAY_STATUS {
+    ACTIVE = 0,
+    HIDDEN = 1,
+    COMPLETE = 3,
 }
 
 export enum CAMPAIGN_SORT_DIRECTION {

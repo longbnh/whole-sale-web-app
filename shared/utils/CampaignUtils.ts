@@ -29,6 +29,12 @@ export function getCurrentPrice(campaign: ICampaign): number {
     return getMergedMilestone(campaign)[getLastActiveMilestone(campaign)].price
 }
 
+export function getPercentageSaleOff(campaign: ICampaign, currentPrice: number): number {
+    console.log(currentPrice)
+    console.log(getMergedMilestone(campaign)[0].price)
+    return 100 - (currentPrice / getMergedMilestone(campaign)[0].price * 100);
+}
+
 /**
  * getMergedMilestone2 functions as well as getMergedMilestone but receives ICampaignItem instead of ICampaign
  */
