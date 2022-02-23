@@ -3,3 +3,10 @@ export interface IRequestPage {
   PageSize?: number;
   Sort?: string;
 }
+
+
+export interface IRequestPageAlter {
+  Page?: number;
+  PageSize?: number;
+  Sort?: number;
+}

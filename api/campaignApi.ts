@@ -26,6 +26,16 @@ const campaignApi = {
       });
     return Promise.all(idArray.map(f));
   },
+  getCampaignForSeller: (campaignId: number) => {
+    const url = `${SHOP_API.Campaign}/${campaignId}`;
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        accountId: 2,
+      },
+    }
+    return axiosClient.get<ICampaign>(url, config);
+  },
 };
 
 export default campaignApi;

@@ -4,6 +4,7 @@ import {ISubCategory} from "./ICategory";
 import {IImage} from "./IImage";
 import {IShop} from "./IShop";
 import IBrand from "./IBrand";
+import {IPromotionPlan} from "./IPromotionPlan";
 
 export interface ICampaign {
     id: number;
@@ -12,7 +13,7 @@ export interface ICampaign {
     endDate: string;
     currentSaleQuantity: number;
     inStockQuantity?: number;
-    promotionPlanId?: number;
+    promotionPlan?: IPromotionPlan;
     status?: number;
     catePath: string;
     category: ISubCategory;

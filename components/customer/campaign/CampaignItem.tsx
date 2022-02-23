@@ -15,12 +15,10 @@ import "react-slideshow-image/dist/styles.css";
 //@ts-ignore
 import { Slide } from "react-slideshow-image";
 import ShowMoreText from "react-show-more-text";
+//@ts-ignore
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import Link from "next/link";
-import { IOrder } from "../../../shared/models/IOrder";
-import orderApi from "../../../api/orderApi";
-import { ICampaign } from "../../../shared/models/ICampaign";
 import { LOCAL_STORAGE } from "../../../shared/enum/enum";
 import cartApi from "../../../api/cartApi";
 
@@ -56,7 +54,6 @@ const renderer = (props: TimeRenderProps) => {
 
 const CampaignItem = () => {
   const [quantity, setQuantity] = useState<number>(1);
-  // const campaignId = props.id; hien chua co
   const router = useRouter();
   const { id } = router.query;
 

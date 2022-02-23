@@ -56,3 +56,28 @@ export enum LOCAL_STORAGE {
   CART_ITEM = "cartItem",
   ADDRESS = "address",
 }
+
+export enum CAMPAIGN_SORT_TYPE {
+  DEFAULT = 0,
+  NAME = 1,
+  REVENUE = 2,
+  END_DATE = 3,
+}
+
+export enum CAMPAIGN_STATUS {
+  ACTIVE = 0,
+  HIDDEN = 1,
+  COMPLETE = 2,
+  NO_SEARCH = 3,
+}
+
+export enum CAMPAIGN_DISPLAY_STATUS {
+  ACTIVE = 0,
+  HIDDEN = 1,
+  COMPLETE = 3,
+}
+
+export enum CAMPAIGN_SORT_DIRECTION {
+  ASC = 0,
+  DESC = 1,
+}
