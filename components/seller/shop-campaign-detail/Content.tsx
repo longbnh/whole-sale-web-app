@@ -59,7 +59,7 @@ const Content = () => {
                             <Tab label="Thông tin cơ bản" {...a11yProps(0)} />
                             <Tab label="Dữ liệu kinh doanh" {...a11yProps(1)} />
                             <Tab label="Đơn đặt hàng" disabled {...a11yProps(2)} />
-                            <Tab label="Cài đặt" {...a11yProps(3)} />
+                            <Tab label="Cài đặt" disabled {...a11yProps(3)} />
                         </Tabs>
                     </Box>
                 </div>
