@@ -13,14 +13,14 @@ export interface ICampaign {
     endDate: string;
     currentSaleQuantity: number;
     inStockQuantity?: number;
-    promotionPlan?: IPromotionPlan;
+    promotionPlan: IPromotionPlan;
     status?: number;
     catePath: string;
     category: ISubCategory;
-    origin: string;
-    brand: IBrand;
-    description: string;
-    images: IImage[];
-    shop: IShop;
+    origin?: string;
+    brand?: IBrand;
+    description?: string;
+    images: IImage[] | string;
+    shop?: IShop;
     mileStones: Array<IMilestone>;
 }

@@ -21,7 +21,7 @@ const CustomDisableInput = styled(TextField)(() => ({
 const myTooltip = {
     sale: "Số lượng bán ra là số sản phẩm đã được mua. Số lượng tối đa là số lượng sản phẩm tối đa mà bạn muốn bán.",
     promotion: "Chương trình khuyến mãi sẽ ảnh hưởng tới độ phủ của sản phẩm và các thiết lập mốc giá của bạn.",
-    milestone: "Mốc giá màu xanh là giá hiện tại của sản phẩm. Các mốc giá màu xám là những mốc giá đã vượt qua.",
+    milestone: "Mốc giá màu xanh là giá hiện tại của sản phẩm. Các mốc giá màu xám là những mốc giá đã vượt qua.Còn các mốc trắng là các mốc chưa đạt được.",
     date: "Sản phẩm sẽ kết thúc bán khi đạt tới ngày kết thúc.",
 
 }
@@ -69,11 +69,11 @@ const Tab1: React.FC<CampaignProps> = (props) => {
                         value={data.inStockQuantity}/>
                 </div>
 
-                <div className="grid grid-cols-4 my-16 grid-rows-2 items-center gap-y-5">
-                    <div className="col-span-1 text-2xl font-bold">
+                <div className="grid grid-cols-8 my-16 grid-rows-2 items-center gap-y-5">
+                    <div className="col-span-2 text-2xl font-bold">
                         Chương trình khuyến mãi:
                     </div>
-                    <div className="col-span-3">
+                    <div className="col-span-6">
                         <Tooltip title={myTooltip.promotion}>
                             <IconButton
                                 disableRipple
@@ -88,22 +88,41 @@ const Tab1: React.FC<CampaignProps> = (props) => {
                             </IconButton>
                         </Tooltip>
                     </div>
-                    <div>
+                    <div className="col-span-2">
                         <span className="text-xl">Chương trình:</span>
                     </div>
-                    <CustomDisableInput disabled value={data.promotionPlan ? data.promotionPlan.name : "Không"}/>
+                    <CustomDisableInput disabled
+                                        className="col-span-6 w-1/4"
+                                        value={data.promotionPlan ? data.promotionPlan.name : "Không"}/>
 
                     {data.promotionPlan && <>
-                        <div>
+                        <div className="col-span-2">
                             <span className="text-xl">Lượt giảm:</span>
-                            <CustomDisableInput disabled
-                                                value={data.promotionPlan ? data.promotionPlan.name : "Không"}/>
                         </div>
-                        <div>
-                            <div>
-                                <span className="text-xl">Thời gian chương trình:</span>
-                            </div>
+                        <CustomDisableInput disabled
+                                            className="col-span-6 w-1/4"
+                                            value={data.promotionPlan.percentSale}/>
+                        <div className="col-span-5">
+                            <span className="text-xl">Thời gian chương trình:</span>
                         </div>
+                        <div className="col-start-2 text-xl">Từ</div>
+                        <CustomDisableInput disabled
+                                            className="col-span-6 w-1/4"
+                                            value={new Date(Date.parse(data.promotionPlan.startDate)).toLocaleDateString('vi-VI', {
+                                                weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric'
+                                            })}/>
+                        <div className="col-start-2 text-xl">Đến</div>
+                        <CustomDisableInput disabled
+                                            className="col-span-6 w-1/4"
+                                            value={new Date(Date.parse(data.promotionPlan.endDate)).toLocaleDateString('vi-VI', {
+                                                weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric'
+                                            })}/>
                     </>}
                 </div>
 
@@ -136,7 +155,7 @@ const Tab1: React.FC<CampaignProps> = (props) => {
                                     <CustomDisableInput disabled
                                                         className={index === getLastActiveMilestone(data)
                                                             ? "bg-green-400"
-                                                            : "bg-gray-400"}
+                                                            : (index > getLastActiveMilestone(data) ? "bg-white" : "bg-gray-400")}
                                                         inputProps={{min: 0, style: {textAlign: 'right'}}}
                                                         value={mileStone.requiredSaleQuantity}/>
                                 </div>
@@ -144,7 +163,7 @@ const Tab1: React.FC<CampaignProps> = (props) => {
                                     <CustomDisableInput disabled
                                                         className={index === getLastActiveMilestone(data)
                                                             ? "bg-green-400"
-                                                            : "bg-gray-400"}
+                                                            : (index > getLastActiveMilestone(data) ? "bg-white" : "bg-gray-400")}
                                                         inputProps={{min: 0, style: {textAlign: 'right'}}}
                                                         value={mileStone.price.toLocaleString()}/>
                                     {index !== 0 && <div className="text-red-500 font-bold text-right text-xl">
