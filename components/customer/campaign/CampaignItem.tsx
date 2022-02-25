@@ -17,6 +17,7 @@ import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import Link from 'next/link'
 import {LOCAL_STORAGE} from "../../../shared/enum/enum";
+import {IImage} from "../../../shared/models/IImage";
 
 interface TimeRenderProps {
     days: number,
@@ -145,7 +146,7 @@ const CampaignItem = () => {
                         <div className="col-start-1 col-span-4">
                             {data && <div className="slide-container mt-20">
                                 <Slide {...slideShowProps}>
-                                    {data.data.images.map((image, index) => (
+                                    {(data.data.images as IImage[]).map((image, index) => (
                                         <div className="each-slide" key={index}>
                                             <InnerImageZoom src={image.url} zoomSrc={image.url}/>
                                         </div>
@@ -216,10 +217,10 @@ const CampaignItem = () => {
             </div>
             <div className="bg-white mt-5 mx-auto max-h-full">
                 {data && <div className="flex flex-row p-5 gap-10">
-                    <Avatar alt="shop avatar" src={data.data.shop.avatarUrl} sx={{width: 100, height: 100}}/>
+                    <Avatar alt="shop avatar" src={data.data.shop?.avatarUrl} sx={{width: 100, height: 100}}/>
                     <div className="flex flex-col">
                         <div className="text-2xl">
-                            {data.data.shop.shopName}
+                            {data.data.shop?.shopName}
                         </div>
                         <div>
                             {"{Sẽ thêm đánh giá ở đây sau}"}
@@ -272,7 +273,7 @@ const CampaignItem = () => {
                         </div>
                         <div className="col-span-10">
                             <span className="text-xl">
-                                {data.data.brand.name}
+                                {data.data.brand?.name}
                     </span>
                         </div>
                     </div>
