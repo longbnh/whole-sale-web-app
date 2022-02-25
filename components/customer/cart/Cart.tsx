@@ -1,15 +1,34 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { Checkbox, Divider } from "@mui/material";
+import useSWRInfinite from "swr/infinite";
+import { Checkbox, Divider, Skeleton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ItemCart from "./ItemCart";
+import { ICartItem } from "../../../shared/models/ICartItem";
+import { ITotal } from ".";
+import cartApi from "../../../api/cartApi";
+import { IPagination } from "../../../shared/models/IPagination";
+import InfiniteScroll from "react-swr-infinite-scroll";
+import ItemCartOutDated from "./ItemCartOutDated";
 
-interface CartProps {}
+interface CartProps {
+  setListTotal: React.Dispatch<React.SetStateAction<ITotal[]>>;
+  listTotal: ITotal[];
+}
 
 const Cart: React.FC<CartProps> = (props) => {
   const router = useRouter();
-  // const orderId = router.query.id;
-  const temp = ["", "", "", "", "", ""];
+
+  const getKey = (
+    pageIndex: number,
+    previousPageData: IPagination<ICartItem>
+  ) => {
+    if (previousPageData && previousPageData.isLastPage) return null;
+    return { Page: pageIndex + 1, PageSize: 10 };
+  };
+
+  const swr = useSWRInfinite(getKey, cartApi.getCart);
+
   return (
     <div className="w-full px-2">
       <div className="w-ful flex items-center">
@@ -17,31 +36,57 @@ const Cart: React.FC<CartProps> = (props) => {
           sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
           color="default"
         />
-        <div className="font-medium" style={{ width: "calc(35% + 90px)" }}>
+        <div className="font-medium" style={{ width: "calc(49%)" }}>
           Sản phẩm
         </div>
-        <div className="font-medium mx-6">Số lượng</div>
-        <div className="font-medium mx-10">Giá tiền</div>
-        <div className="font-medium mx-8">Tạm tính</div>
+        <div className="font-medium w-16">Số lượng</div>
+        <div className="font-medium w-1/6 flex justify-end pr-4">Giá tiền</div>
+        <div className="font-medium w-1/6 flex justify-end pr-1">Tạm tính</div>
 
-        <div className="pr-2 cursor-pointer hover:opacity-75">
+        {/* <div className="pr-2 cursor-pointer hover:opacity-75">
           <DeleteIcon sx={{ fontSize: 28 }} />
-        </div>
+        </div> */}
       </div>
       <Divider />
       <div className="my-4">
-        {temp.map((item, key) => {
-          return (
-            <div key={key} className="py-2">
-              <ItemCart />
-              {key !== temp.length - 1 ? (
-                <Divider sx={{ margin: "12px 0px" }} />
-              ) : (
-                <></>
-              )}
+        <InfiniteScroll
+          swr={swr}
+          loadingIndicator={
+            <div className="pt-4 mx-3">
+              <Skeleton />
+              <Skeleton animation="wave" />
+              <Skeleton animation={false} />
             </div>
-          );
-        })}
+          }
+          isReachingEnd={(swr) => swr.data?.length === swr.data?.[0].totalPage}
+        >
+          {(response) =>
+            (response as IPagination<ICartItem>).content
+              // .filter((item) => item.hasCampaign === true)
+              .map((item, key) => {
+                return (
+                  <div key={key} className="py-2">
+                    {item.hasCampaign ? (
+                      <ItemCart
+                        item={item}
+                        setListTotal={props.setListTotal}
+                        listTotal={props.listTotal}
+                      />
+                    ) : (
+                      <ItemCartOutDated item={item} />
+                    )}
+                    {key !==
+                    // .filter((item) => item.hasCampaign === true)
+                    (response as IPagination<ICartItem>).content.length - 1 ? (
+                      <Divider sx={{ margin: "12px 0px" }} />
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                );
+              })
+          }
+        </InfiniteScroll>
       </div>
     </div>
   );

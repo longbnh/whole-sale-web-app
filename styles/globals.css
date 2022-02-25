@@ -18,6 +18,10 @@ body {
   border-left-color: rgba(211, 47, 47);
 }
 
+.stepLabel {
+  margin-top: 3px !important;
+}
+
 @tailwind components;
 @tailwind utilities;
 

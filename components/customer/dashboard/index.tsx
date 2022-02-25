@@ -24,7 +24,6 @@ const DashboardCustomer = () => {
     const response = await campaignApi.getCampaignByCategory(7, "", page);
     setListHotDeal(response.data.content);
     setListNearby(response.data.content);
-    console.log(response.data.content);
   };
 
   useEffect(() => {

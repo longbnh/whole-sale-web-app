@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Cart from "./Cart";
 import Total from "./Total";
 
+export interface ITotal {
+  id: number;
+  totalPrice: number;
+}
+
 const CartPage = () => {
+  const [listTotal, setListTotal] = useState<ITotal[]>([]);
+
   return (
-    <div className="w-full h-fit relative">
-      <div className="mx-auto h-fit pb-10 w-1200 relative">
-        <div className="text-2xl font-semibold tracking-wide my-4">
-          Giỏ hàng của tôi
-        </div>
-        <div className="flex h-fit items-start">
-          <div className="w-70% mt-5 rounded-lg bg-white">
-            <Cart />
-          </div>
-          <div className="w-30% sticky top-0 self-start z-30">
-            <Total />
-          </div>
-        </div>
+    <div className="mx-auto h-fit pb-10 w-1200 relative flex items-start">
+      <div className="w-70% rounded-lg bg-white">
+        <Cart setListTotal={setListTotal} listTotal={listTotal} />
+      </div>
+      <div className="w-30% sticky top-0 self-start z-30">
+        <Total listTotal={listTotal} />
       </div>
     </div>
   );

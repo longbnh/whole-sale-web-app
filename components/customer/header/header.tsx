@@ -56,15 +56,18 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
           <div
             className={classNames("w-1/6 flex justify-end items-center pr-16")}
           >
-            <Image
-              src={"/LogoRed.svg"}
-              width={50}
-              height={50 / logoRatio}
-              layout="fixed"
-              onLoadingComplete={({ naturalWidth, naturalHeight }) =>
-                setLogoRatio(naturalWidth / naturalHeight)
-              }
-            />
+            <Link href={"/"}>
+              <Image
+                src={"/LogoRed.svg"}
+                className="cursor-pointer"
+                width={50}
+                height={50 / logoRatio}
+                layout="fixed"
+                onLoadingComplete={({ naturalWidth, naturalHeight }) =>
+                  setLogoRatio(naturalWidth / naturalHeight)
+                }
+              />
+            </Link>
           </div>
           <div className="w-full xl:w-2/4 lg:w-1/3 flex justify-start items-center">
             <div className="h-4/5 w-5/6 mx-auto flex items-center">

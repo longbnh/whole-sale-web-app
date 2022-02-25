@@ -6,6 +6,10 @@ import { makeStyles } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import NumberFormat from "../../../utils/NumberFormat";
+import { ICartItem } from "../../../shared/models/ICartItem";
+import { ITotal } from ".";
+import Link from "next/link";
+import cartApi from "../../../api/cartApi";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -15,12 +19,30 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface ItemCartProps {}
+interface ItemCartProps {
+  item: ICartItem;
+  setListTotal: React.Dispatch<React.SetStateAction<ITotal[]>>;
+  listTotal: ITotal[];
+}
 
 const ItemCart: React.FC<ItemCartProps> = (props) => {
   const classes = useStyles();
+  const [quantity, setQuantity] = useState<number>(props.item.quantity);
 
-  const [quantity, setQuantity] = useState<number>(0);
+  let currentPrice = props.item
+    .campaign!.mileStones.sort(
+      (a, b) => a.requiredSaleQuantity - b.requiredSaleQuantity
+    )
+    .reverse()
+    .find(
+      (milestone) =>
+        milestone.requiredSaleQuantity <=
+        props.item.campaign!.currentSaleQuantity
+    )?.price;
+
+  let originPrice = props.item.campaign!.mileStones.find(
+    (item) => item.milestoneNumber === 0
+  )?.price;
 
   const handleChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>) => {
     let quantity = Number.parseInt(event.target.value);
@@ -30,14 +52,44 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
     event.target.value.length === 0 ? setQuantity(0) : null;
   };
 
+  const updateItemQuantity = async () => {
+    await cartApi.updateQuantityItem(props.item.productId, quantity);
+  };
+
+  const deleteItem = async () => {
+    await cartApi.deleteItemCart(props.item.productId);
+  };
+
   return (
     <div className="flex w-ful">
-      <Checkbox classes={{ root: classes.root }} color="default" />
-      <Image src={"https://i.imgur.com/Jcls8b5.png"} width={90} height={90} />
-      <div className="w-1/3 text-sm mx-3">
-        Electric knife sharpener 2 Stage home use double stage for Ceramic
-        Knives and Stainless Steel Knives
-      </div>
+      <Checkbox
+        classes={{ root: classes.root }}
+        color="default"
+        onChange={(event, checked) => {
+          if (checked) {
+            props.setListTotal([
+              ...props.listTotal,
+              {
+                id: props.item.campaign!.id,
+                totalPrice: (currentPrice as number) * quantity,
+              },
+            ]);
+          } else {
+            props.setListTotal(
+              props.listTotal.filter(
+                (item) => item.id !== props.item.campaign!.id
+              )
+            );
+          }
+        }}
+      />
+      <Image src={props.item.imageUrl} width={90} height={90} />
+      <Link href={`campaign/${props.item.campaign?.id}`}>
+        <div className="w-1/3 text-sm mx-3 hover:text-red-400 cursor-pointer">
+          {props.item.name}
+        </div>
+      </Link>
+
       {/* quantity field */}
       <div className="my-auto px-5 pb-6 flex">
         <div className="block" style={{ width: "60px" }}>
@@ -47,6 +99,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
                 type="text"
                 id="quantity"
                 onChange={handleChangeQuantity}
+                onBlur={updateItemQuantity}
                 value={quantity}
                 className="h-3 text-base rounded-md overflow-visible w-full box-content py-3 px-4"
                 style={{
@@ -58,22 +111,25 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
         </div>
       </div>
       {/* Price */}
-      <div className="my-auto pb-6 flex px-5">
+      <div className="my-auto pb-6 flex px-5 w-32 justify-end">
         <div className="text-red-600 text-lg pb-5 relative">
-          {NumberFormat(45000000)}đ
+          {NumberFormat(currentPrice as number)}đ
           <div className="absolute bottom-1 right-0 line-through decoration-2 text-black text-sm">
-            {NumberFormat(50000000)}đ
+            {NumberFormat(originPrice as number)}đ
           </div>
         </div>
       </div>
       {/* Total */}
-      <div className="my-auto pb-6 flex px-5">
+      <div className="my-auto pb-6 flex justify-end w-32">
         <div className="text-red-600 text-lg  relative">
-          {NumberFormat(90000000)}đ
+          {NumberFormat((currentPrice as number) * quantity)}đ
         </div>
       </div>
       {/* Delete icon */}
-      <div className="my-auto pb-6 cursor-pointer hover:opacity-70">
+      <div
+        className="my-auto pb-6 pl-4 cursor-pointer hover:opacity-70"
+        onClick={deleteItem}
+      >
         <DeleteIcon fontSize="small" />
       </div>
     </div>
