@@ -16,8 +16,9 @@ const ActiveLink: React.FC<ActiveLinkProps> = ({
   activeKey = "",
 }) => {
   return (
-    <Link href={href}>
+    <Link href={`/seller/${href}`} replace={true}>
       <div
+        // onClick={() => router.replace(`${href}`)}
         className={classNames(
           "flex bg-white hover:text-red-400 text-base cursor-pointer my-1",
           {

@@ -1,6 +1,8 @@
 import { Divider } from "@mui/material";
+import { useRouter } from "next/router";
 import React from "react";
 import { ITotal } from ".";
+import { LOCAL_STORAGE } from "../../../shared/enum/enum";
 import NumberFormat from "../../../utils/NumberFormat";
 import CustomButtons from "../../commons/CustomButton";
 
@@ -9,6 +11,19 @@ interface TotalProps {
 }
 
 const Total: React.FC<TotalProps> = (props) => {
+  const router = useRouter();
+
+  const handleCheckout = () => {
+    if (typeof window !== undefined) {
+      const myStorage = window.localStorage;
+      myStorage.setItem(
+        LOCAL_STORAGE.CART_ITEM,
+        JSON.stringify([props.listTotal])
+      );
+      router.push("/checkout-step2");
+    }
+  };
+
   return (
     <div className="rounded-lg bg-white p-6 ml-4 mb-4">
       <div className="font-medium text-lg mb-3">Thông tin chung</div>
@@ -52,6 +67,7 @@ const Total: React.FC<TotalProps> = (props) => {
           widthFull={true}
           color={"#ff3e3e"}
           hoverColor={"#ff0b0b"}
+          onClick={handleCheckout}
         />
       </div>
     </div>

@@ -11,9 +11,19 @@ const cartApi = {
   },
   getCart: (pageRequest: IRequestPage) => {
     const url = `${CUSTOMER_API.Customer}${CUSTOMER_API.Cart}`;
-    return axiosClient.get<IPagination<ICartItem>>(url, {
-      params: pageRequest,
-    });
+    return axiosClient
+      .get<IPagination<ICartItem>>(url, {
+        params: pageRequest,
+      })
+      .then((res) => res.data);
+  },
+  updateQuantityItem: (productId: number, quantity: number) => {
+    const url = `${CUSTOMER_API.Customer}${CUSTOMER_API.Cart}`;
+    return axiosClient.put(url, {}, { params: { productId, quantity } });
+  },
+  deleteItemCart: (productId: number) => {
+    const url = `${CUSTOMER_API.Customer}${CUSTOMER_API.Cart}`;
+    return axiosClient.delete(url, { params: productId });
   },
 };
 

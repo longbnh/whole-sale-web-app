@@ -29,7 +29,7 @@ const Hotdeal: React.FC<HotdealProps> = (props) => {
         {props.title}
 
         <div
-          className="absolute w-32 text-center py-1.5 text-red-400 font-semibold text-lg bg-white rounded-3xl"
+          className="absolute w-32 text-center py-1.5 text-red-400 font-semibold text-lg bg-white rounded-3xl cursor-pointer hover:bg-slate-100"
           style={{ top: "17%", left: "25%" }}
         >
           Xem thêm

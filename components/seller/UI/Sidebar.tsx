@@ -2,34 +2,35 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 import ActiveLink from "../../commons/ActiveLink";
-import {URL_LINK} from "../../../shared/enum/enum";
+import { URL_LINK } from "../../../shared/enum/enum";
 
 const Sidebar = () => {
-    const route = useRouter();
-    const activeKey = route.pathname;
+  const route = useRouter();
+  console.log(route.asPath);
+  const activeKey = route.pathname;
 
-    return (
-        <div
-            className="px-2 flex fixed justify-between bg-white flex-col z-20 overflow-x-hidden overflow-y-hidden"
-            style={{height: "calc(100% - 50px)", width: "220px"}}
-        >
-            <div className="block">
-                <div className="flex flex-col pt-5">
-                    <div className="flex pb-1.5">
-                        <Image src={"/ShopIcon.svg"} width={22} height={22}/>
-                        <h4 className="ml-2 text-lg font-medium justify-end pt-1">
-                            Quản lí cửa hàng
-                        </h4>
-                    </div>
-                    <div className="flex flex-col mx-5 pl-5">
-                        <ActiveLink
-                            href={URL_LINK.SHOP_INFO}
-                            activeKey={activeKey}
-                            content="Hồ sơ"
-                        />
-                        <ActiveLink activeKey={activeKey} content="Báo cáo của tôi"/>
-                    </div>
-                </div>
+  return (
+    <div
+      className="px-2 flex fixed justify-between bg-white flex-col z-20 overflow-x-hidden overflow-y-hidden"
+      style={{ height: "calc(100% - 50px)", width: "220px" }}
+    >
+      <div className="block">
+        <div className="flex flex-col pt-5">
+          <div className="flex pb-1.5">
+            <Image src={"/ShopIcon.svg"} width={22} height={22} />
+            <h4 className="ml-2 text-lg font-medium justify-end pt-1">
+              Quản lí cửa hàng
+            </h4>
+          </div>
+          <div className="flex flex-col mx-5 pl-5">
+            <ActiveLink
+              href={URL_LINK.SHOP_INFO}
+              activeKey={activeKey}
+              content="Hồ sơ"
+            />
+            <ActiveLink activeKey={activeKey} content="Báo cáo của tôi" />
+          </div>
+        </div>
         <div className="flex flex-col pt-5">
           <div className="flex pb-1.5">
             <Image src={"/ProductIcon.svg"} width={22} height={22} />
@@ -39,9 +40,9 @@ const Sidebar = () => {
           </div>
           <div className="flex flex-col mx-5 pl-5">
             <ActiveLink
-                href={URL_LINK.SHOP_LIST_PRODUCT}
-                activeKey={activeKey}
-                content="Sản phẩm của tôi"
+              href={URL_LINK.SHOP_LIST_PRODUCT}
+              activeKey={activeKey}
+              content="Sản phẩm của tôi"
             />
             <ActiveLink
               href={URL_LINK.SHOP_PRODUCT}
@@ -57,28 +58,29 @@ const Sidebar = () => {
           </div>
         </div>
 
-                <div className="flex flex-col pt-5">
-                    <div className="flex pb-1.5">
-                        <Image src={"/Price.svg"} width={22} height={22}/>
-                        <h4 className="ml-2 text-lg font-medium justify-end pt-1">
-                            Quản lí mua chung
-                        </h4>
-                    </div>
-                    <div className="flex flex-col mx-5 pl-5">
-                        <ActiveLink
-                            href={URL_LINK.SHOP_CAMPAIGN}
-                            activeKey={activeKey}
-                            content="Sản phẩm đang bán"/>
-                        <ActiveLink activeKey={activeKey} content="Đơn hàng"/>
-                        <ActiveLink activeKey={activeKey} content="Doanh thu"/>
-                    </div>
-                </div>
-            </div>
-            {/* <div className="pb-10">
+        <div className="flex flex-col pt-5">
+          <div className="flex pb-1.5">
+            <Image src={"/Price.svg"} width={22} height={22} />
+            <h4 className="ml-2 text-lg font-medium justify-end pt-1">
+              Quản lí mua chung
+            </h4>
+          </div>
+          <div className="flex flex-col mx-5 pl-5">
+            <ActiveLink
+              href={URL_LINK.SHOP_CAMPAIGN}
+              activeKey={activeKey}
+              content="Sản phẩm đang bán"
+            />
+            <ActiveLink activeKey={activeKey} content="Đơn hàng" />
+            <ActiveLink activeKey={activeKey} content="Doanh thu" />
+          </div>
+        </div>
+      </div>
+      {/* <div className="pb-10">
         <input type="text" />
       </div> */}
-        </div>
-    );
+    </div>
+  );
 };
 
 export default Sidebar;
