@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { LOCAL_STORAGE } from "../../../shared/enum/enum";
 import Cart from "./Cart";
 import Total from "./Total";
 

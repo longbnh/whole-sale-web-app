@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Checkbox } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -10,6 +10,7 @@ import { ICartItem } from "../../../shared/models/ICartItem";
 import { ITotal } from ".";
 import Link from "next/link";
 import cartApi from "../../../api/cartApi";
+import { LOCAL_STORAGE } from "../../../shared/enum/enum";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,22 +49,48 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
     let quantity = Number.parseInt(event.target.value);
     if (quantity >= 0) {
       setQuantity(quantity);
+      if (props.listTotal.find((item) => item.id === props.item.campaign!.id)) {
+        const temp = [...props.listTotal];
+        temp.find((item) => item.id === props.item.campaign!.id)!.totalPrice =
+          (currentPrice as number) * quantity;
+        props.setListTotal(temp);
+      }
     }
     event.target.value.length === 0 ? setQuantity(0) : null;
   };
 
   const updateItemQuantity = async () => {
-    await cartApi.updateQuantityItem(props.item.productId, quantity);
+    if (quantity > 0) {
+      await cartApi.updateQuantityItem(props.item.productId, quantity);
+    } else {
+      await cartApi.deleteItemCart(props.item.productId);
+    }
   };
 
   const deleteItem = async () => {
     await cartApi.deleteItemCart(props.item.productId);
   };
 
+  const handleChecked = () => {
+    if (typeof window !== undefined) {
+      const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
+      const list: [ITotal[]] = JSON.parse(listChecked!);
+      if (
+        list.at(0)!.find((item) => item.id === props.item.campaign!.id) !==
+        undefined
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
     <div className="flex w-ful">
       <Checkbox
+        id={props.item.campaign!.id.toString()}
         classes={{ root: classes.root }}
+        // defaultChecked={handleChecked()}
         color="default"
         onChange={(event, checked) => {
           if (checked) {
