@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -79,9 +79,13 @@ export default function Steppers() {
   ];
   const router = useRouter();
 
-  const [step] = useState(
+  const [step, setStep] = useState(
     steps.find((item) => router.pathname.endsWith(item.path))?.step
   );
+
+  useEffect(() => {
+    setStep(steps.find((item) => router.pathname.endsWith(item.path))?.step);
+  }, [router.pathname]);
 
   return (
     <Stepper alternativeLabel activeStep={step} connector={<QontoConnector />}>

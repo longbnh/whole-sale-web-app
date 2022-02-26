@@ -53,6 +53,8 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
         const temp = [...props.listTotal];
         temp.find((item) => item.id === props.item.campaign!.id)!.totalPrice =
           (currentPrice as number) * quantity;
+        temp.find((item) => item.id === props.item.campaign!.id)!.quantity =
+          quantity;
         props.setListTotal(temp);
       }
     }
@@ -99,6 +101,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
               {
                 id: props.item.campaign!.id,
                 totalPrice: (currentPrice as number) * quantity,
+                quantity: quantity,
               },
             ]);
           } else {
