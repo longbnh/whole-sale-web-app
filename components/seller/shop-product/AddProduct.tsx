@@ -137,7 +137,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             className="w-full relative flex bg-gray-100 ml-56 h-full"
             // style={{ height: "calc(100vh - 50px)" }}
         >
-            <div className="bg-white mt-5 mx-auto w-4/5 overflow-y-auto overflow-x-hidden">
+            <div className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl">
                 <div className="text-xl font-semibold p-4 ml-5">Thêm sản phẩm</div>
                 <CustomAlertDialog title={POPUP_CREATE_PRODUCT.Title}
                                    content={notiContent}
@@ -145,7 +145,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                                    open={open}
                                    handleClickClose={handleClose}/>
                 <form onSubmit={handleSubmit}>
-                    <div className="flex flex-row align-center gap-5 justify-start p-4 mt-5 ml-5">
+                    <div className="flex align-center gap-5 justify-start p-4 mt-5 ml-5">
                         {Array.from(pictures).map((picture, index) => {
                             return (
                                 <div key={index} className="w-32 h-32 relative">
@@ -291,11 +291,14 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         <div className="flex justify-end">
                             <label htmlFor="submit-button">
                                 <Input id="submit-button" type="submit"/>
-                                <Button className="text-red-600" component="span" disabled={loading}>
+                                <Button variant="outlined"
+                                        className="text-white w-32 h-15 bg-red-600 hover:bg-red-500 border-black"
+                                        component="span"
+                                        disabled={loading}>
                                     {
                                         loading
                                             ? <CircularProgress/>
-                                            : "Thêm"
+                                            : <span className="text-xl">Thêm</span>
                                     }
                                 </Button>
                             </label>
