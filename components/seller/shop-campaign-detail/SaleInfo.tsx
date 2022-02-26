@@ -26,7 +26,7 @@ const myTooltip = {
 
 }
 
-const Tab1: React.FC<CampaignProps> = (props) => {
+const SaleInfo: React.FC<CampaignProps> = (props) => {
     const {data} = props;
     return (
         <div className="mx-4 overflow-y-auto overflow-x-hidden min-h-screen">
@@ -223,4 +223,4 @@ const Tab1: React.FC<CampaignProps> = (props) => {
     )
 }
 
-export default Tab1;
+export default SaleInfo;
