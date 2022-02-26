@@ -1,8 +1,8 @@
 import {SHOP_API} from "../shared/enum/enum";
 import axiosClient from "./axiosClient";
 import {IPagination} from "../shared/models/IPagination";
-import {ICampaignItem} from "../shared/models/ICampaignItem";
 import {IRequestPageAlter} from "../shared/models/IRequestPage";
+import {ICampaign} from "../shared/models/ICampaign";
 
 const shopApi = {
     getCampaigns: (shopId: number, productName?: string
@@ -17,7 +17,7 @@ const shopApi = {
             },
             params: param
         }
-        return axiosClient.get<IPagination<ICampaignItem>>(`${url}`, config);
+        return axiosClient.get<IPagination<ICampaign>>(`${url}`, config);
     },
 };
 

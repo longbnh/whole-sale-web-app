@@ -10,6 +10,7 @@ import 'react-slideshow-image/dist/styles.css'
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import {CAMPAIGN_DISPLAY_STATUS} from "../../../shared/enum/enum";
 import {Divider} from "@mui/material";
+import {IImage} from "../../../shared/models/IImage";
 
 const slideShowProps = {
     indicators: true,
@@ -32,7 +33,7 @@ const Tab0: React.FC<CampaignProps> = (props) => {
                     <div className="col-start-1 col-span-4">
                         {data && <div className="slide-container mt-20">
                             <Slide {...slideShowProps}>
-                                {data.images.map((image, index) => (
+                                {data.images?.map((image, index) => (
                                     <div className="each-slide max-h-full" key={index}>
                                         <InnerImageZoom src={image.url}
                                                         zoomSrc={image.url}
@@ -101,7 +102,7 @@ const Tab0: React.FC<CampaignProps> = (props) => {
                                 Thương hiệu:
                             </div>
                             <div>
-                                {data.brand.name}
+                                {data.brand?.name}
                             </div>
                             <Divider className="col-span-2 my-5"/>
                             <div>

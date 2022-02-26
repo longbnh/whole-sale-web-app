@@ -3,6 +3,7 @@ import React from "react";
 
 import Button from "../../commons/CustomButton";
 import { useRouter } from "next/router";
+import {APP_PATH} from "../../../shared/enum/enum";
 
 const Content = () => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const Content = () => {
           <Button
             content="Tạo cửa hàng"
             size="large"
-            onClick={() => router.push("/seller/registerInfo")}
+            onClick={() => router.push(APP_PATH.SELLER.REGISTER_INFO)}
           />
         </div>
       </div>

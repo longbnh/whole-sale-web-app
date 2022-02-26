@@ -6,6 +6,7 @@ import Total from "./Total";
 export interface ITotal {
   id: number;
   totalPrice: number;
+  quantity: number;
 }
 
 const CartPage = () => {

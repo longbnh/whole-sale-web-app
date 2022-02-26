@@ -1,15 +1,15 @@
 import Image from "next/image";
 import React from "react";
-import { Rating } from "@mui/material";
+import {Rating} from "@mui/material";
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 
 import NumberFormat from "../../../utils/NumberFormat";
 import CustomButtons from "../../commons/CustomButton";
-import { ICampaignItem } from "../../../shared/models/ICampaignItem";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
+import {ICampaign} from "../../../shared/models/ICampaign";
 
 interface ProductItemProps {
-  listCampaign: ICampaignItem[];
+  listCampaign: ICampaign[];
 }
 
 const ProductItem: React.FC<ProductItemProps> = (props) => {
@@ -35,14 +35,14 @@ const ProductItem: React.FC<ProductItemProps> = (props) => {
             onClick={() => route.push(`campaign/${item.id}`)}
           >
             <div className="break-words text-sm">
-              <Image
-                src={item.imageUrl}
-                className={
-                  "rounded-md cursor-pointer mb-3 hover:scale-110 ease-in-out duration-300"
-                }
-                width={212}
-                height={212}
-              />
+              {item.imageUrl && <Image
+                  src={item.imageUrl}
+                  className={
+                    "rounded-md cursor-pointer mb-3 hover:scale-110 ease-in-out duration-300"
+                  }
+                  width={212}
+                  height={212}
+              />}
               <div className="cursor-pointer mt-3 mx-0.5">
                 <div className="leading-5 h-10 mb-2 font-normal text-base text-ellipsis line-clamp-2 text-gray-600 overflow-hidden hover:underline">
                   {item.name}

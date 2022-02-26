@@ -3,22 +3,40 @@ import ISubmitProduct from "../shared/models/ISubmitProduct";
 import axiosClient from "./axiosClient";
 import { IProduct } from "../shared/models/IProduct";
 import { IPagination } from "../shared/models/IPagination";
+import {IRequestPage} from "../shared/models/IRequestPage";
 
+const config = {
+  headers: {
+    "content-type": "application/json",
+    accountId: 2,
+  }
+}
 const productApi = {
   createProduct: (product: IProduct, shopId: number) => {
     const url = `${SHOP_API.Shop}/${shopId}/products`;
-    return axiosClient.post(url, product);
+    return axiosClient.post(url, product, config);
   },
   getProducts: (
     shopId: number,
-    pageIndex: number,
-    sortType: string,
-    status: number
+    name?: string,
+    status?: string,
+    pageRequest?: IRequestPage,
   ) => {
     const url = `${
       SHOP_API.Shop
-    }/${shopId}/products?Page=${pageIndex}&PageSize=${10}&Sort=${sortType}&Status=${status}`;
-    return axiosClient.get<IPagination<IProduct>>(url);
+    }/${shopId}/products`;
+    const param = {
+      ...pageRequest,
+      name: name,
+      status: status,
+    }
+    return axiosClient.get<IPagination<IProduct>>(url, {
+      headers: {
+        "content-type": "application/json",
+        accountId: 2,
+      },
+      params: param,
+    });
   },
 
   createListProduct: (listProduct: ISubmitProduct[], shopId: number) => {

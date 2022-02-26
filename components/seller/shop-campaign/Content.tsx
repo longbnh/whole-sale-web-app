@@ -5,14 +5,15 @@ import Stack from "@mui/material/Stack";
 import useSWR from "swr";
 import shopApi from "../../../api/shopApi";
 import {
+    APP_PATH,
     CAMPAIGN_DISPLAY_STATUS,
     CAMPAIGN_SORT_DIRECTION,
     CAMPAIGN_SORT_TYPE,
     CAMPAIGN_STATUS
 } from "../../../shared/enum/enum";
-import {getCurrentPrice2} from "../../../shared/utils/CampaignUtils";
 import {IRequestPageAlter} from "../../../shared/models/IRequestPage";
 import {useRouter} from "next/router";
+import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
 
 
 interface ICampaignStatus {
@@ -168,7 +169,7 @@ const Content = () => {
                     <List className="h-auto">
                         {data.data.content.map((campaign, index) => (
                             <ListItem button
-                                      onClick={() => router.push(`/seller/campaign/${campaign.id}`)}
+                                      onClick={() => router.push(`${APP_PATH.SELLER.CAMPAIGN}/${campaign.id}`)}
                                       key={campaign.id}
                                       divider
                                       className="my-5 p-5 relative flex gap-16">
@@ -186,7 +187,7 @@ const Content = () => {
                                         <div
                                             // className="ml-auto"
                                         >
-                                            {(getCurrentPrice2(campaign) * campaign.currentSaleQuantity).toLocaleString()}đ
+                                            {(getCurrentPrice(campaign) * campaign.currentSaleQuantity).toLocaleString()}đ
                                         </div>
                                         <div>
                                             Ngày kết thúc:

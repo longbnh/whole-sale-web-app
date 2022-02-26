@@ -1,9 +1,8 @@
-import { SHOP_API } from "../shared/enum/enum";
+import {SHOP_API} from "../shared/enum/enum";
 import axiosClient from "./axiosClient";
-import { IPagination } from "../shared/models/IPagination";
-import { ICampaign } from "../shared/models/ICampaign";
-import { IRequestPage } from "../shared/models/IRequestPage";
-import { ICampaignItem } from "../shared/models/ICampaignItem";
+import {IPagination} from "../shared/models/IPagination";
+import {ICampaign} from "../shared/models/ICampaign";
+import {IRequestPage} from "../shared/models/IRequestPage";
 
 const campaignApi = {
   getCampaign: (campaignId: number) => {
@@ -17,7 +16,7 @@ const campaignApi = {
   ) => {
     const url = `${SHOP_API.Campaign}/byCategory`;
     const param = { ...pageRequest, categoryId: categoryId, search: search };
-    return axiosClient.get<IPagination<ICampaignItem>>(url, { params: param });
+    return axiosClient.get<IPagination<ICampaign>>(url, { params: param });
   },
   getCampaigns: (...idArray: number[]) => {
     const f = (id: number) =>

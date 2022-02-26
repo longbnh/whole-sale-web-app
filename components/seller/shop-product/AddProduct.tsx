@@ -21,6 +21,7 @@ import IOrigin from "../../../shared/models/IOrigin";
 import {BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
 import {IProduct} from "../../../shared/models/IProduct";
 import {string} from "prop-types";
+import imageApi from "../../../api/imageApi";
 
 interface IListCategory {
     categories: ICategory[];
@@ -74,7 +75,6 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     const handleCategoryOne = (e: any) => {
         let categoryItem = e.target.value;
         let item = props.categories.filter((cate) => cate.name === categoryItem);
-        console.log(...item);
         setChoice(item[0]);
         setCategoryOne(categoryItem);
         setCategoryId(-1);
@@ -108,40 +108,28 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         //Handle submit here
         setLoading(true);
 
-        let imgArray = [] as string[];
-        for (const picture of pictures) {
-            let index = pictures.indexOf(picture);
-            let storageRef = ref(getStorage(),
-                `gs://wholesalesystem-7cf9b.appspot.com/Images/${Date.now()}-${index}-${picture.name}`);
-            await uploadBytes(storageRef, picture)
-            imgArray.push(await getDownloadURL(storageRef))
+        try {
+            console.log(pictures)
+            const response = await imageApi.uploadImage(pictures);
+            const imgArr: string[] = response.data;
+            let product: IProduct = {
+                name: name,
+                description: des,
+                originalPrice: price,
+                originId: originId,
+                brandId: brandId,
+                categoryId: categoryId,
+                productImages: imgArr,
+            }
+            await productApi.createProduct(product, 1)
+            setLoading(false);
+            setNotiContent(POPUP_CREATE_PRODUCT.Success);
+            setOpen(true);
+        } catch (error) {
+            setLoading(false);
+            setNotiContent(POPUP_CREATE_PRODUCT.Failed);
+            setOpen(true);
         }
-
-        let product: IProduct = {
-            name: name,
-            description: des,
-            originalPrice: price,
-            originId: originId,
-            brandId: brandId,
-            categoryId: categoryId,
-            productImages: imgArray,
-        }
-
-        console.log(product.productImages)
-
-        productApi.createProduct(product, 1)
-            .then(() => {
-                    setLoading(false);
-                    setNotiContent(POPUP_CREATE_PRODUCT.Success);
-                    setOpen(true);
-                    console.log("Submitted");
-                }
-            )
-            .catch(() => {
-                setLoading(false);
-                setNotiContent(POPUP_CREATE_PRODUCT.Failed);
-                setOpen(true);
-            })
     };
 
     return (
@@ -149,7 +137,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             className="w-full relative flex bg-gray-100 ml-56 h-full"
             // style={{ height: "calc(100vh - 50px)" }}
         >
-            <div className="bg-white mt-5 mx-auto w-4/5 overflow-y-auto overflow-x-hidden">
+            <div className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl">
                 <div className="text-xl font-semibold p-4 ml-5">Thêm sản phẩm</div>
                 <CustomAlertDialog title={POPUP_CREATE_PRODUCT.Title}
                                    content={notiContent}
@@ -157,7 +145,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                                    open={open}
                                    handleClickClose={handleClose}/>
                 <form onSubmit={handleSubmit}>
-                    <div className="flex flex-row align-center gap-5 justify-start p-4 mt-5 ml-5">
+                    <div className="flex align-center gap-5 justify-start p-4 mt-5 ml-5">
                         {Array.from(pictures).map((picture, index) => {
                             return (
                                 <div key={index} className="w-32 h-32 relative">
@@ -167,7 +155,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                                         className="w-32 h-32"
                                     />
                                     <IconButton
-                                        className="absolute top-0 right-0 p-0 bg-black"
+                                        className="absolute top-0 right-0 p-0 bg-gray-600"
                                         onClick={() => onRemovePicture(index)}
                                     >
                                         <CloseIcon className="text-white"/>
@@ -183,12 +171,12 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                                 type="file"
                                 onChange={onChangePicture}
                             />
-                            <Button
+                            {pictures.length < 5 && <Button
                                 className="border-2 border-dashed h-32 w-32 text-red-600"
                                 component="span"
                             >
                                 Thêm ảnh
-                            </Button>
+                            </Button>}
                         </label>
                     </div>
                     <div className="w-8/12 p-4 mt-5 ml-5">
@@ -303,11 +291,14 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         <div className="flex justify-end">
                             <label htmlFor="submit-button">
                                 <Input id="submit-button" type="submit"/>
-                                <Button className="text-red-600" component="span" disabled={loading}>
+                                <Button variant="outlined"
+                                        className="text-white w-32 h-15 bg-red-600 hover:bg-red-500 border-black"
+                                        component="span"
+                                        disabled={loading}>
                                     {
                                         loading
                                             ? <CircularProgress/>
-                                            : "Thêm"
+                                            : <span className="text-xl">Thêm</span>
                                     }
                                 </Button>
                             </label>

@@ -20,7 +20,10 @@ export interface ICampaign {
     origin?: string;
     brand?: IBrand;
     description?: string;
-    images: IImage[] | string;
+    //for request that get multiple images
+    images?: IImage[];
+    //for request that get only one image
+    imageUrl?: string;
     shop?: IShop;
     mileStones: Array<IMilestone>;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import categoryApi from "../../../api/categoryApi";
 import ICategory from "../../../shared/models/ICategory";
 import Category from "./Category";
@@ -6,13 +6,13 @@ import Hotdeal from "./Hotdeal";
 
 import dashboard from "../../../public/json/dashboard.json";
 import campaignApi from "../../../api/campaignApi";
-import { IRequestPage } from "../../../shared/models/IRequestPage";
-import { ICampaignItem } from "../../../shared/models/ICampaignItem";
+import {IRequestPage} from "../../../shared/models/IRequestPage";
+import {ICampaign} from "../../../shared/models/ICampaign";
 
 const DashboardCustomer = () => {
   const [category, setCategory] = useState<ICategory[]>([]);
-  const [listHotDeal, setListHotDeal] = useState<ICampaignItem[]>([]);
-  const [listNearby, setListNearby] = useState<ICampaignItem[]>([]);
+  const [listHotDeal, setListHotDeal] = useState<ICampaign[]>([]);
+  const [listNearby, setListNearby] = useState<ICampaign[]>([]);
 
   const getCategoryList = async () => {
     const response = await categoryApi.getCategory();
