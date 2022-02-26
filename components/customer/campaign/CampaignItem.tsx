@@ -97,14 +97,14 @@ const CampaignItem = () => {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const campaignId: number = parseInt(id as string);
 
     const myCampaign = {
       campaignId,
       quantity,
     };
-    cartApi.addToCart(myCampaign);
+    await cartApi.addToCart(myCampaign);
   };
 
   function getDateObject(date: string): number {
@@ -198,7 +198,7 @@ const CampaignItem = () => {
                       style: { textAlign: "center", fontSize: "20px" },
                     },
                   }}
-                ></TextField>
+                />
                 <Button
                   onClick={(e) => handleQuantityChange(e, +1)}
                   variant="outlined"

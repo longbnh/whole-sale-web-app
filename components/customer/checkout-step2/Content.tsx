@@ -5,7 +5,7 @@ import addressApi from "../../../api/addressApi";
 import {
     FormControl,
     FormControlLabel,
-    FormLabel, List,
+    List,
     ListItem,
     ListItemIcon,
     ListItemText,
@@ -16,7 +16,6 @@ import {APP_PATH, LOCAL_STORAGE} from "../../../shared/enum/enum";
 import useSWR from "swr";
 import campaignApi from "../../../api/campaignApi";
 import {ICampaign} from "../../../shared/models/ICampaign";
-import {IImage} from "../../../shared/models/IImage";
 import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
 import Button from "@mui/material/Button";
 import {LocationMarkerIcon} from "@heroicons/react/solid";
@@ -32,6 +31,8 @@ const Content = () => {
         const [addressSet, setAddressSet] = useState<number>();
         const [orderInfo, setOrderInfo] = useState<orderInfo[]>([]);
         const listCampaignId = orderInfo.map(order => order.campaignId);
+        console.log(orderInfo)
+        console.log(listCampaignId)
         const router = useRouter();
         const campaignsSWR = useSWR(listCampaignId, campaignApi.getCampaigns, {
             revalidateOnFocus: true,
