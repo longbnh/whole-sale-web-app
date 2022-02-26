@@ -16,6 +16,7 @@ import {LOCAL_STORAGE} from "../../../shared/enum/enum";
 import useSWR from "swr";
 import campaignApi from "../../../api/campaignApi";
 import {ICampaign} from "../../../shared/models/ICampaign";
+import {IImage} from "../../../shared/models/IImage";
 import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
 import Button from "@mui/material/Button";
 import {LocationMarkerIcon} from "@heroicons/react/solid";
@@ -42,12 +43,12 @@ const Content = () => {
             return (
                 <ListItem className="grid grid-cols-4 mb-5 items-start">
                     <div className="col-span-1">
-                        <ListItemIcon>
-                            <img alt={`campaign-${campaign?.images[0].id}`}
+                        {campaign.images && <ListItemIcon>
+                            <img alt={`campaign-${campaign.images[0].id}`}
                                  width={90}
                                  height={90}
-                                 src={campaign?.images[0].url}/>
-                        </ListItemIcon>
+                                 src={campaign.images[0].url}/>
+                        </ListItemIcon>}
                     </div>
                     <div className="col-span-3">
                         <div className="grid grid-cols-3">

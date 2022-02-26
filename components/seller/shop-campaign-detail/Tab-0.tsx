@@ -33,7 +33,7 @@ const Tab0: React.FC<CampaignProps> = (props) => {
                     <div className="col-start-1 col-span-4">
                         {data && <div className="slide-container mt-20">
                             <Slide {...slideShowProps}>
-                                {(data.images as IImage[]).map((image, index) => (
+                                {data.images?.map((image, index) => (
                                     <div className="each-slide max-h-full" key={index}>
                                         <InnerImageZoom src={image.url}
                                                         zoomSrc={image.url}

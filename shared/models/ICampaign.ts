@@ -20,7 +20,8 @@ export interface ICampaign {
     origin?: string;
     brand?: IBrand;
     description?: string;
-    images: IImage[] | string;
+    images?: IImage[];
+    imageUrl?: string;
     shop?: IShop;
     mileStones: Array<IMilestone>;
 }

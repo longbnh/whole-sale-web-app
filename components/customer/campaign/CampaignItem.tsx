@@ -153,7 +153,7 @@ const CampaignItem = () => {
               {data && (
                 <div className="slide-container mt-20">
                   <Slide {...slideShowProps}>
-                    {(data.data.images as IImage[]).map((image, index) => (
+                    {data.data.images?.map((image, index) => (
                       <div className="each-slide" key={index}>
                         <InnerImageZoom src={image.url} zoomSrc={image.url} />
                       </div>

@@ -1,13 +1,13 @@
 import Image from "next/image";
 import React from "react";
 import ProductItem from "./ProductItem";
-import { useRouter } from "next/router";
-import { ICampaignItem } from "../../../shared/models/ICampaignItem";
+import {useRouter} from "next/router";
+import {ICampaign} from "../../../shared/models/ICampaign";
 
 interface HotdealProps {
   title: string | any;
   imgLink: string;
-  listCampaign: ICampaignItem[];
+  listCampaign: ICampaign[];
 }
 
 const Hotdeal: React.FC<HotdealProps> = (props) => {
