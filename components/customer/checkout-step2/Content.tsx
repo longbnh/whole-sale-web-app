@@ -12,7 +12,7 @@ import {
     Radio,
     RadioGroup
 } from "@mui/material";
-import {LOCAL_STORAGE} from "../../../shared/enum/enum";
+import {APP_PATH, LOCAL_STORAGE} from "../../../shared/enum/enum";
 import useSWR from "swr";
 import campaignApi from "../../../api/campaignApi";
 import {ICampaign} from "../../../shared/models/ICampaign";
@@ -130,7 +130,7 @@ const Content = () => {
             const myStorage = window.localStorage;
 
             myStorage.setItem(LOCAL_STORAGE.ADDRESS, JSON.stringify(addressSet));
-            router.push("/checkout-step3")
+            router.push(APP_PATH.CUSTOMER.CHECKOUT_3)
         }
 
         return (

@@ -2,7 +2,7 @@ import { Divider } from "@mui/material";
 import { useRouter } from "next/router";
 import React from "react";
 import { ITotal } from ".";
-import { LOCAL_STORAGE } from "../../../shared/enum/enum";
+import {APP_PATH, LOCAL_STORAGE} from "../../../shared/enum/enum";
 import NumberFormat from "../../../utils/NumberFormat";
 import CustomButtons from "../../commons/CustomButton";
 
@@ -20,7 +20,7 @@ const Total: React.FC<TotalProps> = (props) => {
         LOCAL_STORAGE.CART_ITEM,
         JSON.stringify([props.listTotal])
       );
-      router.push("/checkout-step2");
+      router.push(APP_PATH.CUSTOMER.CHECKOUT_2);
     }
   };
 

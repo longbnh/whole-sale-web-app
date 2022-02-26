@@ -81,3 +81,24 @@ export enum CAMPAIGN_SORT_DIRECTION {
   ASC = 0,
   DESC = 1,
 }
+
+export namespace APP_PATH {
+  export enum CUSTOMER {
+    CAMPAIGN = '/campaign',
+    CART = '/cart',
+    CHECKOUT_2 = '/checkout-step2',
+    CHECKOUT_3 = "/checkout-step3",
+    INDEX = '/',
+  }
+  export enum SELLER {
+    INDEX = '/seller/',
+    CAMPAIGN = '/seller/campaign',
+    ADD_LIST_PRODUCT = '/seller/addListProduct',
+    REGISTER_INFO = '/seller/registerInfo',
+    SHOP_CAMPAIGN = '/seller/shopCampaign',
+    SHOP_INFO = '/seller/shopInfo',
+    SHOP_LIST_PRODUCT = '/seller/shopListProduct',
+    SHOP_PRODUCT = '/seller/shopProduct',
+    WELCOME = '/seller/welcome',
+  }
+}

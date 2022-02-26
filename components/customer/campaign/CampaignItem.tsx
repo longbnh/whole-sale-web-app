@@ -20,7 +20,7 @@ import ShowMoreText from "react-show-more-text";
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import Link from 'next/link'
-import {LOCAL_STORAGE} from "../../../shared/enum/enum";
+import {APP_PATH, LOCAL_STORAGE} from "../../../shared/enum/enum";
 import {IImage} from "../../../shared/models/IImage";
 import cartApi from "../../../api/cartApi";
 
@@ -93,7 +93,7 @@ const CampaignItem = () => {
       };
       await myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify([myCampaign]));
       await cartApi.addToCart(myCampaign);
-      await router.push("/checkout-step2");
+      await router.push(APP_PATH.CUSTOMER.CHECKOUT_2);
     }
   };
 
