@@ -37,6 +37,7 @@ import {ArrowCircleDownIcon, ArrowCircleUpIcon, ChevronRightIcon} from "@heroico
 import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
 import {useRouter} from "next/router";
 import {IRequestPage, IRequestPageAlter} from "../../../shared/models/IRequestPage";
+import {IImage} from "../../../shared/models/IImage";
 
 interface EnhancedTableProps {
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof IProduct) => void;
@@ -188,7 +189,7 @@ const Content = () => {
                                       className="my-5 p-5 relative flex gap-16">
                                 {product.productImages &&
                                 <Avatar sx={{width: 100, height: 100}} variant="square">
-                                    <img src={product.productImages[0].url}/>
+                                    <img src={(product.productImages as IImage[])[0].url}/>
                                 </Avatar>}
                                 <div className="grid grid-cols-1">
                                     <div className="font-bold text-2xl">

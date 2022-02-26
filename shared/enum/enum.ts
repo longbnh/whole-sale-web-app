@@ -22,6 +22,7 @@ export enum SHOP_API {
   Order = "/orders",
   PaymentType = "/paymentTypes",
   Address = "/customers/addresses",
+  Image = "/images",
 }
 
 export enum POPUP_CREATE_PRODUCT {

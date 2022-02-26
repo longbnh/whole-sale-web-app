@@ -21,6 +21,7 @@ import IOrigin from "../../../shared/models/IOrigin";
 import {BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
 import {IProduct} from "../../../shared/models/IProduct";
 import {string} from "prop-types";
+import imageApi from "../../../api/imageApi";
 
 interface IListCategory {
     categories: ICategory[];
@@ -74,7 +75,6 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     const handleCategoryOne = (e: any) => {
         let categoryItem = e.target.value;
         let item = props.categories.filter((cate) => cate.name === categoryItem);
-        console.log(...item);
         setChoice(item[0]);
         setCategoryOne(categoryItem);
         setCategoryId(-1);
@@ -108,40 +108,28 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         //Handle submit here
         setLoading(true);
 
-        let imgArray = [] as string[];
-        for (const picture of pictures) {
-            let index = pictures.indexOf(picture);
-            let storageRef = ref(getStorage(),
-                `gs://wholesalesystem-7cf9b.appspot.com/Images/${Date.now()}-${index}-${picture.name}`);
-            await uploadBytes(storageRef, picture)
-            imgArray.push(await getDownloadURL(storageRef))
+        try {
+            console.log(pictures)
+            const response = await imageApi.uploadImage(pictures);
+            const imgArr: string[] = response.data;
+            let product: IProduct = {
+                name: name,
+                description: des,
+                originalPrice: price,
+                originId: originId,
+                brandId: brandId,
+                categoryId: categoryId,
+                productImages: imgArr,
+            }
+            await productApi.createProduct(product, 1)
+            setLoading(false);
+            setNotiContent(POPUP_CREATE_PRODUCT.Success);
+            setOpen(true);
+        } catch (error) {
+            setLoading(false);
+            setNotiContent(POPUP_CREATE_PRODUCT.Failed);
+            setOpen(true);
         }
-
-        let product: IProduct = {
-            name: name,
-            description: des,
-            originalPrice: price,
-            originId: originId,
-            brandId: brandId,
-            categoryId: categoryId,
-            productImages: imgArray,
-        }
-
-        console.log(product.productImages)
-
-        productApi.createProduct(product, 1)
-            .then(() => {
-                    setLoading(false);
-                    setNotiContent(POPUP_CREATE_PRODUCT.Success);
-                    setOpen(true);
-                    console.log("Submitted");
-                }
-            )
-            .catch(() => {
-                setLoading(false);
-                setNotiContent(POPUP_CREATE_PRODUCT.Failed);
-                setOpen(true);
-            })
     };
 
     return (
@@ -167,7 +155,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                                         className="w-32 h-32"
                                     />
                                     <IconButton
-                                        className="absolute top-0 right-0 p-0 bg-black"
+                                        className="absolute top-0 right-0 p-0 bg-gray-600"
                                         onClick={() => onRemovePicture(index)}
                                     >
                                         <CloseIcon className="text-white"/>
@@ -183,12 +171,12 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                                 type="file"
                                 onChange={onChangePicture}
                             />
-                            <Button
+                            {pictures.length < 5 && <Button
                                 className="border-2 border-dashed h-32 w-32 text-red-600"
                                 component="span"
                             >
                                 Thêm ảnh
-                            </Button>
+                            </Button>}
                         </label>
                     </div>
                     <div className="w-8/12 p-4 mt-5 ml-5">

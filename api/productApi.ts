@@ -5,10 +5,16 @@ import { IProduct } from "../shared/models/IProduct";
 import { IPagination } from "../shared/models/IPagination";
 import {IRequestPage} from "../shared/models/IRequestPage";
 
+const config = {
+  headers: {
+    "content-type": "application/json",
+    accountId: 2,
+  }
+}
 const productApi = {
   createProduct: (product: IProduct, shopId: number) => {
     const url = `${SHOP_API.Shop}/${shopId}/products`;
-    return axiosClient.post(url, product);
+    return axiosClient.post(url, product, config);
   },
   getProducts: (
     shopId: number,
