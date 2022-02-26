@@ -1,12 +1,14 @@
+import {IImage} from "./IImage";
+
 export interface IProduct {
-    id?: string
-    name?: string;
-    description?: string;
+    id: string
+    name: string;
+    description: string;
     originalPrice: number;
     originId?: number;
     brandId?: number;
     categoryId?: number;
-    productImages?: Array<string>;
+    productImages?: Array<IImage>;
     removeImages?: number[];
     status?: number;
 }

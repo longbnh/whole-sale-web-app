@@ -8,14 +8,35 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {SORT_TYPE} from "../../../shared/enum/enum";
-import {FormControl, InputLabel, MenuItem, Pagination, Select} from "@mui/material";
+import {
+    APP_PATH,
+    CAMPAIGN_DISPLAY_STATUS,
+    CAMPAIGN_SORT_DIRECTION,
+    CAMPAIGN_SORT_TYPE,
+    SORT_TYPE
+} from "../../../shared/enum/enum";
+import {
+    Avatar,
+    Button,
+    FormControl,
+    IconButton,
+    InputLabel,
+    List,
+    ListItem,
+    MenuItem,
+    Pagination,
+    Select
+} from "@mui/material";
 import Stack from "@mui/material/Stack";
 import {IProduct} from "../../../shared/models/IProduct";
 import {Order} from "../../../shared/type/type";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
 import {visuallyHidden} from "@mui/utils";
+import {ArrowCircleDownIcon, ArrowCircleUpIcon, ChevronRightIcon} from "@heroicons/react/solid";
+import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
+import {useRouter} from "next/router";
+import {IRequestPage, IRequestPageAlter} from "../../../shared/models/IRequestPage";
 
 interface EnhancedTableProps {
     onRequestSort: (event: React.MouseEvent<unknown>, property: keyof IProduct) => void;
@@ -92,131 +113,111 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 const Content = () => {
-    const [pageIndex, setPageIndex] = useState(1);
-    const [sortType, setSortType] = useState(SORT_TYPE.ID_ASC);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState<number>(5);
+    const [sortBy, setSortBy] = useState(SORT_TYPE.ID_ASC);
+    const [name, setName] = useState<string>("");
     const [order, setOrder] = React.useState<Order>('asc');
+    const [status, setStatus] = useState<number>(0);
     const [orderBy, setOrderBy] = React.useState<keyof IProduct>('name');
-    const [filter, setFilter] = React.useState<number>(0);
+    const router = useRouter();
 
+    let pageParam: IRequestPage = {
+        Page: page,
+        PageSize: pageSize,
+        Sort: sortBy,
+    }
     const {data, error} = useSWR([
         1,
-        pageIndex,
-        sortType,
-        filter,
+        name,
+        status,
+        pageParam,
     ], productApi.getProducts, {
         revalidateOnFocus: true
     });
 
     const handlePaging = (e: any, page: number) => {
-        setPageIndex(page)
+        setPage(page)
     }
 
-    function getSortType(order: Order, orderBy: keyof IProduct) {
-        if (order === "asc" && orderBy === "name") return SORT_TYPE.NAME_ASC;
-        if (order === "desc" && orderBy === "name") return SORT_TYPE.NAME_DESC;
-
-        if (order === "asc" && orderBy === "originalPrice") return SORT_TYPE.PRICE_ASC;
-        if (order === "desc" && orderBy === "originalPrice") return SORT_TYPE.PRICE_DESC;
-
-        if (order === "asc" && orderBy === "description") return SORT_TYPE.DESCRIPTION_ASC;
-        if (order === "desc" && orderBy === "description") return SORT_TYPE.DESCRIPTION_DESC;
-
-        return SORT_TYPE.ID_ASC
-    }
-
-    const handleRequestSort = async (
-        event: React.MouseEvent<unknown>,
-        property: keyof IProduct,
-    ) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-        setSortType(getSortType(isAsc ? 'desc' : 'asc', property))
-    };
-
-    const handleFilter = (e: any) => {
-        const filterValue = e.target.value;
-        setPageIndex(1)
-        setFilter(filterValue);
-    }
 
     return (
         <div
-            className="w-full relative flex bg-gray-100 ml-56"
-            // style={{ height: "calc(100vh - 50px)" }}
+            className="w-full relative bg-gray-100 ml-56"
         >
-            <div className="bg-white mt-5 mx-auto w-4/5 overflow-y-auto overflow-x-hidden min-h-screen">
-                <div className="flex flex-col align-center gap-5 justify-start p-4 mt-5 ml-5">
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Trạng thái</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={filter}
-                            label="Trạng thái"
-                            onChange={handleFilter}
+            <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
+                <div
+                    className="flex bg-white mx-4 mt-5 max-h-full border rounded-xl px-5 py-2 items-center justify-start gap-5">
+                    <span className="text-xl">Sắp xếp theo:</span>
+                    <Button className={`bg-red-600 text-white`}
+                    >
+                        Tên sản phẩm
+                    </Button>
+                    <Button className={`bg-red-600 text-white`}
+                    >
+                        Doanh số
+                    </Button>
+                    <Button className={`bg-red-600 text-white`}
+                    >
+                        Thời gian kết thúc
+                    </Button>
+                    <span className="flex items-center gap-5 text-xl ml-auto">
+                        Thứ tự:
+                        <IconButton aria-label="up"
+                                    size="small"
                         >
-                            <MenuItem key={0} value={0}>
-                                Tất cả
-                            </MenuItem>
-                            <MenuItem key={1} value={1}>
-                                Chưa bán
-                            </MenuItem>
-                            <MenuItem key={2} value={2}>
-                                Đang bán
-                            </MenuItem>
-                        </Select>
-                    </FormControl>
-                    {data?.data?.content?.length !== 0 &&
-                        <div className="flex flex-col gap-10">
-                            <TableContainer component={Paper}>
-                                <Table sx={{minWidth: 650}} aria-label="simple table">
-                                    <EnhancedTableHead
-                                        order={order}
-                                        orderBy={orderBy}
-                                        onRequestSort={handleRequestSort}
-                                    />
-                                    <TableBody>
-                                        {data && data.data.content?.map((product, index) => {
-                                            return (
-                                                <TableRow
-                                                    style ={ index % 2? { background : "#f1efef" }:{ background : "white" }}
-                                                    key={product.id}
-                                                    sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                                                >
-                                                    <TableCell component="th" scope="row" align="right">
-                                                        {index + (pageIndex - 1) * 10 + 1}
-                                                    </TableCell>
-                                                    <TableCell component="th" scope="row">
-                                                        {product.name}
-                                                    </TableCell>
-                                                    <TableCell component="th" scope="row">
-                                                        {product.description}
-                                                    </TableCell>
-                                                    <TableCell align="right">
-                                                        {product.originalPrice}
-                                                    </TableCell>
-                                                </TableRow>
-                                            )
-                                        })}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <div className="flex justify-end">
-                                <Stack spacing={2}>
-                                    <Pagination count={data?.data?.totalPage}
-                                                page={pageIndex}
-                                                onChange={handlePaging}
-                                                variant="outlined"
-                                                shape="rounded"/>
-                                </Stack>
-                            </div>
-                        </div>
-                    }
+                        <ArrowCircleUpIcon className={`h-10 w-10`}/>
+                        </IconButton>
+
+                        <IconButton aria-label="down"
+                                    size="small">
+                        <ArrowCircleDownIcon className={`h-10 w-10`}/>
+                        </IconButton>
+                    </span>
                 </div>
             </div>
+            {data && <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
+                <div
+                    className="bg-white mx-4 mt-5 overflow-y-auto p-2 overflow-x-hidden min-h-screen border rounded-xl">
+                    <List className="h-auto">
+                        {data.data.content.map((product, index) => (
+                            <ListItem button
+                                // onClick={() => router.push(`${APP_PATH.SELLER.}/${product.id}`)}
+                                      key={product.id}
+                                      divider
+                                      className="my-5 p-5 relative flex gap-16">
+                                {product.productImages &&
+                                <Avatar sx={{width: 100, height: 100}} variant="square">
+                                    <img src={product.productImages[0].url}/>
+                                </Avatar>}
+                                <div className="grid grid-cols-1">
+                                    <div className="font-bold text-2xl">
+                                        {product.name}
+                                    </div>
+                                </div>
+                                <ChevronRightIcon className="absolute right-0" style={{
+                                    top: "50%",
+                                    height: "20",
+                                }}/>
+                            </ListItem>
+                        ))}
+                    </List>
+                    {data.data.content.length > 0 && <div className="flex justify-end mt-16">
+                        <Stack spacing={2}>
+                            <Pagination count={data?.data?.totalPage}
+                                        page={page}
+                                        onChange={handlePaging}
+                                        variant="outlined"
+                                        shape="rounded"/>
+                        </Stack>
+                    </div>}
+                    {!(data.data.content.length > 0) &&
+                    <div className="flex justify-center text-xl mt-16">Không tìm thấy kết quả phù hợp!</div>}
+                </div>
+
+            </div>}
         </div>
     );
-};
+}
 
 export default Content;

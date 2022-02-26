@@ -140,13 +140,13 @@ const CampaignItem = () => {
 
   return (
     <div className="mx-auto w-1200">
-      <div className="bg-white mt-10 p-4 max-h-full">
+      <div className="bg-white mt-10 p-4 max-h-full rounded-lg">
         <span className="text-xl text-blue-600">
           <Link href="/">Trang chủ</Link>
         </span>
         {data && getCatePath(data.data.catePath)}
       </div>
-      <div className="bg-white mt-5 mx-auto max-h-full">
+      <div className="bg-white mt-5 mx-auto max-h-full rounded-lg">
         <div className="flex flex-col align-center gap-5 justify-start p-4">
           <div className="grid grid-cols-12">
             <div className="col-start-1 col-span-4">
@@ -245,7 +245,7 @@ const CampaignItem = () => {
                     </div>
                 </div>
             </div>
-            <div className="bg-white mt-5 mx-auto max-h-full">
+            <div className="bg-white mt-5 mx-auto max-h-full rounded-lg">
                 {data && <div className="flex flex-row p-5 gap-10">
                     <Avatar alt="shop avatar" src={data.data.shop?.avatarUrl} sx={{width: 100, height: 100}}/>
                     <div className="flex flex-col">
@@ -258,7 +258,7 @@ const CampaignItem = () => {
                     </div>
                 </div>}
             </div>
-            {data && <div className="bg-white mt-5 mx-auto max-h-full p-5 mb-5">
+            {data && <div className="bg-white rounded-lg mt-5 mx-auto max-h-full p-5 mb-5">
                 <div className="grid grid-rows-1">
                     <span className=" text-2xl font-bold mb-16">
                         Thông tin sản phẩm:
