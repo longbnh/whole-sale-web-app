@@ -14,7 +14,7 @@ const orderApi = {
     getPaymentType: () => {
         const url = `${
             SHOP_API.Order
-        }/${SHOP_API.PaymentType}`;
+        }${SHOP_API.PaymentType}`;
         return axiosClient.get<IPaymentType[]>(url);
     }
 }

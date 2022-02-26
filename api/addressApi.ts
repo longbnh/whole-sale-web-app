@@ -1,5 +1,4 @@
-import { SHOP_API } from "../shared/enum/enum";
-import IOrigin from "../shared/models/IOrigin";
+import {SHOP_API} from "../shared/enum/enum";
 import axiosClient from "./axiosClient";
 import {IAddress} from "../shared/models/IAddress";
 

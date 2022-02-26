@@ -10,9 +10,9 @@ import {
     CAMPAIGN_SORT_TYPE,
     CAMPAIGN_STATUS
 } from "../../../shared/enum/enum";
-import {getCurrentPrice2} from "../../../shared/utils/CampaignUtils";
 import {IRequestPageAlter} from "../../../shared/models/IRequestPage";
 import {useRouter} from "next/router";
+import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
 
 
 interface ICampaignStatus {
@@ -186,7 +186,7 @@ const Content = () => {
                                         <div
                                             // className="ml-auto"
                                         >
-                                            {(getCurrentPrice2(campaign) * campaign.currentSaleQuantity).toLocaleString()}đ
+                                            {(getCurrentPrice(campaign) * campaign.currentSaleQuantity).toLocaleString()}đ
                                         </div>
                                         <div>
                                             Ngày kết thúc:

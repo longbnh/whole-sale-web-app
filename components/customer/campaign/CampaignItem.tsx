@@ -83,7 +83,7 @@ const CampaignItem = () => {
     }
   };
 
-  const handleCheckOut = () => {
+  const handleCheckOut = async() => {
     if (typeof id === "string") {
       const myStorage = window.localStorage;
       const campaignId: number = parseInt(id);
@@ -91,9 +91,9 @@ const CampaignItem = () => {
         campaignId,
         quantity,
       };
-      myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify([myCampaign]));
-      cartApi.addToCart(myCampaign);
-      router.push("/checkout-step2");
+      await myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify([myCampaign]));
+      await cartApi.addToCart(myCampaign);
+      await router.push("/checkout-step2");
     }
   };
 
