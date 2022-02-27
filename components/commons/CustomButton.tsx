@@ -13,6 +13,7 @@ interface CustomButtonsProps {
   borderRadius?: number;
   boxShadow?: boolean;
   widthFull?: boolean;
+  disable?: boolean;
 }
 
 const CustomButtons: React.FC<CustomButtonsProps> = ({
@@ -24,6 +25,7 @@ const CustomButtons: React.FC<CustomButtonsProps> = ({
   borderRadius = 4,
   boxShadow = true,
   widthFull = false,
+  disable = false,
 }) => {
   const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
     color: theme.palette.getContrastText(color),
@@ -48,6 +50,7 @@ const CustomButtons: React.FC<CustomButtonsProps> = ({
           "w-full": widthFull,
         })}
         size={size}
+        disabled={disable}
         onClick={onClick}
       >
         {content}

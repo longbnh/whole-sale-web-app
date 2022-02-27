@@ -74,15 +74,11 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
   };
 
   const handleChecked = () => {
-    if (typeof window !== undefined) {
-      const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
-      const list: [ITotal[]] = JSON.parse(listChecked!);
-      if (
-        list.at(0)!.find((item) => item.id === props.item.campaign!.id) !==
-        undefined
-      ) {
-        return true;
-      }
+    const findItemCart = props.listTotal.find(
+      (item) => item.id === props.item.campaign?.id
+    );
+    if (findItemCart !== undefined) {
+      return true;
     }
     return false;
   };
@@ -92,7 +88,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
       <Checkbox
         id={props.item.campaign!.id.toString()}
         classes={{ root: classes.root }}
-        // defaultChecked={handleChecked()}
+        defaultChecked={handleChecked()}
         color="default"
         onChange={(event, checked) => {
           if (checked) {

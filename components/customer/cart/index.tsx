@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LOCAL_STORAGE } from "../../../shared/enum/enum";
 import Cart from "./Cart";
 import Total from "./Total";
@@ -11,6 +11,17 @@ export interface ITotal {
 
 const CartPage = () => {
   const [listTotal, setListTotal] = useState<ITotal[]>([]);
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
+      const list: ITotal[] = JSON.parse(listChecked!);
+      if (list !== null) {
+        // console.log(list);
+        setListTotal(list);
+      }
+    }
+  }, []);
 
   return (
     <div className="mx-auto h-fit pb-10 w-1200 relative flex items-start">
