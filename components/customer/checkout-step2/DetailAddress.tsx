@@ -1,5 +1,5 @@
 import ReactMapGL, {Marker} from '@goongmaps/goong-map-react';
-import React, {Dispatch, SetStateAction, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Autocomplete, Box, TextField} from "@mui/material";
 import goongMapApi from "../../../api/goongMapApi";
 import {IPlace, IPrediction} from "../../../shared/models/goongMap/IPrediction";
@@ -37,10 +37,17 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
         setAddressDetail,
     }) => {
     const [viewport, setViewport] = useState<MapProps | undefined>();
+    const [searchValue, setSearchValue] = useState<string>("");
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            handleSearch()
+        }, 2000)
+        return () => clearTimeout(timer)
+    }, [searchValue])
 
 
-    const handleSearch = async (e: any) => {
-        const searchValue = e.target.value;
+    const handleSearch = async () => {
         try {
             const response = await goongMapApi
                 .searchByKeyword(`${searchValue} ${ward.name} ${district.name} ${city.name}`);
@@ -49,6 +56,10 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
         } catch (error) {
             //handle error here
         }
+    }
+
+    const handleChangeSearchValue = (e) => {
+        setSearchValue(e.target.value);
     }
 
     const handleSelect = async (e: any) => {
@@ -90,8 +101,8 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
                 options={options}
                 getOptionLabel={option => option.description}
                 sx={{width: 900}}
-                onChange={e => handleSelect(e)}
-                onInputChange={(e) => handleSearch(e)}
+                onChange={handleSelect}
+                onInputChange={event => handleChangeSearchValue(event)}
                 renderInput={(params) =>
                     <TextField {...params}/>}
             />
