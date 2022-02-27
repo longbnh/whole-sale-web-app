@@ -19,7 +19,7 @@ interface CampaignProps {
 
 
 
-const Tab3: React.FC<CampaignProps> = (props) => {
+const Setting: React.FC<CampaignProps> = (props) => {
     const {data} = props;
     return (
         <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
@@ -162,4 +162,4 @@ const Tab3: React.FC<CampaignProps> = (props) => {
     )
 }
 
-export default Tab3;
+export default Setting;

@@ -34,7 +34,7 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
 import {visuallyHidden} from "@mui/utils";
 import {ArrowCircleDownIcon, ArrowCircleUpIcon, ChevronRightIcon} from "@heroicons/react/solid";
-import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
+import {getCurrentPrice} from "../../../utils/CampaignUtils";
 import {useRouter} from "next/router";
 import {IRequestPage, IRequestPageAlter} from "../../../shared/models/IRequestPage";
 import {IImage} from "../../../shared/models/IImage";

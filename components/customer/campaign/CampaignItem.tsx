@@ -5,7 +5,7 @@ import {
   getLastActiveMilestone,
   getMaxMilestone,
   getMergedMilestone,
-} from "../../../shared/utils/CampaignUtils";
+} from "../../../utils/CampaignUtils";
 import CustomStepper from "../../commons/CustomStepper";
 import Button from "@mui/material/Button";
 import Countdown from "react-countdown";

@@ -1,5 +1,5 @@
-import {ICampaign} from "../models/ICampaign";
-import {IMilestone} from "../models/IMilestone";
+import {ICampaign} from "../shared/models/ICampaign";
+import {IMilestone} from "../shared/models/IMilestone";
 
 export function getMergedMilestone(campaign: ICampaign): IMilestone[] {
     return campaign.mileStones.sort(function (a, b) {

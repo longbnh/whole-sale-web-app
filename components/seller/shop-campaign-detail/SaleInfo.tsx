@@ -2,7 +2,7 @@ import React from "react";
 import {ICampaign} from "../../../shared/models/ICampaign";
 import {Button, IconButton, TextField, tooltipClasses, TooltipProps} from "@mui/material";
 import {styled} from "@mui/material/styles";
-import {getLastActiveMilestone, getPercentageSaleOff} from "../../../shared/utils/CampaignUtils";
+import {getLastActiveMilestone, getPercentageSaleOff} from "../../../utils/CampaignUtils";
 import {IMilestone} from "../../../shared/models/IMilestone";
 import {QuestionMarkCircleIcon} from "@heroicons/react/solid";
 import Tooltip from '@mui/material/Tooltip';
@@ -26,7 +26,7 @@ const myTooltip = {
 
 }
 
-const Tab1: React.FC<CampaignProps> = (props) => {
+const SaleInfo: React.FC<CampaignProps> = (props) => {
     const {data} = props;
     return (
         <div className="mx-4 overflow-y-auto overflow-x-hidden min-h-screen">
@@ -223,4 +223,4 @@ const Tab1: React.FC<CampaignProps> = (props) => {
     )
 }
 
-export default Tab1;
+export default SaleInfo;
