@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {IAddress} from "../../../shared/models/IAddress";
+import {IAddress, IAddressUnit} from "../../../shared/models/IAddress";
 import addressApi from "../../../api/addressApi";
-import {Divider, FormControl, FormControlLabel, Radio, RadioGroup} from "@mui/material";
+import {Button, Divider, FormControl, FormControlLabel, Radio, RadioGroup} from "@mui/material";
 import {APP_PATH, LOCAL_STORAGE} from "../../../shared/enum/enum";
 import useSWR from "swr";
 import campaignApi from "../../../api/campaignApi";
 import {LocationMarkerIcon} from "@heroicons/react/solid";
 import {OrderInfo} from "../orderInfo/OrderInfo";
+import CreateAddress from "./CreateAddress";
 
 
 interface orderInfo {
@@ -19,6 +20,7 @@ const Content = () => {
         const [addresses, setAddresses] = useState<IAddress[]>([])
         const [addressSet, setAddressSet] = useState<number>();
         const [orderInfo, setOrderInfo] = useState<orderInfo[]>([]);
+        const [open, setOpen] = useState<boolean>(false);
         const listCampaignId = orderInfo.map(order => order.campaignId);
         const router = useRouter();
         const campaignsSWR = useSWR(listCampaignId, campaignApi.getCampaigns, {
@@ -32,8 +34,6 @@ const Content = () => {
             addressApi.getAddresses()
                 .then(response => {
                     setAddresses(response.data)
-                    console.log(response.data)
-                    console.log(response.data.filter(address => address.isPrimary)[0].id)
                     setAddressSet(response.data.filter(address => address.isPrimary)[0].id);
                 })
                 .catch(error => console.log(error));
@@ -46,7 +46,7 @@ const Content = () => {
                     {address.receiverName} - {address.phoneNumber}
                 </span>
                     <span className="mr-5">
-                    {address.detailAddress}, {address.ward.name}, {address.district.name}, {address.city.name}
+                    {address.detailAddress}, {(address.ward as IAddressUnit).name}, {(address.district as IAddressUnit).name}, {(address.city as IAddressUnit).name}
                 </span>
                     {address.isPrimary && <span className="text-gray-500">
                     Mặc định
@@ -68,6 +68,10 @@ const Content = () => {
             await router.push(APP_PATH.CUSTOMER.CHECKOUT_3)
         }
 
+        const handleCreateAddress = () => {
+            setOpen(true);
+        }
+
         return (
             <div
                 className="w-full relative bg-gray-100 max-h-full"
@@ -79,7 +83,7 @@ const Content = () => {
                                 Chọn địa chỉ nhận hàng
                             </span>
                         <Divider className="my-5"/>
-                        {addressSet && <FormControl className="mt-5 items-start">
+                        {addressSet && <FormControl className="mt-5">
                             <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
                                 defaultValue={addressSet}
@@ -93,12 +97,14 @@ const Content = () => {
                                                       label={getLabel(address)}/>
                                 )}
                             </RadioGroup>
+                            <Button onClick={handleCreateAddress}>TẠO ĐỊA CHỈ MỚI</Button>
                         </FormControl>}
                     </div>
                     {orderInfo && campaignsInfo &&
                     <OrderInfo handleClick={handleSubmit}
                                campaignsInfo={campaignsInfo}
                                orderInfo={orderInfo}/>}
+                    <CreateAddress open={open} handleClose={() => setOpen(false)}/>
                 </div>}
             </div>
         );

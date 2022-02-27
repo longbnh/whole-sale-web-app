@@ -9,12 +9,12 @@ export interface IAddress {
     detailAddress: string,
     latitude: 0,
     longitude: 0,
-    ward: IAddressUnit
-    district: IAddressUnit
-    city: IAddressUnit
+    ward: IAddressUnit | number,
+    district?: IAddressUnit | number,
+    city?: IAddressUnit | number,
     receiverName: string,
     phoneNumber: string,
     addressType: number,
     isPrimary: boolean,
-    status: number,
+    status?: number,
 }
