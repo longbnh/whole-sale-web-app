@@ -18,6 +18,10 @@ const addressApi = {
     getWards: (districtId: number) => {
         const url = `${ADDRESS.DISTRICT}/${districtId}/${ADDRESS.WARD}`;
         return axiosClient.get<IAddressUnit[]>(url);
+    },
+    createAddress: (address: IAddress) => {
+        const url = `${SHOP_API.Address}`;
+        return axiosClient.post(url, address);
     }
 };
 

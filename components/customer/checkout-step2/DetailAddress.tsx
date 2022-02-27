@@ -113,9 +113,6 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
                 </ReactMapGL>}
                 {viewport === undefined &&
                 <img className="hover:cursor-not-allowed"
-                     style={{
-                         pointerEvents: "none",
-                     }}
                      src="/world.svg" width={600} height={400}/>
                 }
             </div>

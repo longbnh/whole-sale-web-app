@@ -4,11 +4,12 @@ import {City} from "./City";
 import {District} from "./District";
 import {Ward} from "./Ward";
 import {DetailAddress} from "./DetailAddress";
-import {IAddressUnit} from "../../../shared/models/IAddress";
+import {IAddress, IAddressUnit} from "../../../shared/models/IAddress";
 import {IPlace} from "../../../shared/models/goongMap/IPrediction";
 import UserInfo from "./UserInfo";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
+import addressApi from "../../../api/addressApi";
 
 function a11yProps(index: number) {
     return {
@@ -20,6 +21,7 @@ function a11yProps(index: number) {
 export interface AddressUnitProps {
     handleClick: (unit: IAddressUnit) => void;
     unit?: IAddressUnit;
+    id: number;
 }
 
 export interface MarkerProps {
@@ -27,11 +29,12 @@ export interface MarkerProps {
     longitude: number;
 }
 
-const DEFAULT_VALUE : IAddressUnit = {
+const DEFAULT_VALUE: IAddressUnit = {
     id: -1,
     name: "",
     divisionType: "",
 };
+
 enum ADDRESS_TYPE {
     USER = 0,
     CITY = 1,
@@ -39,9 +42,11 @@ enum ADDRESS_TYPE {
     WARD = 3,
     DETAIL = 4,
 }
+
 interface CreateAddressProp {
     handleClose: any
 }
+
 const CreateAddressContent: React.FC<CreateAddressProp> = ({handleClose}) => {
     const [value, setValue] = useState(ADDRESS_TYPE.USER);
     const [city, setCity] = useState<IAddressUnit>(DEFAULT_VALUE);
@@ -82,21 +87,37 @@ const CreateAddressContent: React.FC<CreateAddressProp> = ({handleClose}) => {
         }
     }
 
-    const handleSubmit = async() => {
+    const handleSubmit = async () => {
         try {
-            console.log(ward.id);
-            console.log(addressDetail)
-            console.log(marker)
-            console.log(receiverName)
-            console.log(phoneNumber)
-        }
-        catch(error) {
-
+            if (ward.id !== -1
+                && addressDetail !== ""
+                && marker?.latitude
+                && marker.longitude
+                && receiverName !== ""
+                && phoneNumber != "") {
+                const addressParam: IAddress = {
+                    detailAddress: addressDetail,
+                    latitude: marker?.latitude,
+                    longitude: marker?.longitude,
+                    wardId: ward.id,
+                    receiverName: receiverName,
+                    phoneNumber: phoneNumber,
+                    addressType: 0,
+                    isPrimary: false,
+                }
+                await addressApi.createAddress(addressParam);
+                handleClose();
+            }
+            else {
+                console.log('missing info')
+            }
+        } catch (error) {
+            //handle error here
         }
     }
     return (
         <div>
-            <AppBar sx={{ position: 'relative' }}>
+            <AppBar sx={{position: 'relative'}}>
                 <Toolbar>
                     <IconButton
                         edge="start"
@@ -104,9 +125,9 @@ const CreateAddressContent: React.FC<CreateAddressProp> = ({handleClose}) => {
                         onClick={handleClose}
                         aria-label="close"
                     >
-                        <CloseIcon />
+                        <CloseIcon/>
                     </IconButton>
-                    <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                    <Typography sx={{ml: 2, flex: 1}} variant="h6" component="div">
                         Tạo địa chỉ mới
                     </Typography>
                     <Button autoFocus color="inherit" onClick={handleSubmit}>
@@ -120,7 +141,8 @@ const CreateAddressContent: React.FC<CreateAddressProp> = ({handleClose}) => {
                       aria-label="basic tabs example">
                     <Tab label="Thông tin cá nhân" {...a11yProps(ADDRESS_TYPE.USER)} />
                     <Tab label="Tỉnh/ Thành" {...a11yProps(ADDRESS_TYPE.CITY)} />
-                    <Tab label="Thành Phố/ Quận Huyện" disabled={city.id === -1} {...a11yProps(ADDRESS_TYPE.DISTRICT)} />
+                    <Tab label="Thành Phố/ Quận Huyện"
+                         disabled={city.id === -1} {...a11yProps(ADDRESS_TYPE.DISTRICT)} />
                     <Tab label="Phường Xã" disabled={district.id === -1} {...a11yProps(ADDRESS_TYPE.WARD)} />
                     <Tab label="Địa chỉ cụ thể" disabled={ward.id === -1} {...a11yProps(ADDRESS_TYPE.DETAIL)} />
                 </Tabs>
@@ -128,9 +150,10 @@ const CreateAddressContent: React.FC<CreateAddressProp> = ({handleClose}) => {
                     {value === ADDRESS_TYPE.USER
                     && <UserInfo phoneNumber={phoneNumber} receiverName={receiverName}
                                  setPhoneNumber={setPhoneNumber} setReceiverName={setReceiverName}/>}
-                    {value === ADDRESS_TYPE.CITY && <City handleClick={handleClick}/>}
-                    {value === ADDRESS_TYPE.DISTRICT && <District handleClick={handleClick} unit={city}/>}
-                    {value === ADDRESS_TYPE.WARD && <Ward handleClick={handleClick} unit={district}/>}
+                    {value === ADDRESS_TYPE.CITY && <City handleClick={handleClick} id={city.id}/>}
+                    {value === ADDRESS_TYPE.DISTRICT &&
+                    <District handleClick={handleClick} unit={city} id={district.id}/>}
+                    {value === ADDRESS_TYPE.WARD && <Ward handleClick={handleClick} unit={district} id={ward.id}/>}
                     {value === ADDRESS_TYPE.DETAIL
                     && <DetailAddress city={city} district={district} ward={ward}
                                       marker={marker}

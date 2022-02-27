@@ -5,13 +5,14 @@ export interface IAddressUnit {
 }
 
 export interface IAddress {
-    id: number;
+    id?: number;
     detailAddress: string,
-    latitude: 0,
-    longitude: 0,
-    ward: IAddressUnit | number,
-    district?: IAddressUnit | number,
-    city?: IAddressUnit | number,
+    latitude: number,
+    longitude: number,
+    ward?: IAddressUnit,
+    wardId?: number;
+    district?: IAddressUnit,
+    city?: IAddressUnit,
     receiverName: string,
     phoneNumber: string,
     addressType: number,

@@ -4,7 +4,7 @@ import addressApi from "../../../api/addressApi";
 import {Divider, List, ListItem, ListItemText} from "@mui/material";
 import {AddressUnitProps} from "./CreateAddressContent";
 
-export const City: React.FC<AddressUnitProps> = ({handleClick}) => {
+export const City: React.FC<AddressUnitProps> = ({handleClick, id}) => {
     const [cities, setCities] = useState<IAddressUnit[]>([]);
     useEffect(() => {
         addressApi.getCities()
@@ -19,7 +19,8 @@ export const City: React.FC<AddressUnitProps> = ({handleClick}) => {
         <List style={{maxHeight: '100%', overflow: 'auto'}}>
             {cities.map(city => (
                     <>
-                        <ListItem button key={city.id} onClick={() => handleClick(city)}>
+                        <ListItem button key={city.id} onClick={() => handleClick(city)}
+                                  className={`${id === city.id ? "bg-green-400" : ""}`}>
                             <ListItemText primary={city.name} secondary={city.divisionType}/>
                         </ListItem>
                         <Divider/>
