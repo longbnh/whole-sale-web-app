@@ -5,16 +5,17 @@ export interface IAddressUnit {
 }
 
 export interface IAddress {
-    id: number;
+    id?: number;
     detailAddress: string,
-    latitude: 0,
-    longitude: 0,
-    ward: IAddressUnit
-    district: IAddressUnit
-    city: IAddressUnit
+    latitude: number,
+    longitude: number,
+    ward?: IAddressUnit,
+    wardId?: number;
+    district?: IAddressUnit,
+    city?: IAddressUnit,
     receiverName: string,
     phoneNumber: string,
     addressType: number,
     isPrimary: boolean,
-    status: number,
+    status?: number,
 }
