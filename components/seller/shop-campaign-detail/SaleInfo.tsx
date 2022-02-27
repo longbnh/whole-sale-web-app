@@ -2,7 +2,7 @@ import React from "react";
 import {ICampaign} from "../../../shared/models/ICampaign";
 import {Button, IconButton, TextField, tooltipClasses, TooltipProps} from "@mui/material";
 import {styled} from "@mui/material/styles";
-import {getLastActiveMilestone, getPercentageSaleOff} from "../../../shared/utils/CampaignUtils";
+import {getLastActiveMilestone, getPercentageSaleOff} from "../../../utils/CampaignUtils";
 import {IMilestone} from "../../../shared/models/IMilestone";
 import {QuestionMarkCircleIcon} from "@heroicons/react/solid";
 import Tooltip from '@mui/material/Tooltip';

@@ -13,7 +13,7 @@ import {
 } from "../../../shared/enum/enum";
 import {IRequestPageAlter} from "../../../shared/models/IRequestPage";
 import {useRouter} from "next/router";
-import {getCurrentPrice} from "../../../shared/utils/CampaignUtils";
+import {getCurrentPrice} from "../../../utils/CampaignUtils";
 
 
 interface ICampaignStatus {

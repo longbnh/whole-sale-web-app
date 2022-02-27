@@ -4,9 +4,9 @@ import {Box, Button, IconButton, Tab, Tabs} from "@mui/material";
 import {useRouter} from "next/router";
 import useSWR from "swr";
 import campaignApi from "../../../api/campaignApi";
-import Tab0 from "./Tab-0";
-import Tab1 from "./Tab-1";
-import Tab3 from "./Tab-3";
+import GeneralInfo from "./GeneralInfo";
+import SaleInfo from "./SaleInfo";
+import Setting from "./Setting";
 
 const Content = () => {
     const router = useRouter();
@@ -32,11 +32,10 @@ const Content = () => {
 
     return (
         <div
-            className="relative bg-gray-100 min-h-screen h-full overflow-y-auto overflow-x-hidden py-5"
+            className="relative bg-gray-100 py-5 w-full ml-56"
         >
-            <div className="mx-4 max-h-full">
-                <div
-                    className="flex bg-white mx-4 mt-5 max-h-full border rounded-xl px-5 py-2 items-center justify-start gap-5">
+            <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
+                <div className="flex bg-white mx-4 mt-5 max-h-full border rounded-xl px-5 py-2 items-center justify-start gap-5">
                     <Button variant="text"
                             onClick={() => router.back()}
                             startIcon={
@@ -51,7 +50,7 @@ const Content = () => {
                 </div>
             </div>
 
-            <div className="mx-4 max-h-full">
+            <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
                 <div
                     className="bg-white mx-4 mt-5 p-2 max-h-full border rounded-xl">
                     <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
@@ -59,14 +58,14 @@ const Content = () => {
                             <Tab label="Thông tin cơ bản" {...a11yProps(0)} />
                             <Tab label="Dữ liệu kinh doanh" {...a11yProps(1)} />
                             <Tab label="Đơn đặt hàng" disabled {...a11yProps(2)} />
-                            <Tab label="Cài đặt" disabled {...a11yProps(3)} />
+                            <Tab label="Cài đặt" {...a11yProps(3)} />
                         </Tabs>
                     </Box>
                 </div>
             </div>
-            {(tabIndex === 0) && data && <Tab0 data={data.data}/>}
-            {(tabIndex === 1) && data && <Tab1 data={data.data}/>}
-            {(tabIndex === 3) && data && <Tab3 data={data.data}/>}
+            {(tabIndex === 0) && data && <GeneralInfo data={data.data}/>}
+            {(tabIndex === 1) && data && <SaleInfo data={data.data}/>}
+            {(tabIndex === 3) && data && <Setting data={data.data}/>}
 
         </div>
     )

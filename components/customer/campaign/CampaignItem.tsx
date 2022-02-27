@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Avatar, Divider, TextField} from "@mui/material";
-import {getLastActiveMilestone, getMaxMilestone, getMergedMilestone,} from "../../../shared/utils/CampaignUtils";
+import {getLastActiveMilestone, getMaxMilestone, getMergedMilestone,} from "../../../utils/CampaignUtils";
 import CustomStepper from "../../commons/CustomStepper";
 import Button from "@mui/material/Button";
 import Countdown from "react-countdown";
