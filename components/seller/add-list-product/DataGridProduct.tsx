@@ -120,7 +120,7 @@ const DataGridProduct: React.FC<DataGridProduct> = (props) => {
       disableColumnMenu: true,
       hideSortIcons: true,
       renderCell: (params) => {
-        return params.value.toLocaleString("en-us");
+        return (params.value / 1000).toLocaleString("en-us");
       },
     },
     {

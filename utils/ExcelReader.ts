@@ -28,7 +28,7 @@ const ExcelReader = (
               subcategory: temp[3],
               origin: temp[4],
               brand: temp[5],
-              price: temp[6] / 1000,
+              price: temp[6],
               des: temp[7],
             };
             data.push(excelObject);

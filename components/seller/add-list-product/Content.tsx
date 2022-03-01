@@ -12,6 +12,8 @@ import DataGridProduct from "./DataGridProduct";
 import CustomButtons from "../../commons/CustomButton";
 import ISubmitProduct from "../../../shared/models/ISubmitProduct";
 import productApi from "../../../api/productApi";
+import { useRouter } from "next/router";
+import { APP_PATH } from "../../../shared/enum/enum";
 
 const Input = styled("input")({
   display: "none",
@@ -28,6 +30,8 @@ const Content: React.FC<ContentProps> = (props) => {
   const [formData, setFormData] = useState<ISubmitProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const route = useRouter();
+
   const handleUpload = async (e: any) => {
     setLoading(true);
     const file = e.target.files[0];
@@ -37,7 +41,7 @@ const Content: React.FC<ContentProps> = (props) => {
   const handleSubmit = async () => {
     const response = await productApi.createListProduct(formData, 1);
     if (response.status === 200) {
-      console.log("success");
+      route.push(APP_PATH.SELLER.SHOP_LIST_PRODUCT);
     }
   };
 
