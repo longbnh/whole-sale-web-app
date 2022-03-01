@@ -31,6 +31,9 @@ export namespace GOONG_PATH {
         AUTOCOMPLETE = "/Place/AutoComplete",
         DETAIL = "/Place/Detail",
     }
+    export enum GEOCODING {
+        FORWARD = "/geocode"
+    }
 }
 
 export enum ADDRESS {
