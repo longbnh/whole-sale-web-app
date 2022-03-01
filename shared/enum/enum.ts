@@ -106,6 +106,11 @@ export namespace PAGE_REQUEST {
                 GET_ALL_ACTIVE_ONLY = 1,
                 GET_ALL_SALE_ONLY = 2,
             }
+            export enum PRODUCT_DISPLAY {
+                ACTIVE = 0,
+                DELETED = 0,
+                ON_SALE = 0,
+            }
         }
     }
     export namespace ORDER {

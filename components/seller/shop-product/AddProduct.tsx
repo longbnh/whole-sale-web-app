@@ -19,7 +19,7 @@ import ICategory from "../../../shared/models/ICategory";
 import IBrand from "../../../shared/models/IBrand";
 import IOrigin from "../../../shared/models/IOrigin";
 import {BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
-import {IProduct} from "../../../shared/models/IProduct";
+import {IProduct} from "../../../shared/models/modifyApi/IProduct";
 import imageApi from "../../../api/imageApi";
 
 interface IListCategory {
