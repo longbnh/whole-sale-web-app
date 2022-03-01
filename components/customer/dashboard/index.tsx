@@ -6,7 +6,7 @@ import Hotdeal from "./Hotdeal";
 
 import dashboard from "../../../public/json/dashboard.json";
 import campaignApi from "../../../api/campaignApi";
-import {IRequestPage} from "../../../shared/models/IRequestPage";
+import {IRequestPage, IRequestPageInitialState} from "../../../shared/models/IRequestPage";
 import {ICampaign} from "../../../shared/models/ICampaign";
 
 const DashboardCustomer = () => {
@@ -20,7 +20,7 @@ const DashboardCustomer = () => {
   };
 
   const getCampaignByCategory = async () => {
-    let page: IRequestPage = { Page: 1, PageSize: 5, Sort: "id_asc" };
+    let page: IRequestPage = IRequestPageInitialState;
     const response = await campaignApi.getCampaignByCategory(7, "", page);
     setListHotDeal(response.data.content);
     setListNearby(response.data.content);

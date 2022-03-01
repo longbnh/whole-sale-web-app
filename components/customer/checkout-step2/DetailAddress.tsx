@@ -39,7 +39,7 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
     useEffect(() => {
         const timer = setTimeout(() => {
             handleSearch()
-        }, 1000)
+        }, 1000) //wait 1 sec after users finish typing
         return () => clearTimeout(timer)
     }, [searchValue])
 

@@ -10,5 +10,7 @@ export interface IProduct {
     categoryId?: number;
     productImages?: Array<IImage> | string[];
     removeImages?: number[];
+    sort?: number;
+    order?: number;
     status?: number;
 }

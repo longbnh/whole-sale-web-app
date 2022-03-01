@@ -8,9 +8,8 @@ import ShowMoreText from "react-show-more-text";
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-slideshow-image/dist/styles.css'
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
-import {CAMPAIGN_DISPLAY_STATUS} from "../../../shared/enum/enum";
+import {PAGE_REQUEST} from "../../../shared/enum/enum";
 import {Divider} from "@mui/material";
-import {IImage} from "../../../shared/models/IImage";
 
 const slideShowProps = {
     indicators: true,
@@ -52,11 +51,11 @@ const GeneralInfo: React.FC<CampaignProps> = (props) => {
                                 Trạng thái:
                             </div>
                             <div>
-                                {data.status === CAMPAIGN_DISPLAY_STATUS.ACTIVE
+                                {data.status === PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY.ACTIVE
                                 && <span className="font-bold text-green-500">ĐANG BÁN</span>}
-                                {data.status === CAMPAIGN_DISPLAY_STATUS.HIDDEN
+                                {data.status === PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY.HIDDEN
                                 && <span className="font-bold text-red-500">ĐÃ ẨN</span>}
-                                {data.status === CAMPAIGN_DISPLAY_STATUS.COMPLETE
+                                {data.status === PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY.COMPLETE
                                 && <span className="font-bold text-blue-500">HOÀN THÀNH</span>}
                             </div>
                             <Divider className="col-span-2 my-5"/>

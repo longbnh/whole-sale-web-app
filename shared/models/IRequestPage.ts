@@ -1,12 +1,15 @@
+import {OrderType, SortType, StatusQueryType} from "../type/type";
+
 export interface IRequestPage {
-  Page?: number;
-  PageSize?: number;
-  Sort?: string;
+    page: number;
+    pageSize: number;
+    sort?: SortType;
+    order?: OrderType;
+    status?: StatusQueryType;
 }
 
-
-export interface IRequestPageAlter {
-  Page?: number;
-  PageSize?: number;
-  Sort?: number;
+export const IRequestPageInitialState: IRequestPage = {
+    page: 1,
+    pageSize: 5,
 }
+

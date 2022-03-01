@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import {styled} from "@mui/material/styles";
 import {
-    Button, CircularProgress,
+    Button,
+    CircularProgress,
     FormControl,
     IconButton,
     InputLabel,
@@ -12,7 +13,6 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import CustomAutoComplete from "../../commons/CustomAutoComplete";
-import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import productApi from "../../../api/productApi";
 import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
 import ICategory from "../../../shared/models/ICategory";
@@ -20,7 +20,6 @@ import IBrand from "../../../shared/models/IBrand";
 import IOrigin from "../../../shared/models/IOrigin";
 import {BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
 import {IProduct} from "../../../shared/models/IProduct";
-import {string} from "prop-types";
 import imageApi from "../../../api/imageApi";
 
 interface IListCategory {

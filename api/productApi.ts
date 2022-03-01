@@ -3,7 +3,7 @@ import ISubmitProduct from "../shared/models/ISubmitProduct";
 import axiosClient from "./axiosClient";
 import { IProduct } from "../shared/models/IProduct";
 import { IPagination } from "../shared/models/IPagination";
-import {IRequestPage} from "../shared/models/IRequestPage";
+import { IRequestPage} from "../shared/models/IRequestPage";
 
 const config = {
   headers: {
@@ -19,7 +19,6 @@ const productApi = {
   getProducts: (
     shopId: number,
     name?: string,
-    status?: string,
     pageRequest?: IRequestPage,
   ) => {
     const url = `${
@@ -28,7 +27,6 @@ const productApi = {
     const param = {
       ...pageRequest,
       name: name,
-      status: status,
     }
     return axiosClient.get<IPagination<IProduct>>(url, {
       headers: {

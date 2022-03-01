@@ -1,145 +1,24 @@
 import React, {useState} from "react";
 import useSWR from 'swr'
 import productApi from "../../../api/productApi";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import {
-    APP_PATH,
-    CAMPAIGN_DISPLAY_STATUS,
-    CAMPAIGN_SORT_DIRECTION,
-    CAMPAIGN_SORT_TYPE,
-    SORT_TYPE
-} from "../../../shared/enum/enum";
-import {
-    Avatar,
-    Button,
-    FormControl,
-    IconButton,
-    InputLabel,
-    List,
-    ListItem,
-    MenuItem,
-    Pagination,
-    Select
-} from "@mui/material";
+import {Avatar, Button, IconButton, List, ListItem, Pagination} from "@mui/material";
 import Stack from "@mui/material/Stack";
-import {IProduct} from "../../../shared/models/IProduct";
-import {Order} from "../../../shared/type/type";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Box from "@mui/material/Box";
-import {visuallyHidden} from "@mui/utils";
 import {ArrowCircleDownIcon, ArrowCircleUpIcon, ChevronRightIcon} from "@heroicons/react/solid";
-import {getCurrentPrice} from "../../../utils/CampaignUtils";
-import {useRouter} from "next/router";
-import {IRequestPage, IRequestPageAlter} from "../../../shared/models/IRequestPage";
+import {IRequestPage, IRequestPageInitialState} from "../../../shared/models/IRequestPage";
 import {IImage} from "../../../shared/models/IImage";
-
-interface EnhancedTableProps {
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof IProduct) => void;
-    order: Order;
-    orderBy: string;
-}
-
-interface HeadCell {
-    disablePadding: boolean;
-    id: keyof IProduct;
-    label: string;
-    numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
-    {
-        id: 'name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Tên sản phẩm',
-    },
-    {
-        id: 'description',
-        numeric: false,
-        disablePadding: false,
-        label: 'Mô tả',
-    },
-    {
-        id: 'originalPrice',
-        numeric: true,
-        disablePadding: false,
-        label: 'Giá gốc',
-    },
-];
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-    const {order, orderBy, onRequestSort} =
-        props;
-    const createSortHandler =
-        (property: keyof IProduct) => (event: React.MouseEvent<unknown>) => {
-            onRequestSort(event, property);
-        };
-
-    return (
-        <TableHead>
-            <TableRow>
-                <TableCell align="right">
-                    #
-                </TableCell>
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
-}
+import {handlePageUtil} from "../../../utils/PageRequestUtils";
 
 const Content = () => {
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState<number>(5);
-    const [sortBy, setSortBy] = useState(SORT_TYPE.ID_ASC);
-    const [name, setName] = useState<string>("");
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [status, setStatus] = useState<number>(0);
-    const [orderBy, setOrderBy] = React.useState<keyof IProduct>('name');
-    const router = useRouter();
+    const [productName, setProductName] = useState<string>("");
+     const [pageRequest, setPageRequest] = useState<IRequestPage>(IRequestPageInitialState);
 
-    let pageParam: IRequestPage = {
-        Page: page,
-        PageSize: pageSize,
-        Sort: sortBy,
-    }
-    const {data, error} = useSWR([
+    const {data} = useSWR([
         1,
-        name,
-        status,
-        pageParam,
+        productName,
+        pageRequest,
     ], productApi.getProducts, {
         revalidateOnFocus: true
     });
-
-    const handlePaging = (e: any, page: number) => {
-        setPage(page)
-    }
 
 
     return (
@@ -206,8 +85,8 @@ const Content = () => {
                     {data.data.content.length > 0 && <div className="flex justify-end mt-16">
                         <Stack spacing={2}>
                             <Pagination count={data?.data?.totalPage}
-                                        page={page}
-                                        onChange={handlePaging}
+                                        page={pageRequest.page}
+                                        onChange={(e, page) => handlePageUtil(page, setPageRequest)}
                                         variant="outlined"
                                         shape="rounded"/>
                         </Stack>

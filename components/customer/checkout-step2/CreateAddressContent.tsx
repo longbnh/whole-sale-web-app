@@ -53,7 +53,6 @@ const CreateAddressContent: React.FC<CreateAddressProp> = ({handleClose}) => {
     const [district, setDistrict] = useState<IAddressUnit>(DEFAULT_VALUE);
     const [ward, setWard] = useState<IAddressUnit>(DEFAULT_VALUE);
     const [marker, setMarker] = useState<MarkerProps>(); //keep the lat and lng value
-    const [options, setOptions] = useState<readonly IPlace[]>([]);
     const [addressDetail, setAddressDetail] = useState<string>("");
     const [receiverName, setReceiverName] = useState<string>("");
     const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -92,7 +91,7 @@ const CreateAddressContent: React.FC<CreateAddressProp> = ({handleClose}) => {
             if (ward.id !== -1
                 && addressDetail !== ""
                 && marker?.latitude
-                && marker.longitude
+                && marker?.longitude
                 && receiverName !== ""
                 && phoneNumber != "") {
                 const addressParam: IAddress = {
@@ -158,7 +157,7 @@ const CreateAddressContent: React.FC<CreateAddressProp> = ({handleClose}) => {
                     && <DetailAddress city={city} district={district} ward={ward}
                                       marker={marker}
                                       setAddressDetail={setAddressDetail}
-                                      setMarker={setMarker} options={options} setOptions={setOptions}/>}
+                                      setMarker={setMarker}/>}
                 </div>
             </Box>
         </div>
