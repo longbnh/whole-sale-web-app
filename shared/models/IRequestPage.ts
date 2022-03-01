@@ -1,4 +1,4 @@
-import {OrderType, SortType, StatusQueryType} from "../type/type";
+import {OrderType, SortType, StatusQueryType} from "../type/paginationTypes";
 
 export interface IRequestPage {
     page: number;

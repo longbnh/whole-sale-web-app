@@ -4,7 +4,7 @@ import {IImage} from "./IImage";
 import {IShop} from "./IShop";
 import IBrand from "./IBrand";
 import {IPromotionPlan} from "./IPromotionPlan";
-import {CampaignDisplayStatus} from "../type/type";
+import {CampaignDisplayStatus} from "../type/paginationTypes";
 
 export interface ICampaign {
     id: number;

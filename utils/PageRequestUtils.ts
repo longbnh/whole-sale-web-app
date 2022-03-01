@@ -1,6 +1,6 @@
 import {Dispatch, SetStateAction} from "react";
 import {IRequestPage} from "../shared/models/IRequestPage";
-import {CampaignDisplayStatus, OrderType, SortType, StatusQueryType} from "../shared/type/type";
+import {CampaignDisplayStatus, OrderType, SortType, StatusQueryType} from "../shared/type/paginationTypes";
 import {PAGE_REQUEST} from "../shared/enum/enum";
 import ORDER_QUERY = PAGE_REQUEST.ORDER.ORDER_QUERY;
 
