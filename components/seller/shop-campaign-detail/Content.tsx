@@ -68,7 +68,7 @@ const Content = () => {
       </div>
       {tabIndex === 0 && data && <GeneralInfo data={data.data} />}
       {tabIndex === 1 && data && <SaleInfo data={data.data} />}
-      {tabIndex === 2 && data && <Order />}
+      {tabIndex === 2 && data && <Order data={data.data} />}
       {tabIndex === 3 && data && <Setting data={data.data} />}
     </div>
   );

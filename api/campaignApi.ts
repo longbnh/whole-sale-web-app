@@ -1,8 +1,9 @@
-import {SHOP_API} from "../shared/enum/enum";
+import { SHOP_API } from "../shared/enum/enum";
 import axiosClient from "./axiosClient";
-import {IPagination} from "../shared/models/IPagination";
-import {ICampaign} from "../shared/models/ICampaign";
-import {IRequestPage} from "../shared/models/IRequestPage";
+import { IPagination } from "../shared/models/IPagination";
+import { ICampaign } from "../shared/models/ICampaign";
+import { IRequestPage } from "../shared/models/IRequestPage";
+import { IOrderSeller } from "../shared/models/IOrder";
 
 const campaignApi = {
   getCampaign: (campaignId: number) => {
@@ -32,8 +33,24 @@ const campaignApi = {
         "content-type": "application/json",
         accountId: 2,
       },
-    }
+    };
     return axiosClient.get<ICampaign>(url, config);
+  },
+  getOrderByCampaign: (campaignId: number, pageRequest: IRequestPage) => {
+    const url = `${SHOP_API.Campaign}/${campaignId}/${SHOP_API.Order}`;
+    const param = { ...pageRequest, campaignId: campaignId };
+    // sau này bỏ
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        accountId: 2,
+      },
+    };
+    // sau này bỏ
+    return axiosClient.get<IPagination<IOrderSeller>>(url, {
+      params: param,
+      ...config,
+    });
   },
 };
 
