@@ -108,8 +108,8 @@ export namespace PAGE_REQUEST {
             }
             export enum PRODUCT_DISPLAY {
                 ACTIVE = 0,
-                DELETED = 0,
-                ON_SALE = 0,
+                DELETED = 1,
+                ON_SALE = 2,
             }
         }
     }

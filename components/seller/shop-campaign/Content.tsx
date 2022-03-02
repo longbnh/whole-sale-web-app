@@ -16,7 +16,7 @@ import {
     matchOrderType,
     matchSortType
 } from "../../../utils/PageRequestUtils";
-import {CampaignDisplayStatus, SortType, StatusQueryType} from "../../../shared/type/paginationTypes";
+import {CampaignDisplayStatus, StatusQueryType} from "../../../shared/type/paginationTypes";
 import GENERAL_ORDER = PAGE_REQUEST.ORDER.ORDER_QUERY;
 import CAMPAIGN_QUERY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_QUERY;
 import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
