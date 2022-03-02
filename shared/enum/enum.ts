@@ -82,6 +82,7 @@ export namespace APP_PATH {
         SHOP_LIST_PRODUCT = '/seller/shopListProduct',
         SHOP_PRODUCT = '/seller/shopProduct',
         WELCOME = '/seller/welcome',
+        PRODUCT = '/seller/product',
     }
 }
 

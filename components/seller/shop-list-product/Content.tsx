@@ -14,12 +14,13 @@ import {
     matchOrderType,
     matchSortType
 } from "../../../utils/PageRequestUtils";
-import {PAGE_REQUEST} from "../../../shared/enum/enum";
+import {APP_PATH, PAGE_REQUEST} from "../../../shared/enum/enum";
 import {ProductDisplayStatus, StatusQueryType} from "../../../shared/type/paginationTypes";
 import ORDER_QUERY = PAGE_REQUEST.ORDER.ORDER_QUERY;
 import PRODUCT = PAGE_REQUEST.SORT.PRODUCT;
 import PRODUCT_DISPLAY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_DISPLAY;
 import PRODUCT_QUERY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_QUERY;
+import {useRouter} from "next/router";
 
 interface IProductStatus {
     id: StatusQueryType;
@@ -53,6 +54,7 @@ const Content = () => {
     ], productApi.getProducts, {
         revalidateOnFocus: true
     });
+    const router = useRouter();
 
     function renderStatus(status: ProductDisplayStatus) {
         console.log(status)
@@ -162,7 +164,7 @@ const Content = () => {
                     <List className="h-auto">
                         {data.data.content.map((product, index) => (
                             <ListItem button
-                                // onClick={() => router.push(`${APP_PATH.SELLER.}/${product.id}`)}
+                                onClick={() => router.push(`${APP_PATH.SELLER.PRODUCT}/${product.id}`)}
                                       key={product.id}
                                       divider
                                       className="my-5 p-5 relative flex gap-16">

@@ -1,5 +1,4 @@
 import React from "react";
-import {ICampaign} from "../../../shared/models/ICampaign";
 //@ts-ignore
 import {Slide} from 'react-slideshow-image';
 //@ts-ignore
@@ -10,22 +9,24 @@ import 'react-slideshow-image/dist/styles.css'
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import {PAGE_REQUEST} from "../../../shared/enum/enum";
 import {Divider} from "@mui/material";
+import {IProduct} from "../../../shared/models/IProduct";
+import {matchProductStatusDisplayType} from "../../../utils/PageRequestUtils";
+import PRODUCT_DISPLAY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_DISPLAY;
+import NumberFormat from "../../../utils/NumberFormat";
 import {DateFormat} from "../../../utils/DateFormat";
-import {matchCampaignStatusDisplayType} from "../../../utils/PageRequestUtils";
-import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
 
 const slideShowProps = {
     indicators: true,
     scale: 2
 }
 
-interface CampaignProps {
-    data: ICampaign;
+interface ProductProps {
+    data: IProduct;
 }
 
 
 
-const GeneralInfo: React.FC<CampaignProps> = (props) => {
+const GeneralInfo: React.FC<ProductProps> = (props) => {
     const {data} = props;
     return (
         <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
@@ -35,7 +36,7 @@ const GeneralInfo: React.FC<CampaignProps> = (props) => {
                     <div className="col-start-1 col-span-4">
                         {data && <div className="slide-container mt-20">
                             <Slide {...slideShowProps}>
-                                {data.images?.map((image, index) => (
+                                {data.productImages?.map((image, index) => (
                                     <div className="each-slide max-h-full" key={index}>
                                         <InnerImageZoom src={image.url}
                                                         zoomSrc={image.url}
@@ -54,26 +55,17 @@ const GeneralInfo: React.FC<CampaignProps> = (props) => {
                                 Trạng thái:
                             </div>
                             <div>
-                                {matchCampaignStatusDisplayType(data.status, CAMPAIGN_DISPLAY.ACTIVE)
-                                && <span className="font-bold text-green-500">ĐANG BÁN</span>}
-                                {matchCampaignStatusDisplayType(data.status, CAMPAIGN_DISPLAY.HIDDEN)
-                                && <span className="font-bold text-red-500">ĐÃ ẨN</span>}
-                                {matchCampaignStatusDisplayType(data.status, CAMPAIGN_DISPLAY.COMPLETE)
-                                && <span className="font-bold text-blue-500">HOÀN THÀNH</span>}
+                                {matchProductStatusDisplayType(data.status, PRODUCT_DISPLAY.ACTIVE)
+                                && <span className="font-bold text-green-500">SẴN SÀNG</span>}
+                                {matchProductStatusDisplayType(data.status, PRODUCT_DISPLAY.ON_SALE)
+                                && <span className="font-bold text-orange-500">ĐANG BÁN</span>}
                             </div>
                             <Divider className="col-span-2 my-5"/>
                             <div>
-                                Ngày bắt đầu:
+                                Ngày khởi tạo:
                             </div>
                             <div>
-                                {DateFormat(data.startDate)}
-                            </div>
-                            <Divider className="col-span-2 my-5"/>
-                            <div>
-                                Ngày kết thúc:
-                            </div>
-                            <div>
-                                {DateFormat(data.endDate)}
+                                {DateFormat(data.createdAt)}
                             </div>
                             <Divider className="col-span-2 my-5"/>
                             <div>
@@ -81,6 +73,13 @@ const GeneralInfo: React.FC<CampaignProps> = (props) => {
                             </div>
                             <div>
                                 {data.description}
+                            </div>
+                            <Divider className="col-span-2 my-5"/>
+                            <div>
+                                Giá gốc:
+                            </div>
+                            <div>
+                                {NumberFormat(data.originalPrice)}đ
                             </div>
                             <Divider className="col-span-2 my-5"/>
                             <div>
