@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ArrowCircleLeftIcon, ArrowCircleUpIcon } from "@heroicons/react/solid";
-import { Box, Button, IconButton, Tab, Tabs } from "@mui/material";
+import { ArrowCircleLeftIcon } from "@heroicons/react/solid";
+import { Box, Button, Tab, Tabs } from "@mui/material";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import campaignApi from "../../../api/campaignApi";

@@ -31,6 +31,7 @@ export namespace GOONG_PATH {
         AUTOCOMPLETE = "/Place/AutoComplete",
         DETAIL = "/Place/Detail",
     }
+
     export enum GEOCODING {
         FORWARD = "/geocode"
     }
@@ -57,47 +58,9 @@ export enum URL_LINK {
     SHOP_CAMPAIGN = "shopCampaign",
 }
 
-export enum SORT_TYPE {
-    ID_ASC = "id_asc",
-    ID_DESC = "id_des",
-    NAME_ASC = "name_asc",
-    NAME_DESC = "name_desc",
-    PRICE_ASC = "originalPrice_asc",
-    PRICE_DESC = "originalPrice_desc",
-    DESCRIPTION_ASC = "description_asc",
-    DESCRIPTION_DESC = "description_desc",
-    STATUS_ASC = "status_asc",
-    STATUS_DESC = "status_desc",
-}
-
 export enum LOCAL_STORAGE {
     CART_ITEM = "cartItem",
     ADDRESS = "address",
-}
-
-export enum CAMPAIGN_SORT_TYPE {
-    DEFAULT = 0,
-    NAME = 1,
-    REVENUE = 2,
-    END_DATE = 3,
-}
-
-export enum CAMPAIGN_STATUS {
-    ACTIVE = 0,
-    HIDDEN = 1,
-    COMPLETE = 2,
-    NO_SEARCH = 3,
-}
-
-export enum CAMPAIGN_DISPLAY_STATUS {
-    ACTIVE = 0,
-    HIDDEN = 1,
-    COMPLETE = 3,
-}
-
-export enum CAMPAIGN_SORT_DIRECTION {
-    ASC = 0,
-    DESC = 1,
 }
 
 export namespace APP_PATH {
@@ -119,5 +82,57 @@ export namespace APP_PATH {
         SHOP_LIST_PRODUCT = '/seller/shopListProduct',
         SHOP_PRODUCT = '/seller/shopProduct',
         WELCOME = '/seller/welcome',
+        PRODUCT = '/seller/product',
+    }
+}
+
+export namespace PAGE_REQUEST {
+    export namespace STATUS {
+        export namespace CAMPAIGN {
+            export enum CAMPAIGN_QUERY {
+                ACTIVE = 0,
+                HIDDEN = 1,
+                COMPLETE = 2,
+                NO_SEARCH = 3,
+            }
+            export enum CAMPAIGN_DISPLAY {
+                ACTIVE = 0,
+                HIDDEN = 1,
+                COMPLETE = 3,
+            }
+        }
+        export namespace PRODUCT {
+            export enum PRODUCT_QUERY {
+                GET_ALL_ACTIVE_AND_SALE = 0,
+                GET_ALL_ACTIVE_ONLY = 1,
+                GET_ALL_SALE_ONLY = 2,
+            }
+            export enum PRODUCT_DISPLAY {
+                ACTIVE = 0,
+                DELETED = 1,
+                ON_SALE = 2,
+            }
+        }
+    }
+    export namespace ORDER {
+        export enum ORDER_QUERY {
+            ASC = 0,
+            DESC = 1,
+        }
+    }
+    export namespace SORT {
+        export enum PRODUCT {
+            NO_SEARCH = 0,
+            BY_ID = 1,
+            BY_NAME = 2,
+            BY_CREATE_DATE = 3,
+        }
+
+        export enum CAMPAIGN {
+            DEFAULT = 0,
+            NAME = 1,
+            REVENUE = 2,
+            END_DATE = 3,
+        }
     }
 }

@@ -1,10 +1,10 @@
-import { IProduct } from "./IProduct";
 import { IMilestone } from "./IMilestone";
 import { ISubCategory } from "./ICategory";
 import { IImage } from "./IImage";
 import { IShop } from "./IShop";
 import IBrand from "./IBrand";
 import { IPromotionPlan } from "./IPromotionPlan";
+import { CampaignDisplayStatus } from "../type/paginationTypes";
 
 export interface ICampaign {
   id: number;
@@ -14,7 +14,7 @@ export interface ICampaign {
   currentSaleQuantity: number;
   inStockQuantity?: number;
   promotionPlan: IPromotionPlan;
-  status?: number;
+  status: CampaignDisplayStatus;
   statusString?: string;
   rating?: {
     totalReview: number;

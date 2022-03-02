@@ -8,9 +8,7 @@ export function getMergedMilestone(campaign: ICampaign): IMilestone[] {
 }
 
 export function getLastActiveMilestone(campaign: ICampaign): number {
-    // console.log(campaign)
     const mergedMilestone = getMergedMilestone(campaign);
-    // console.log(mergedMilestone)
     const milestoneQuantity = mergedMilestone.map(milestone => milestone.requiredSaleQuantity);
     const arrayOfActiveMilestone = milestoneQuantity
         .filter(quantity => quantity <= campaign.currentSaleQuantity);
@@ -25,6 +23,7 @@ export function getMaxMilestone(campaign: ICampaign): number {
 }
 
 export function getCurrentPrice(campaign: ICampaign): number {
+    console.log(campaign)
     return getMergedMilestone(campaign)[getLastActiveMilestone(campaign)].price
 }
 

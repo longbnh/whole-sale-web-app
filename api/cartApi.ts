@@ -1,7 +1,7 @@
-import { CUSTOMER_API } from "../shared/enum/enum";
-import { ICartItem } from "../shared/models/ICartItem";
-import { IPagination } from "../shared/models/IPagination";
-import { IRequestPage } from "../shared/models/IRequestPage";
+import {CUSTOMER_API} from "../shared/enum/enum";
+import {ICartItem} from "../shared/models/ICartItem";
+import {IPagination} from "../shared/models/IPagination";
+import {IRequestPage} from "../shared/models/IRequestPage";
 import axiosClient from "./axiosClient";
 
 const cartApi = {

@@ -4,86 +4,83 @@ import {ArrowCircleDownIcon, ArrowCircleUpIcon, ChevronRightIcon, SearchIcon} fr
 import Stack from "@mui/material/Stack";
 import useSWR from "swr";
 import shopApi from "../../../api/shopApi";
-import {
-    APP_PATH,
-    CAMPAIGN_DISPLAY_STATUS,
-    CAMPAIGN_SORT_DIRECTION,
-    CAMPAIGN_SORT_TYPE,
-    CAMPAIGN_STATUS
-} from "../../../shared/enum/enum";
-import {IRequestPageAlter} from "../../../shared/models/IRequestPage";
+import {APP_PATH, PAGE_REQUEST} from "../../../shared/enum/enum";
+import {IRequestPage, IRequestPageInitialState} from "../../../shared/models/IRequestPage";
 import {useRouter} from "next/router";
 import {getCurrentPrice} from "../../../utils/CampaignUtils";
+import {
+    handleOrderUtil,
+    handlePageUtil,
+    handleSortUtil,
+    handleStatusUtil,
+    matchOrderType,
+    matchSortType
+} from "../../../utils/PageRequestUtils";
+import {CampaignDisplayStatus, StatusQueryType} from "../../../shared/type/paginationTypes";
+import GENERAL_ORDER = PAGE_REQUEST.ORDER.ORDER_QUERY;
+import CAMPAIGN_QUERY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_QUERY;
+import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
+import ORDER_QUERY = PAGE_REQUEST.ORDER.ORDER_QUERY;
+import CAMPAIGN = PAGE_REQUEST.SORT.CAMPAIGN;
 
 
 interface ICampaignStatus {
-    id: number;
+    id: StatusQueryType;
     name: string;
 }
 
 const campaignStatuses: ICampaignStatus[] = [
     {
-        id: CAMPAIGN_STATUS.NO_SEARCH,
+        id: CAMPAIGN_QUERY.NO_SEARCH,
         name: "Tất cả"
     },
     {
-        id: CAMPAIGN_STATUS.ACTIVE,
+        id: CAMPAIGN_QUERY.ACTIVE,
         name: "Đang bán"
     },
     {
-        id: CAMPAIGN_STATUS.HIDDEN,
+        id: CAMPAIGN_QUERY.HIDDEN,
         name: "Đã ẩn"
     },
     {
-        id: CAMPAIGN_STATUS.COMPLETE,
+        id: CAMPAIGN_QUERY.COMPLETE,
         name: "Hoàn thành"
     }
 ]
 const Content = () => {
-    const [page, setPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(5);
-    const [productName, setProductName] = useState<string>("");
-    const [sortBy, setSortBy] = useState<number>(CAMPAIGN_SORT_TYPE.DEFAULT);
-    const [status, setStatus] = useState<number>(CAMPAIGN_STATUS.NO_SEARCH);
-    const [sortDirection, setSortDirection] = useState<number>(CAMPAIGN_SORT_DIRECTION.ASC);
-
+    const [campaignName, setCampaignName] = useState<string>("");
+    let initialState:IRequestPage = {...IRequestPageInitialState, sort: PAGE_REQUEST.SORT.CAMPAIGN.DEFAULT}
+    const [pageRequest, setPageRequest] = useState<IRequestPage>(initialState);
     const router = useRouter();
-    let pageParam : IRequestPageAlter = {
-        Page: page,
-        PageSize: pageSize,
-        Sort: sortBy,
-    }
-    const {data, error} = useSWR([
+    const {data} = useSWR([
         1,
-        productName,
-        status,
-        sortDirection,
-        pageParam
+        campaignName,
+        pageRequest
     ], shopApi.getCampaigns, {
         revalidateOnFocus: true
     });
 
-    const handlePaging = (e: any, page: number) => {
-        setPage(page)
-    }
-
-    const handleStatusChange = (e: any) => {
-        let newStatus = e.target.value;
-        setStatus(newStatus);
-    }
-
-    const handleSortOrder = (sortOrder : number) => {
-        setSortDirection(sortOrder)
-    }
-
     const handleSearch = (e: any) => {
         let searchValue = e.target.value;
-        setProductName(searchValue);
+        handlePageUtil(1, setPageRequest);
+        setCampaignName(searchValue);
     }
 
-    const handleSortType = (sortType: number) => {
-        setSortDirection(CAMPAIGN_SORT_DIRECTION.ASC)
-        setSortBy(sortType);
+    function renderStatus(status: CampaignDisplayStatus) {
+        switch (status) {
+            case CAMPAIGN_DISPLAY.ACTIVE:
+                return (
+                    <span className="font-bold text-green-500">ĐANG BÁN</span>
+                )
+            case CAMPAIGN_DISPLAY.HIDDEN:
+                return (
+                    <span className="font-bold text-red-500">ĐÃ ẨN</span>
+                )
+            case CAMPAIGN_DISPLAY.COMPLETE:
+                return (
+                    <span className="font-bold text-blue-500">HOÀN THÀNH</span>
+                )
+        }
     }
 
     return (
@@ -93,24 +90,24 @@ const Content = () => {
             <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
                 <div className="flex bg-white mx-4 mt-5 max-h-full border rounded-xl px-5 py-2 items-center justify-start gap-5">
                     <span className="text-xl">Sắp xếp theo:</span>
-                    <Button className={`${sortBy === CAMPAIGN_SORT_TYPE.NAME
+                    <Button className={`${matchSortType(pageRequest.sort, CAMPAIGN.NAME)
                         ? "bg-red-600 text-white hover:bg-red-500 hover:text-gray"
                         : "bg-white"}`}
-                            onClick={() => handleSortType(CAMPAIGN_SORT_TYPE.NAME)}
+                            onClick={() => handleSortUtil(CAMPAIGN.NAME, setPageRequest)}
                     >
                         Tên sản phẩm
                     </Button>
-                    <Button className={`${sortBy === CAMPAIGN_SORT_TYPE.REVENUE
+                    <Button className={`${matchSortType(pageRequest.sort, CAMPAIGN.REVENUE)
                         ? "bg-red-600 text-white hover:bg-red-300 hover:text-black"
                         : "bg-white"}`}
-                            onClick={() => handleSortType(CAMPAIGN_SORT_TYPE.REVENUE)}
+                            onClick={() => handleSortUtil(CAMPAIGN.REVENUE, setPageRequest)}
                     >
                         Doanh số
                     </Button>
-                    <Button className={`${sortBy === CAMPAIGN_SORT_TYPE.END_DATE
+                    <Button className={`${matchSortType(pageRequest.sort, CAMPAIGN.END_DATE)
                         ? "bg-red-600 text-white hover:bg-red-300 hover:text-black"
                         : "bg-white"}`}
-                            onClick={() => handleSortType(CAMPAIGN_SORT_TYPE.END_DATE)}
+                            onClick={() => handleSortUtil(CAMPAIGN.END_DATE, setPageRequest)}
                     >
                         Thời gian kết thúc
                     </Button>
@@ -118,18 +115,24 @@ const Content = () => {
                         Thứ tự:
                         <IconButton aria-label="up"
                                     size="small"
-                                    onClick={() => handleSortOrder(CAMPAIGN_SORT_DIRECTION.ASC)}
-                                    disabled={sortBy === CAMPAIGN_SORT_TYPE.DEFAULT}>
+                                    onClick={() => handleOrderUtil(GENERAL_ORDER.ASC, setPageRequest)}
+                                    disabled={matchSortType(pageRequest.sort, CAMPAIGN.DEFAULT)}>
                         <ArrowCircleUpIcon className={`h-10 w-10 
-                        ${sortDirection === CAMPAIGN_SORT_DIRECTION.ASC && sortBy !== CAMPAIGN_SORT_TYPE.DEFAULT ? "text-green-500" : "text-gray-500"}`}/>
+                        ${matchOrderType(pageRequest.order, ORDER_QUERY.ASC)
+                        && !matchSortType(pageRequest.sort, CAMPAIGN.DEFAULT)
+                            ? "text-green-500" 
+                            : "text-gray-500"}`}/>
                         </IconButton>
 
                         <IconButton aria-label="down"
                                     size="small"
-                                    onClick={() => handleSortOrder(CAMPAIGN_SORT_DIRECTION.DESC)}
-                                    disabled={sortBy === CAMPAIGN_SORT_TYPE.DEFAULT}>
+                                    onClick={() => handleOrderUtil(GENERAL_ORDER.DESC, setPageRequest)}
+                                    disabled={matchSortType(pageRequest.sort, CAMPAIGN.DEFAULT)}>
                         <ArrowCircleDownIcon className={`h-10 w-10 
-                        ${sortDirection === CAMPAIGN_SORT_DIRECTION.DESC ? "text-red-500" : "text-gray-500"}`}/>
+                        ${matchOrderType(pageRequest.order, ORDER_QUERY.DESC)
+                        && !matchSortType(pageRequest.sort, CAMPAIGN.DEFAULT)
+                            ? "text-red-500" 
+                            : "text-gray-500"}`}/>
                         </IconButton>
                     </span>
                 </div>
@@ -149,12 +152,12 @@ const Content = () => {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         displayEmpty
-                        value={status}
+                        value={pageRequest.status}
                         className="bg-white ml-auto h-16 border rounded-2xl w-2/6"
                         inputProps={{'aria-label': 'Without label'}}
-                        onChange={handleStatusChange}
+                        onChange={(e) => handleStatusUtil((e.target.value as StatusQueryType), setPageRequest)}
                     >
-                        <MenuItem disabled value="">
+                        <MenuItem disabled value={undefined}>
                             <em>Lọc trạng thái</em>
                         </MenuItem>
                         {campaignStatuses.map(campaignStatus =>
@@ -167,7 +170,7 @@ const Content = () => {
             {data && <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
                 <div className="bg-white mx-4 mt-5 overflow-y-auto p-2 overflow-x-hidden min-h-screen border rounded-xl">
                     <List className="h-auto">
-                        {data.data.content.map((campaign, index) => (
+                        {data.data.content.map((campaign) => (
                             <ListItem button
                                       onClick={() => router.push(`${APP_PATH.SELLER.CAMPAIGN}/${campaign.id}`)}
                                       key={campaign.id}
@@ -204,12 +207,7 @@ const Content = () => {
                                             Trạng thái:
                                         </div>
                                         <div>
-                                            {campaign.status === CAMPAIGN_DISPLAY_STATUS.ACTIVE
-                                            && <span className="font-bold text-green-500">ĐANG BÁN</span>}
-                                            {campaign.status === CAMPAIGN_DISPLAY_STATUS.HIDDEN
-                                            && <span className="font-bold text-red-500">ĐÃ ẨN</span>}
-                                            {campaign.status === CAMPAIGN_DISPLAY_STATUS.COMPLETE
-                                            && <span className="font-bold text-blue-500">HOÀN THÀNH</span>}
+                                            {renderStatus(campaign.status)}
                                         </div>
                                     </div>
                                 </div>
@@ -223,8 +221,8 @@ const Content = () => {
                     {data.data.content.length > 0 && <div className="flex justify-end mt-16">
                         <Stack spacing={2}>
                             <Pagination count={data?.data?.totalPage}
-                                        page={page}
-                                        onChange={handlePaging}
+                                        page={pageRequest.page}
+                                        onChange={(e, page) => handlePageUtil(page,  setPageRequest)}
                                         variant="outlined"
                                         shape="rounded"/>
                         </Stack>

@@ -1,9 +1,8 @@
 import React from "react";
 import {ICampaign} from "../../../shared/models/ICampaign";
-import {CAMPAIGN_STATUS} from "../../../shared/enum/enum";
 import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {ArrowCircleLeftIcon, PencilAltIcon} from "@heroicons/react/solid";
+import {PencilAltIcon} from "@heroicons/react/solid";
 import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Cancel} from "@mui/icons-material";

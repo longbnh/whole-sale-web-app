@@ -1,146 +1,84 @@
 import React, {useState} from "react";
 import useSWR from 'swr'
 import productApi from "../../../api/productApi";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import {
-    APP_PATH,
-    CAMPAIGN_DISPLAY_STATUS,
-    CAMPAIGN_SORT_DIRECTION,
-    CAMPAIGN_SORT_TYPE,
-    SORT_TYPE
-} from "../../../shared/enum/enum";
-import {
-    Avatar,
-    Button,
-    FormControl,
-    IconButton,
-    InputLabel,
-    List,
-    ListItem,
-    MenuItem,
-    Pagination,
-    Select
-} from "@mui/material";
+import {Avatar, Button, IconButton, Input, List, ListItem, MenuItem, Pagination, Select} from "@mui/material";
 import Stack from "@mui/material/Stack";
-import {IProduct} from "../../../shared/models/IProduct";
-import {Order} from "../../../shared/type/type";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Box from "@mui/material/Box";
-import {visuallyHidden} from "@mui/utils";
-import {ArrowCircleDownIcon, ArrowCircleUpIcon, ChevronRightIcon} from "@heroicons/react/solid";
-import {getCurrentPrice} from "../../../utils/CampaignUtils";
-import {useRouter} from "next/router";
-import {IRequestPage, IRequestPageAlter} from "../../../shared/models/IRequestPage";
+import {ArrowCircleDownIcon, ArrowCircleUpIcon, ChevronRightIcon, SearchIcon} from "@heroicons/react/solid";
+import {IRequestPage, IRequestPageInitialState} from "../../../shared/models/IRequestPage";
 import {IImage} from "../../../shared/models/IImage";
+import {
+    handleOrderUtil,
+    handlePageUtil,
+    handleSortUtil,
+    handleStatusUtil,
+    matchOrderType,
+    matchSortType
+} from "../../../utils/PageRequestUtils";
+import {APP_PATH, PAGE_REQUEST} from "../../../shared/enum/enum";
+import {ProductDisplayStatus, StatusQueryType} from "../../../shared/type/paginationTypes";
+import ORDER_QUERY = PAGE_REQUEST.ORDER.ORDER_QUERY;
+import PRODUCT = PAGE_REQUEST.SORT.PRODUCT;
+import PRODUCT_DISPLAY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_DISPLAY;
+import PRODUCT_QUERY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_QUERY;
+import {useRouter} from "next/router";
 
-interface EnhancedTableProps {
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof IProduct) => void;
-    order: Order;
-    orderBy: string;
+interface IProductStatus {
+    id: StatusQueryType;
+    name: string;
 }
 
-interface HeadCell {
-    disablePadding: boolean;
-    id: keyof IProduct;
-    label: string;
-    numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
+const productStatuses: IProductStatus[] = [
     {
-        id: 'name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Tên sản phẩm',
+        id: PRODUCT_QUERY.GET_ALL_ACTIVE_AND_SALE,
+        name: "Tất cả"
     },
     {
-        id: 'description',
-        numeric: false,
-        disablePadding: false,
-        label: 'Mô tả',
+        id: PRODUCT_QUERY.GET_ALL_ACTIVE_ONLY,
+        name: "Sẵn sàng"
     },
     {
-        id: 'originalPrice',
-        numeric: true,
-        disablePadding: false,
-        label: 'Giá gốc',
+        id: PRODUCT_QUERY.GET_ALL_SALE_ONLY,
+        name: "Đang bán"
     },
-];
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-    const {order, orderBy, onRequestSort} =
-        props;
-    const createSortHandler =
-        (property: keyof IProduct) => (event: React.MouseEvent<unknown>) => {
-            onRequestSort(event, property);
-        };
-
-    return (
-        <TableHead>
-            <TableRow>
-                <TableCell align="right">
-                    #
-                </TableCell>
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
-}
+]
 
 const Content = () => {
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState<number>(5);
-    const [sortBy, setSortBy] = useState(SORT_TYPE.ID_ASC);
-    const [name, setName] = useState<string>("");
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [status, setStatus] = useState<number>(0);
-    const [orderBy, setOrderBy] = React.useState<keyof IProduct>('name');
-    const router = useRouter();
-
-    let pageParam: IRequestPage = {
-        Page: page,
-        PageSize: pageSize,
-        Sort: sortBy,
-    }
-    const {data, error} = useSWR([
+    const [productName, setProductName] = useState<string>("");
+    let initialState: IRequestPage = {...IRequestPageInitialState, sort: PAGE_REQUEST.SORT.PRODUCT.NO_SEARCH}
+    const [pageRequest, setPageRequest] = useState<IRequestPage>(initialState);
+    const {data} = useSWR([
         1,
-        name,
-        status,
-        pageParam,
+        productName,
+        undefined,
+        pageRequest,
     ], productApi.getProducts, {
         revalidateOnFocus: true
     });
+    const router = useRouter();
 
-    const handlePaging = (e: any, page: number) => {
-        setPage(page)
+    function renderStatus(status: ProductDisplayStatus) {
+        console.log(status)
+        switch (status) {
+            case PRODUCT_DISPLAY.ON_SALE:
+                return (
+                    <span className="font-bold text-orange-500">ĐANG BÁN</span>
+                )
+            case PRODUCT_DISPLAY.ACTIVE:
+                return (
+                    <span className="font-bold text-green-500">SẴN SÀNG</span>
+                )
+            case PRODUCT_DISPLAY.DELETED:
+                return (
+                    <span className="font-bold text-red-500">ĐÃ XÓA</span>
+                )
+        }
     }
 
+    const handleSearch = (e: any) => {
+        let searchValue = e.target.value;
+        handlePageUtil(1, setPageRequest);
+        setProductName(searchValue);
+    }
 
     return (
         <div
@@ -150,31 +88,74 @@ const Content = () => {
                 <div
                     className="flex bg-white mx-4 mt-5 max-h-full border rounded-xl px-5 py-2 items-center justify-start gap-5">
                     <span className="text-xl">Sắp xếp theo:</span>
-                    <Button className={`bg-red-600 text-white`}
+                    <Button className={`${matchSortType(pageRequest.sort, PRODUCT.BY_NAME)
+                        ? "bg-red-600 text-white hover:bg-red-500 hover:text-gray"
+                        : "bg-white"}`}
+                            onClick={() => handleSortUtil(PRODUCT.BY_NAME, setPageRequest)}
                     >
                         Tên sản phẩm
                     </Button>
-                    <Button className={`bg-red-600 text-white`}
+                    <Button className={`${matchSortType(pageRequest.sort, PRODUCT.BY_CREATE_DATE)
+                        ? "bg-red-600 text-white hover:bg-red-500 hover:text-gray"
+                        : "bg-white"}`}
+                            onClick={() => handleSortUtil(PRODUCT.BY_CREATE_DATE, setPageRequest)}
                     >
-                        Doanh số
-                    </Button>
-                    <Button className={`bg-red-600 text-white`}
-                    >
-                        Thời gian kết thúc
+                        Thời điểm tạo
                     </Button>
                     <span className="flex items-center gap-5 text-xl ml-auto">
                         Thứ tự:
                         <IconButton aria-label="up"
                                     size="small"
-                        >
-                        <ArrowCircleUpIcon className={`h-10 w-10`}/>
+                                    onClick={() => handleOrderUtil(ORDER_QUERY.ASC, setPageRequest)}
+                                    disabled={matchSortType(pageRequest.sort, PRODUCT.NO_SEARCH)}>
+                        <ArrowCircleUpIcon className={`h-10 w-10 
+                        ${matchOrderType(pageRequest.order, ORDER_QUERY.ASC)
+                        && !matchSortType(pageRequest.sort, PRODUCT.NO_SEARCH)
+                            ? "text-green-500"
+                            : "text-gray-500"}`}/>
                         </IconButton>
 
                         <IconButton aria-label="down"
-                                    size="small">
-                        <ArrowCircleDownIcon className={`h-10 w-10`}/>
+                                    size="small"
+                                    onClick={() => handleOrderUtil(ORDER_QUERY.DESC, setPageRequest)}
+                                    disabled={matchSortType(pageRequest.sort, PRODUCT.NO_SEARCH)}>
+                        <ArrowCircleDownIcon className={`h-10 w-10 
+                        ${matchOrderType(pageRequest.order, ORDER_QUERY.DESC)
+                        && !matchSortType(pageRequest.sort, PRODUCT.NO_SEARCH)
+                            ? "text-green-500"
+                            : "text-gray-500"}`}/>
                         </IconButton>
                     </span>
+                </div>
+            </div>
+            <div className="mx-4 mt-5 overflow-y-auto overflow-x-hidden max-h-full">
+                <div className="flex mx-4 max-h-full items-center gap-5">
+                    <div className="flex items-center bg-white w-full h-16 p-5 relative border rounded-2xl">
+                        <div className="w-5/6">
+                            <Input fullWidth
+                                onChange={handleSearch}
+                                   placeholder="Tìm kiếm theo tên hàng..."
+                                   disableUnderline/>
+                        </div>
+                        <SearchIcon className="w-5 h-5 absolute right-5"/>
+                    </div>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        displayEmpty
+                        value={pageRequest.status}
+                        className="bg-white ml-auto h-16 border rounded-2xl w-2/6"
+                        inputProps={{'aria-label': 'Without label'}}
+                        onChange={(e) => handleStatusUtil((e.target.value as StatusQueryType), setPageRequest)}
+                    >
+                        <MenuItem disabled value={undefined}>
+                            <em>Lọc trạng thái</em>
+                        </MenuItem>
+                        {productStatuses.map(productStatus =>
+                            <MenuItem value={productStatus.id} key={productStatus.id}>
+                                {productStatus.name}
+                            </MenuItem>)}
+                    </Select>
                 </div>
             </div>
             {data && <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
@@ -183,7 +164,7 @@ const Content = () => {
                     <List className="h-auto">
                         {data.data.content.map((product, index) => (
                             <ListItem button
-                                // onClick={() => router.push(`${APP_PATH.SELLER.}/${product.id}`)}
+                                onClick={() => router.push(`${APP_PATH.SELLER.PRODUCT}/${product.id}`)}
                                       key={product.id}
                                       divider
                                       className="my-5 p-5 relative flex gap-16">
@@ -194,6 +175,31 @@ const Content = () => {
                                 <div className="grid grid-cols-1">
                                     <div className="font-bold text-2xl">
                                         {product.name}
+                                    </div>
+                                    <div className="grid grid-cols-2 grid-rows-3">
+                                        <div>
+                                            Ngành hàng
+                                        </div>
+                                        <div>
+                                            {product.category.name}
+                                        </div>
+                                        <div>
+                                            Ngày tạo
+                                        </div>
+                                        <div>
+                                            {new Date(Date.parse(product.createdAt)).toLocaleDateString('vi-VI', {
+                                                weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric'
+                                            })}
+                                        </div>
+                                        <div>
+                                            Trạng thái:
+                                        </div>
+                                        <div>
+                                            {renderStatus(product.status)}
+                                        </div>
                                     </div>
                                 </div>
                                 <ChevronRightIcon className="absolute right-0" style={{
@@ -206,8 +212,8 @@ const Content = () => {
                     {data.data.content.length > 0 && <div className="flex justify-end mt-16">
                         <Stack spacing={2}>
                             <Pagination count={data?.data?.totalPage}
-                                        page={page}
-                                        onChange={handlePaging}
+                                        page={pageRequest.page}
+                                        onChange={(e, page) => handlePageUtil(page, setPageRequest)}
                                         variant="outlined"
                                         shape="rounded"/>
                         </Stack>

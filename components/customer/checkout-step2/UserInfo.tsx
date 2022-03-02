@@ -12,21 +12,40 @@ const UserInfo: React.FC<UserInfoProps> = ({setPhoneNumber, setReceiverName, pho
     }
     return (
         <form>
-            <div className="flex flex-col my-5 px-5 gap-y-5 w-1/2">
-                <TextField
-                    id="outlined-error"
-                    required
-                    value={receiverName}
-                    label="Tên người nhận"
-                    onChange={handleNameChange}
-                />
-                <TextField
-                    id="outlined-error-helper-text"
-                    required
-                    value={phoneNumber}
-                    label="Số điện thoại"
-                    onChange={handlePhoneChange}
-                />
+            <div className="flex flex-col my-5 px-5 gap-y-5 w-full">
+                <div className="relative w-2/5 h-20 p-0 m-0">
+                    <TextField
+                        required
+                        className="w-full"
+                        value={receiverName}
+                        label="Tên người nhận"
+                        inputProps={{maxLength: 50}}
+                        onChange={handleNameChange}
+                    />
+                    <div className="absolute right-5 bottom-1/2 text-gray-500 w-100" style={{pointerEvents: "none"}}>
+                        {receiverName.length} / 50
+                    </div>
+                </div>
+
+                <div className="relative w-2/5 h-20 p-0 m-0">
+                    <TextField
+                        required
+                        className="w-full"
+                        value={phoneNumber}
+                        label="Số điện thoại"
+                        inputProps={{maxLength: 20}}
+                        onKeyPress={event => {
+                            const regex = /\d/
+                            if (!regex.test(event.key)) {
+                                event.preventDefault();
+                            }
+                        }}
+                        onChange={handlePhoneChange}
+                    />
+                    <div className="absolute right-5 bottom-1/2 text-gray-500 w-100" style={{pointerEvents: "none"}}>
+                        {receiverName.length} / 20
+                    </div>
+                </div>
             </div>
         </form>
     )
