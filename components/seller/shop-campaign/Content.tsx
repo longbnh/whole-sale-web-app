@@ -83,10 +83,6 @@ const Content = () => {
         }
     }
 
-    function sortDisplayColor(sort: SortType, matching: SortType) {
-
-    }
-
     return (
         <div
             className="w-full relative bg-gray-100 ml-56"
