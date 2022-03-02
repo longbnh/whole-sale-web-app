@@ -18,8 +18,8 @@ const Order: React.FC<OrderProps> = (props) => {
 
   const getOrderSeller = async () => {
     const res = await campaignApi.getOrderByCampaign(props.data.id, {
-      Page: 1,
-      PageSize: 10,
+      page: 1,
+      pageSize: 10,
     });
     setPageCampaign(res.data);
   };
