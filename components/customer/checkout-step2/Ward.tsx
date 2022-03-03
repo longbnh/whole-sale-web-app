@@ -16,7 +16,7 @@ export const Ward: React.FC<AddressUnitProps> = ({handleClick, unit, id}) => {
                     setWards(response.data);
                 })
                 .catch(error => {
-                    //handle error here
+                    //TODO handle error here
                 })
         }
     }, [])

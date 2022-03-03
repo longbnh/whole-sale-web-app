@@ -65,7 +65,7 @@ const Content = () => {
             await router.push(paymentData[0].paymentUrl)
         }
         catch (error) {
-            //handle error here
+            //TODO handle error here
         }
     }
 

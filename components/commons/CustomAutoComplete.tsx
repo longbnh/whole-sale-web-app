@@ -5,9 +5,10 @@ import React from "react";
 
 interface CustomAutoCompleteProps {
     options: any [];
-    onChange?: (e:any, value:any) => void;
+    onChange?: (e: any, value: any) => void;
     title: string;
     displayValue: string;
+    value?: any;
 }
 
 export const isString = (item: any): item is string => {
@@ -19,7 +20,8 @@ const CustomAutoComplete: React.FC<CustomAutoCompleteProps> = ({
                                                                    options,
                                                                    onChange,
                                                                    title,
-    displayValue
+                                                                   displayValue,
+                                                                   value,
                                                                }) => {
 
     return (
@@ -28,6 +30,7 @@ const CustomAutoComplete: React.FC<CustomAutoCompleteProps> = ({
                 disableClearable
                 autoComplete
                 autoHighlight
+                value={value}
                 renderInput={(params) => (
                     <TextField
                         {...params}

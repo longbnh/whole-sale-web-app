@@ -16,7 +16,7 @@ export const District: React.FC<AddressUnitProps> = ({handleClick, unit, id}) =>
                     setDistricts(response.data);
                 })
                 .catch(error => {
-                    //handle error here
+                    //TODO handle error here
                 })
         }
     }, [])

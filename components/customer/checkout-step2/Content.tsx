@@ -36,7 +36,9 @@ const Content = () => {
                     setAddresses(response.data)
                     setAddressSet(response.data.filter(address => address.isPrimary)[0].id);
                 })
-                .catch(error => console.log(error));
+                .catch(error => console.log(error)
+                    //TODO handle error here
+                );
         }, [open])
 
         function getLabel(address: IAddress) {
