@@ -191,7 +191,6 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                             required
                             id="name"
                             label="Giá gốc"
-                            // error={true}
                             className="w-full mb-5"
                             inputMode="numeric"
                             size="small"

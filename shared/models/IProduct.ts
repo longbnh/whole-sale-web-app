@@ -10,10 +10,18 @@ export interface IProduct {
     originalPrice: number;
     origin: string;
     brand: IBrand;
-    category: ICategory;
+    category: IProductCategory;
     productImages: Array<IImage>;
     status: ProductDisplayStatus;
     statusString: string;
     createdAt: string;
     createBy: string;
+}
+
+export interface IProductCategory {
+    id: number;
+    name: string;
+    priority: number;
+    imageUrl: string;
+    iconUrl: string;
 }

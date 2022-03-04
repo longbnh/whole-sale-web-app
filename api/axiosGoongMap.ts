@@ -24,7 +24,7 @@ axiosGoongMap.interceptors.response.use(
         return response;
     },
     (error) => {
-        // Handle errors
+        //TODO handle error here
         throw error;
     }
 );

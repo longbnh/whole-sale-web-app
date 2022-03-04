@@ -13,4 +13,12 @@ interface ICategory {
   subCategories: Array<ISubCategory>;
 }
 
+export interface IProductCategory {
+  id: number;
+  name: string;
+  imageUrl: string;
+  priority: number;
+  iconUrl: string;
+}
+
 export default ICategory;
