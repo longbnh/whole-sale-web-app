@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Checkbox } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -11,6 +11,10 @@ import { ITotal } from ".";
 import Link from "next/link";
 import cartApi from "../../../api/cartApi";
 import { LOCAL_STORAGE } from "../../../shared/enum/enum";
+import { SWRInfiniteResponse } from "swr/infinite/dist/infinite";
+import { IPagination } from "../../../shared/models/IPagination";
+import { useDispatch } from "react-redux";
+import { setCart } from "../../../shared/slices/CartSlice";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -23,12 +27,15 @@ const useStyles = makeStyles(() => ({
 interface ItemCartProps {
   item: ICartItem;
   setListTotal: React.Dispatch<React.SetStateAction<ITotal[]>>;
+  swr: SWRInfiniteResponse<IPagination<ICartItem>, any>;
   listTotal: ITotal[];
 }
 
 const ItemCart: React.FC<ItemCartProps> = (props) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState<number>(props.item.quantity);
+
+  const dispatch = useDispatch();
 
   let currentPrice = props.item
     .campaign!.mileStones.sort(
@@ -71,6 +78,8 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
 
   const deleteItem = async () => {
     await cartApi.deleteItemCart(props.item.productId);
+    props.swr.mutate();
+    dispatch(setCart());
   };
 
   const handleChecked = () => {

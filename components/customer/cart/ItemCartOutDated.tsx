@@ -5,14 +5,23 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { ICartItem } from "../../../shared/models/ICartItem";
 import cartApi from "../../../api/cartApi";
+import { SWRInfiniteResponse } from "swr/infinite/dist/infinite";
+import { IPagination } from "../../../shared/models/IPagination";
+import { useDispatch } from "react-redux";
+import { setCart } from "../../../shared/slices/CartSlice";
 
 interface ItemCartOutDatedProps {
+  swr: SWRInfiniteResponse<IPagination<ICartItem>, any>;
   item: ICartItem;
 }
 
 const ItemCartOutDated: React.FC<ItemCartOutDatedProps> = (props) => {
+  const dispatch = useDispatch();
+
   const deleteItem = async () => {
     await cartApi.deleteItemCart(props.item.productId);
+    props.swr.mutate();
+    dispatch(setCart());
   };
 
   return (

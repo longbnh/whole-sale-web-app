@@ -27,7 +27,9 @@ const Cart: React.FC<CartProps> = (props) => {
     return { Page: pageIndex + 1, PageSize: 10 };
   };
 
-  const swr = useSWRInfinite(getKey, cartApi.getCart);
+  const swr = useSWRInfinite(getKey, cartApi.getCart, {
+    refreshInterval: 5000,
+  });
 
   return (
     <div className="w-full px-2">
@@ -71,9 +73,10 @@ const Cart: React.FC<CartProps> = (props) => {
                         item={item}
                         setListTotal={props.setListTotal}
                         listTotal={props.listTotal}
+                        swr={swr}
                       />
                     ) : (
-                      <ItemCartOutDated item={item} />
+                      <ItemCartOutDated item={item} swr={swr} />
                     )}
                     {key !==
                     // .filter((item) => item.hasCampaign === true)

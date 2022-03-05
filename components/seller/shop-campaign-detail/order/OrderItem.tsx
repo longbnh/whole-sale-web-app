@@ -17,9 +17,14 @@ const useStyles = makeStyles(() => ({
 interface OrderItemProps {
   data: IOrderSeller;
   setCustomer: React.Dispatch<React.SetStateAction<IOrderSeller | undefined>>;
+  customer: IOrderSeller | undefined;
 }
 
-const OrderItem: React.FC<OrderItemProps> = ({ data, setCustomer }) => {
+const OrderItem: React.FC<OrderItemProps> = ({
+  data,
+  setCustomer,
+  customer,
+}) => {
   const classes = useStyles();
 
   data.orderTimes.sort((a, b) => a.dateType - b.dateType);
@@ -28,8 +33,15 @@ const OrderItem: React.FC<OrderItemProps> = ({ data, setCustomer }) => {
     setCustomer(data);
   };
 
+  console.log(data);
+
   return (
-    <div className="cursor-pointer" onClick={handleChose}>
+    <div
+      className={classNames("cursor-pointer py-0.5 my-1", {
+        "bg-yellow-200": customer && customer.orderNumber === data.orderNumber,
+      })}
+      onClick={handleChose}
+    >
       <div className="flex items-center my-2">
         <div className="text-xl font-semibold">Đơn hàng : </div>
         <div className="text-lg font-normal mx-2">{data.orderNumber}</div>

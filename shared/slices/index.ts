@@ -1,11 +1,10 @@
-import {combineReducers} from "redux";
+import { combineReducers } from "redux";
+import CartSlice from "./CartSlice";
 
-export interface IRootState {
-
-}
+export interface IRootState {}
 
 const rootReducer = combineReducers<IRootState>({
-    //name : reducer,
-})
+  cart: CartSlice,
+});
 
 export default rootReducer;

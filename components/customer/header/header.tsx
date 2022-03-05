@@ -4,12 +4,15 @@ import { WithStyles, withStyles } from "@mui/styles";
 import classNames from "classnames";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import cartApi from "../../../api/cartApi";
+import useSWR from "swr";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomButtons from "../../commons/CustomButton";
 
 import stickHeader from "../../../public/json/stickHeader.json";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 const styles = () => ({
   root: {
@@ -36,6 +39,16 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
   const [cartIcon, setCartIcon] = useState(16 / 9);
   const [logoRatio, setLogoRatio] = useState(16 / 9);
   const [logoutRatio, setLogoutRatio] = useState(16 / 9);
+
+  const { data, mutate } = useSWR({ page: 1, pageSize: 10 }, cartApi.getCart);
+
+  //@ts-ignore
+  const cart = useSelector((state) => state.cart);
+
+  console.log(cart);
+  useEffect(() => {
+    mutate();
+  }, [cart]);
 
   const { classes } = props;
 
@@ -104,10 +117,34 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
 
           <div className="md:flex w-1/6 items-center justify-end md:flex-1 xl:w-1/4 lg:w-1/3">
             <div className="flex items-center justify-start w-full my-auto text-lg">
-              <Link href={"/cart"}>
+              {data?.totalElements !== 0 ? (
+                <Link href={"/cart"}>
+                  <div
+                    className={classNames(
+                      "w-1/4 md:flex relative items-center gap-1 mt-3 px-3 cursor-pointer hover:opacity-75"
+                    )}
+                  >
+                    <Image
+                      width={30}
+                      height={30 / cartIcon}
+                      src="/Shopping Cart.svg"
+                      layout="fixed"
+                      onLoadingComplete={({ naturalWidth, naturalHeight }) =>
+                        setCartIcon(naturalWidth / naturalHeight)
+                      }
+                    />
+                    <span className="whitespace-nowrap font-normal my-auto">
+                      Giỏ hàng
+                    </span>
+                    <div className="absolute top-0 left-7 rounded-full text-middle text-center bg-red-500 text-white w-3 h-3">
+                      {data?.totalElements}
+                    </div>
+                  </div>
+                </Link>
+              ) : (
                 <div
                   className={classNames(
-                    "w-1/4 md:flex items-center gap-1 mt-3 px-3 cursor-pointer hover:opacity-75"
+                    "w-1/4 md:flex relative items-center gap-1 mt-3 px-3"
                   )}
                 >
                   <Image
@@ -122,11 +159,14 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
                   <span className="whitespace-nowrap font-normal my-auto">
                     Giỏ hàng
                   </span>
+                  <div className="absolute top-0 left-7 rounded-full text-middle text-center bg-red-500 text-white w-3 h-3">
+                    {data?.totalElements}
+                  </div>
                 </div>
-              </Link>
+              )}
               <div
                 className={classNames(
-                  "w-1/4 md:flex items-center gap-1 mt-3 px-3"
+                  "w-1/4 md:flex items-center gap-1 mt-3 px-3 relative group"
                 )}
               >
                 <Image
@@ -138,9 +178,22 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
                     setUserIconRatio(naturalWidth / naturalHeight)
                   }
                 />
-                <span className="whitespace-nowrap font-normal account">
+                <span className="whitespace-nowrap font-normal account ">
                   User123
                 </span>
+                <div className="hidden absolute w-full top-0 pt-8 h-fit group-hover:block">
+                  <div className="bg-white border-2 rounded-md flex flex-col text-base">
+                    <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer border-b-2 border-slate-200">
+                      Tài khoản
+                    </div>
+                    <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer border-b-2 border-slate-200">
+                      Đơn mua
+                    </div>
+                    <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer">
+                      Đăng xuất
+                    </div>
+                  </div>
+                </div>
               </div>
               <div
                 className={classNames(

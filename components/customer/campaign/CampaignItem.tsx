@@ -28,6 +28,8 @@ import {
 } from "../../../shared/enum/enum";
 import cartApi from "../../../api/cartApi";
 import { CustomAlertDialog } from "../../commons/CustomAlertDialog";
+import { useDispatch } from "react-redux";
+import { setCart } from "../../../shared/slices/CartSlice";
 
 interface TimeRenderProps {
   days: number;
@@ -42,6 +44,8 @@ const CampaignItem = () => {
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
   const { id } = router.query;
+
+  const dispatch = useDispatch();
 
   const { data, error } = useSWR([id], campaignApi.getCampaign, {
     revalidateOnFocus: true,
@@ -132,6 +136,7 @@ const CampaignItem = () => {
       quantity,
     };
     await cartApi.addToCart(myCampaign);
+    dispatch(setCart());
   };
 
   function getDateObject(date: string): number {

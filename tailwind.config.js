@@ -5,6 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        middle: ["0.75rem", "0.75rem"],
+      },
       fontFamily: {
         sfpro: "Source Sans Pro",
       },
