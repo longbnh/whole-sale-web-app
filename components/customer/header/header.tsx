@@ -13,6 +13,7 @@ import CustomButtons from "../../commons/CustomButton";
 import stickHeader from "../../../public/json/stickHeader.json";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import { APP_PATH } from "../../../shared/enum/enum";
 
 const styles = () => ({
   root: {
@@ -45,7 +46,6 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
   //@ts-ignore
   const cart = useSelector((state) => state.cart);
 
-  console.log(cart);
   useEffect(() => {
     mutate();
   }, [cart]);
@@ -186,9 +186,11 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
                     <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer border-b-2 border-slate-200">
                       Tài khoản
                     </div>
-                    <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer border-b-2 border-slate-200">
-                      Đơn mua
-                    </div>
+                    <Link href={APP_PATH.CUSTOMER.PURCHASE}>
+                      <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer border-b-2 border-slate-200">
+                        Đơn mua
+                      </div>
+                    </Link>
                     <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer">
                       Đăng xuất
                     </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 import IBrand from "../../../shared/models/IBrand";
 import ICategory from "../../../shared/models/ICategory";
@@ -36,6 +37,13 @@ const Content: React.FC<ContentProps> = (props) => {
     setLoading(true);
     const file = e.target.files[0];
     ExcelReader(file, setData);
+  };
+
+  const handleDownload = async () => {
+    const url = await productApi.downloadFileImport();
+    if (typeof window !== "undefined") {
+      window.location.href = url.data;
+    }
   };
 
   const handleSubmit = async () => {
@@ -85,6 +93,17 @@ const Content: React.FC<ContentProps> = (props) => {
           Thêm danh sách sản phẩm
         </div>
         <div className="flex justify-end w-11/12 mx-auto pb-4">
+          <Button
+            className="mr-6"
+            variant="contained"
+            component="span"
+            color="warning"
+            startIcon={<FileDownloadOutlinedIcon />}
+            size="small"
+            onClick={handleDownload}
+          >
+            File mẫu
+          </Button>
           <label htmlFor="contained-button-file">
             <Input
               accept=".xlsx, .xls, .csv, .xlsm"
