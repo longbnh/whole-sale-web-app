@@ -6,7 +6,7 @@ import { URL_LINK } from "../../../shared/enum/enum";
 
 const Sidebar = () => {
   const route = useRouter();
-  console.log(route.asPath);
+
   const activeKey = route.pathname;
 
   return (

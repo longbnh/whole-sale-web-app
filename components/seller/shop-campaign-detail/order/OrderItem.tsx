@@ -3,8 +3,11 @@ import { makeStyles } from "@mui/styles";
 import classNames from "classnames";
 import moment from "moment";
 import React from "react";
+
 import { IOrderSeller } from "../../../../shared/models/IOrder";
 import NumberFormat from "../../../../utils/NumberFormat";
+//@ts-ignore
+import orderStatus from "../../../../public/json/orderStatus.json";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -32,8 +35,6 @@ const OrderItem: React.FC<OrderItemProps> = ({
   const handleChose = () => {
     setCustomer(data);
   };
-
-  console.log(data);
 
   return (
     <div
@@ -119,7 +120,9 @@ const OrderItem: React.FC<OrderItemProps> = ({
                 color="default"
                 size="small"
               /> */}
-              <div className="text-xl text-red-500">Hoàn tất</div>
+              <div className="text-xl text-red-500">
+                {orderStatus.find((item) => item.statusId === data.status).vn}
+              </div>
             </div>
           </div>
         </div>

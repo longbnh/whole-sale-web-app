@@ -8,7 +8,7 @@ interface BuyerInfoProps {
 
 const BuyerInfo: React.FC<BuyerInfoProps> = ({ customer }) => {
   return (
-    <div className="sticky top-0 self-start mt-4 min-h-full">
+    <div className="sticky z-20 top-0 self-start mt-4 min-h-full">
       <div className="text-2xl font-semibold text-center my-5">
         Thông tin người mua
       </div>

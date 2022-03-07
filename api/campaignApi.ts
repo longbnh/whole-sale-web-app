@@ -36,9 +36,19 @@ const campaignApi = {
     };
     return axiosClient.get<ICampaign>(url, config);
   },
-  getOrderByCampaign: (campaignId: number, pageRequest: IRequestPage) => {
+  getOrderByCampaign: (
+    campaignId: number,
+    pageRequest: IRequestPage,
+    orderNumber?: string,
+    status?: number
+  ) => {
     const url = `${SHOP_API.Campaign}/${campaignId}/${SHOP_API.Order}`;
-    const param = { ...pageRequest, campaignId: campaignId };
+    const param = {
+      ...pageRequest,
+      campaignId: campaignId,
+      status: status,
+      orderNumber: orderNumber,
+    };
     // sau này bỏ
     const config = {
       headers: {

@@ -1,0 +1,12 @@
+[
+  { "statusId": 1, "statusString": "GetAll", "vn": "--" },
+  { "statusId": 2, "statusString": "PaymentSuccess", "vn": "Thanh toán" },
+  { "statusId": 3, "statusString": "CustomerCancel", "vn": "Đã hủy" },
+  {
+    "statusId": 4,
+    "statusString": "PaymentSuccessButNotEnoughQuantity",
+    "vn": "Hết hàng"
+  },
+  { "statusId": 5, "statusString": "WaitingReview", "vn": "Đánh giá" },
+  { "statusId": 6, "statusString": "Completed", "vn": "Hoàn tất" }
+]
