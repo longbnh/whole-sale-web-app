@@ -19,7 +19,7 @@ import {CustomAlertDialog} from "../../../commons/CustomAlertDialog";
 import ICategory from "../../../../shared/models/ICategory";
 import IBrand from "../../../../shared/models/IBrand";
 import IOrigin from "../../../../shared/models/IOrigin";
-import {BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../../shared/enum/enum";
+import {APP_PATH, BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../../shared/enum/enum";
 import {IProduct} from "../../../../shared/models/IProduct";
 import {IProduct as IProductRequest} from "../../../../shared/models/modifyApi/IProduct";
 import {useRouter} from "next/router";
@@ -45,7 +45,6 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
     const [notiContent, setNotiContent] = useState<string>("");
-    const [product, setProduct] = useState<IProduct>();
     const [productRequest, setProductRequest] = useState<IProductRequest>();
     const [categoryOne, setCategoryOne] = useState<string>("");
     const [choice, setChoice] = useState<ICategory>();
@@ -61,7 +60,6 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
             if (id) {
                 productApi.getProduct(parseInt(id as string))
                     .then(res => {
-                        setProduct(res.data);
                         setProductRequest({
                             originalPrice: res.data.originalPrice,
                             description: res.data.description,
@@ -123,9 +121,10 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
 
     const handleCategoryOne = (e: any) => {
         let categoryItem = e.target.value;
+        console.log(categoryItem)
         let item = props.categories.filter((cate) => cate.name === categoryItem);
-        setChoice(item[0]);
         setCategoryOne(categoryItem);
+        setChoice(item[0]);
     };
 
     const handleCategoryTwo = (e: any) => {
@@ -167,6 +166,20 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
         }
     };
 
+    function getCategoryTwo() {
+        if (choice && productRequest) {
+            const cateTwo = choice.subCategories.find(
+                (value) => value.id === productRequest.categoryId
+            )?.id;
+            if (cateTwo !== undefined) {
+                return cateTwo;
+            }
+            else {
+                return choice.subCategories[0].id
+            }
+        }
+        return null;
+    }
 
     return (
         <div
@@ -179,7 +192,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                 <CircularProgress color="inherit" />
             </Backdrop>
             <div className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl">
-                <div className="text-xl font-semibold p-4 ml-5">Thêm sản phẩm</div>
+                <div className="text-xl font-semibold p-4 ml-5">Cập nhật sản phẩm</div>
                 <CustomAlertDialog title={POPUP_CREATE_PRODUCT.Title}
                                    content={notiContent}
                                    btName={POPUP_CREATE_PRODUCT.Ok}
@@ -310,13 +323,11 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                                     Danh mục
                                 </InputLabel>
                                 <Select
-                                    // required
+                                    required
                                     className="mb-5"
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={choice.subCategories.find(
-                                        (value) => value.id === productRequest.categoryId
-                                    )!.id}
+                                    value={getCategoryTwo()}
                                     disabled={categoryOne === ""}
                                     label="Danh mục"
                                     onChange={handleCategoryTwo}
@@ -393,17 +404,26 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             }
                         />
                         <div className="mb-5"/>
-                        <div className="flex justify-end">
+                        <div className="flex justify-end gap-5">
+                            <Button variant="outlined"
+                                    className="text-black w-32 h-16 bg-gray-400 hover:bg-gray-500"
+                                    component="span"
+                                    onClick={() => router.push(`${APP_PATH.SELLER.PRODUCT}/${id}`)}
+                                    disabled={loading}>
+                                {
+                                    <span className="text-xl">Hủy</span>
+                                }
+                            </Button>
                             <label htmlFor="submit-button">
                                 <Input id="submit-button" type="submit"/>
                                 <Button variant="outlined"
-                                        className="text-white w-32 h-15 bg-red-600 hover:bg-red-500 border-black"
+                                        className="text-white w-32 h-16 bg-red-600 hover:bg-red-500"
                                         component="span"
                                         disabled={loading}>
                                     {
                                         loading
-                                            ? <CircularProgress/>
-                                            : <span className="text-xl">Thêm</span>
+                                            ? <CircularProgress className="text-white"/>
+                                            : <span className="text-xl">Thay đổi</span>
                                     }
                                 </Button>
                             </label>
