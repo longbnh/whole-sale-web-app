@@ -25,6 +25,7 @@ import {IProduct as IProductRequest} from "../../../../shared/models/modifyApi/I
 import {useRouter} from "next/router";
 import {IImage} from "../../../../shared/models/IImage";
 import Autocomplete from "@mui/material/Autocomplete";
+import imageApi from "../../../../api/imageApi";
 
 interface IListCategory {
     categories: ICategory[];
@@ -103,7 +104,6 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                 (picture, index) => index !== removeIndex
             ) as []),
         ];
-        console.log(updatePictures);
         setNewPictures(updatePictures);
     };
 
@@ -145,37 +145,28 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        //Handle submit here
-        // setLoading(true);
-        console.log(productRequest)
-        // try {
-        //     console.log(pictures)
-        //     const response = await imageApi.uploadImage(pictures);
-        //     const imgArr: string[] = response.data;
-        //     let product: IProduct = {
-        //         name: name,
-        //         description: des,
-        //         originalPrice: price,
-        //         originId: originId,
-        //         brandId: brandId,
-        //         categoryId: categoryId,
-        //         productImages: imgArr,
-        //     }
-        //     await productApi.createProduct(product, 1)
-        //     setLoading(false);
-        //     setNotiContent(POPUP_CREATE_PRODUCT.Success);
-        //     setOpen(true);
-        // } catch (error) {
-        //     setLoading(false);
-        //     setNotiContent(POPUP_CREATE_PRODUCT.Failed);
-        //     setOpen(true);
-        // }
+        setLoading(true);
+        try {
+            let response = await imageApi.uploadImage(newPictures);
+            let newImages = response.data;
+            let product: IProductRequest = {
+                ...productRequest,
+                newImages: newImages,
+                removeImages: removedPictures,
+            }
+            await productApi.updateProduct(product, parseInt(id as string))
+            setNotiContent(POPUP_CREATE_PRODUCT.Success);
+            console.log(product);
+        }
+        catch (error) {
+            setNotiContent(POPUP_CREATE_PRODUCT.Failed);
+        }
+        finally {
+            setLoading(false);
+            setOpen(true);
+        }
     };
 
-    console.log(choice?.subCategories.filter(
-        (value) => value.id === productRequest?.categoryId
-    ))
-    console.log(productRequest?.categoryId)
 
     return (
         <div
@@ -301,7 +292,6 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                                     id="demo-simple-select"
                                     value={categoryOne}
                                     label="Ngành hàng"
-                                    // defaultValue={defaultCateOne.name}
                                     onChange={handleCategoryOne}
                                 >
                                     {props.categories.map((cate) => {
@@ -320,13 +310,13 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                                     Danh mục
                                 </InputLabel>
                                 <Select
-                                    required
+                                    // required
                                     className="mb-5"
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    // value={choice?.subCategories.filter(
-                                    //     (value) => value.id === productRequest?.categoryId
-                                    // )}
+                                    value={choice.subCategories.find(
+                                        (value) => value.id === productRequest.categoryId
+                                    )!.id}
                                     disabled={categoryOne === ""}
                                     label="Danh mục"
                                     onChange={handleCategoryTwo}
@@ -378,7 +368,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             }
                         />
                         <div className="mb-5"/>
-                        {props.origins.find(origin => origin.id === productRequest?.originId) && <Autocomplete
+                        <Autocomplete
                             disableClearable
                             autoComplete
                             autoHighlight
@@ -401,7 +391,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             getOptionLabel={(option: any) =>
                                 isString(option[ORIGIN_VALUE.Name]) ? option[ORIGIN_VALUE.Name] : ""
                             }
-                        />}
+                        />
                         <div className="mb-5"/>
                         <div className="flex justify-end">
                             <label htmlFor="submit-button">

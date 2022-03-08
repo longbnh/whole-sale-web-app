@@ -1,14 +1,14 @@
 import {IImage} from "./IImage";
 import {ProductDisplayStatus} from "../type/paginationTypes";
 import IBrand from "./IBrand";
-import ICategory from "./ICategory";
+import IOrigin from "./IOrigin";
 
 export interface IProduct {
     id: string
     name: string;
     description: string;
     originalPrice: number;
-    origin: string;
+    origin: IOrigin;
     brand: IBrand;
     category: IProductCategory;
     productImages: Array<IImage>;
