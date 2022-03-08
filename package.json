@@ -8,12 +8,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@date-io/date-fns": "^2.13.1",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@goongmaps/goong-map-react": "^1.1.0",
     "@headlessui/react": "^1.4.3",
     "@heroicons/react": "^1.0.5",
     "@mui/icons-material": "^5.3.1",
+    "@mui/lab": "^5.0.0-alpha.72",
     "@mui/material": "^5.4.0",
     "@mui/styles": "^5.4.1",
     "@mui/x-data-grid": "^5.5.0",
@@ -26,6 +28,7 @@
     "autosuggest-highlight": "^3.2.1",
     "axios": "^0.25.0",
     "classnames": "^2.3.1",
+    "date-fns": "^2.28.0",
     "exceljs": "^4.3.0",
     "firebase": "^9.6.6",
     "lodash": "^4.17.21",

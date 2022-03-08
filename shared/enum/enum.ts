@@ -24,6 +24,7 @@ export enum SHOP_API {
     PaymentType = "/paymentTypes",
     Address = "/customers/addresses",
     Image = "/images",
+    PromotionPlan = "/promotions",
 }
 
 export namespace GOONG_PATH {
