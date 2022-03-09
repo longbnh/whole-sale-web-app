@@ -61,7 +61,11 @@ const Cart: React.FC<CartProps> = (props) => {
             </div>
           }
           isReachingEnd={(swr) => {
-            return swr.data && swr.data.at(0).content.length === 0;
+            console.log(swr.data && swr.data.at(0));
+            return (
+              (swr.data && swr.data.at(0).isLastPage) ||
+              (swr.data && swr.data.at(0).totalElements === 0)
+            );
           }}
         >
           {(response) =>
