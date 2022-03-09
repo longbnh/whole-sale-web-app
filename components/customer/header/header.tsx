@@ -41,7 +41,11 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
   const [logoRatio, setLogoRatio] = useState(16 / 9);
   const [logoutRatio, setLogoutRatio] = useState(16 / 9);
 
-  const { data, mutate } = useSWR({ page: 1, pageSize: 10 }, cartApi.getCart);
+  const { data, mutate } = useSWR({ page: 1, pageSize: 10 }, cartApi.getCart, {
+    refreshInterval: 0,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   //@ts-ignore
   const cart = useSelector((state) => state.cart);

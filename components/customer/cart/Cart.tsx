@@ -60,7 +60,9 @@ const Cart: React.FC<CartProps> = (props) => {
               <Skeleton animation={false} />
             </div>
           }
-          isReachingEnd={(swr) => swr.data?.length === swr.data?.[0].totalPage}
+          isReachingEnd={(swr) => {
+            return swr.data && swr.data.at(0).content.length === 0;
+          }}
         >
           {(response) =>
             (response as IPagination<ICartItem>).content
