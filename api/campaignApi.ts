@@ -2,6 +2,7 @@ import {SHOP_API} from "../shared/enum/enum";
 import axiosClient from "./axiosClient";
 import {IPagination} from "../shared/models/IPagination";
 import {ICampaign} from "../shared/models/ICampaign";
+import {ICampaign as ICampaignRequest} from "../shared/models/modifyApi/ICampaign";
 import {IRequestPage} from "../shared/models/IRequestPage";
 
 const campaignApi = {
@@ -35,6 +36,16 @@ const campaignApi = {
     }
     return axiosClient.get<ICampaign>(url, config);
   },
+  createCampaign: (productId: number, campaign: ICampaignRequest) => {
+    const url = `${SHOP_API.Product}/${productId}${SHOP_API.Campaign}`;
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        accountId: 2,
+      },
+    }
+    return axiosClient.post<ICampaign>(url, campaign, config);
+  }
 };
 
 export default campaignApi;

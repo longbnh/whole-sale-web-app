@@ -85,7 +85,7 @@ const Setting: React.FC<ProductProps> = (props) => {
                                                 color="success"
                                                 className="bg-green-500 text-white w-60"
                                                 disabled={matchProductStatusDisplayType(data.status, PRODUCT_DISPLAY.ON_SALE)}
-                                            // onClick={() => router.back()}
+                                                onClick={() => router.push(`${APP_PATH.SELLER.CAMPAIGN_ADD}/${data.id}`)}
                                                 startIcon={
                                                     <SendIcon
                                                         className="h-10 w-10"
