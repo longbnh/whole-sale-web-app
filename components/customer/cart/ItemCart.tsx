@@ -56,12 +56,18 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
     let quantity = Number.parseInt(event.target.value);
     if (quantity >= 0) {
       setQuantity(quantity);
-      if (props.listTotal.find((item) => item.id === props.item.campaign!.id)) {
+      if (
+        props.listTotal.find(
+          (item) => item.campaignId === props.item.campaign!.id
+        )
+      ) {
         const temp = [...props.listTotal];
-        temp.find((item) => item.id === props.item.campaign!.id)!.totalPrice =
-          (currentPrice as number) * quantity;
-        temp.find((item) => item.id === props.item.campaign!.id)!.quantity =
-          quantity;
+        temp.find(
+          (item) => item.campaignId === props.item.campaign!.id
+        )!.totalPrice = (currentPrice as number) * quantity;
+        temp.find(
+          (item) => item.campaignId === props.item.campaign!.id
+        )!.quantity = quantity;
         props.setListTotal(temp);
       }
     }
@@ -83,9 +89,12 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
   };
 
   const handleChecked = () => {
-    const findItemCart = props.listTotal.find(
-      (item) => item.id === props.item.campaign?.id
-    );
+    const findItemCart =
+      props.listTotal &&
+      props.listTotal.find(
+        (item) => item.campaignId === props.item.campaign!.id
+      );
+
     if (findItemCart !== undefined) {
       return true;
     }
@@ -104,7 +113,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
             props.setListTotal([
               ...props.listTotal,
               {
-                id: props.item.campaign!.id,
+                campaignId: props.item.campaign!.id,
                 totalPrice: (currentPrice as number) * quantity,
                 quantity: quantity,
               },
@@ -112,7 +121,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
           } else {
             props.setListTotal(
               props.listTotal.filter(
-                (item) => item.id !== props.item.campaign!.id
+                (item) => item.campaignId !== props.item.campaign!.id
               )
             );
           }

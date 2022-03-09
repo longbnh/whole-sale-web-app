@@ -4,7 +4,7 @@ import Cart from "./Cart";
 import Total from "./Total";
 
 export interface ITotal {
-  id: number;
+  campaignId: number;
   totalPrice: number;
   quantity?: number;
 }
