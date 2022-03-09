@@ -3,9 +3,7 @@ import {ICampaign} from "../../../shared/models/ICampaign";
 import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {PencilAltIcon} from "@heroicons/react/solid";
-import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Cancel} from "@mui/icons-material";
 
 const slideShowProps = {
     indicators: true,
@@ -16,7 +14,10 @@ interface CampaignProps {
     data: ICampaign;
 }
 
-
+function checkUpdateCondition(campaign: ICampaign): boolean {
+    if (campaign.currentSaleQuantity > 0) return false;
+    return true;
+}
 const Setting: React.FC<CampaignProps> = (props) => {
     const {data} = props;
     return (

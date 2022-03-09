@@ -18,9 +18,11 @@ import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
 import ICategory from "../../../shared/models/ICategory";
 import IBrand from "../../../shared/models/IBrand";
 import IOrigin from "../../../shared/models/IOrigin";
-import {BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
-import {IProduct} from "../../../shared/models/modifyApi/IProduct";
+import {APP_PATH, BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
+import {IProduct as IProductRequest} from "../../../shared/models/modifyApi/IProduct";
+import {IProduct} from "../../../shared/models/IProduct";
 import imageApi from "../../../api/imageApi";
+import {useRouter} from "next/router";
 
 interface IListCategory {
     categories: ICategory[];
@@ -45,8 +47,11 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
     const [notiContent, setNotiContent] = useState<string>("");
+    const [product, setProduct] = useState<IProduct>();
+    const router = useRouter();
 
-    const handleClose = () => {
+    const handleClose = async () => {
+        await router.push(`${APP_PATH.SELLER.PRODUCT}/${product?.id}`);
         setOpen(false);
     };
 
@@ -54,9 +59,6 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         let updatePictures = [...pictures] as File[];
         let newPictures = [...e.target.files] as File[];
         updatePictures = [...updatePictures, ...newPictures];
-        updatePictures.forEach(picture => {
-            console.log(picture.name)
-        })
         if (updatePictures.length <= 5) setPictures(updatePictures);
     };
 
@@ -67,7 +69,6 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                 (picture, index) => index !== removeIndex
             ) as []),
         ];
-        console.log(updatePictures);
         setPictures(updatePictures);
     };
 
@@ -111,7 +112,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             console.log(pictures)
             const response = await imageApi.uploadImage(pictures);
             const imgArr: string[] = response.data;
-            let product: IProduct = {
+            let product: IProductRequest = {
                 name: name,
                 description: des,
                 originalPrice: price,
@@ -120,13 +121,13 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                 categoryId: categoryId,
                 productImages: imgArr,
             }
-            await productApi.createProduct(product, 1)
-            setLoading(false);
+            let productResponse = await productApi.createProduct(product, 1);
+            setProduct(productResponse.data);
             setNotiContent(POPUP_CREATE_PRODUCT.Success);
-            setOpen(true);
         } catch (error) {
-            setLoading(false);
             setNotiContent(POPUP_CREATE_PRODUCT.Failed);
+        } finally {
+            setLoading(false);
             setOpen(true);
         }
     };

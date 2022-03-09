@@ -15,6 +15,7 @@ import {ICampaign} from "../../../shared/models/ICampaign";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddIcon from '@mui/icons-material/Add';
 import {toISOLocal} from "../../../utils/LocalDateTimeUtil";
+import {IErrorResponse} from "../../../shared/models/IErrorResponse";
 
 interface InputFieldProps {
     price?: number,
@@ -39,11 +40,12 @@ const EditCampaign = () => {
     );
     const [quantity, setQuantity] = React.useState<number>();
     const [campaign, setCampaign] = useState<ICampaign>();
+    const [error, setError] = useState<IErrorResponse>({status: false});
 
     useEffect(() => {
         try {
             if (id) {
-                campaignApi.getCampaign(parseInt(id as string))
+                campaignApi.getCampaignForSeller(parseInt(id as string))
                     .then(response => {
                         let data = response.data;
                         setCampaign(data);
@@ -76,28 +78,176 @@ const EditCampaign = () => {
         setEndDate(newValue);
     };
 
+    function handleError(): boolean {
+        //Quantity error
+        if (quantity === undefined) {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "quantity",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        } else {
+            if (quantity === 0) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "quantity",
+                    errorContent: "Số lượng bán ra phải lớn hơn 0"
+                }))
+                return false;
+            }
+        }
+
+        //Input list error
+        for (let i = 0; i < inputList.length; i++) {
+            let price = inputList[i].price;
+            let requiredSaleQuantity = inputList[i].requiredSaleQuantity;
+
+            //price error
+            if (price === undefined) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "price",
+                    optionalId: i,
+                    errorContent: "Trường này bị trống"
+                }))
+                return false;
+            } else {
+                if (i === 0) {
+                    console.log(campaign!.mileStones[0].price)
+                    if (price >= campaign!.mileStones[0].price) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "price",
+                            optionalId: i,
+                            errorContent: "Giá phải bé hơn giá gốc"
+                        }))
+                        return false;
+                    }
+                } else {
+                    let prevPrice = inputList[i - 1].price;
+                    if (prevPrice !== undefined && (price >= prevPrice)) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "price",
+                            optionalId: i,
+                            errorContent: "Giá phải bé hơn giá trước"
+                        }))
+                        return false;
+                    }
+                }
+            }
+            if (requiredSaleQuantity === undefined) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "requiredSaleQuantity",
+                    optionalId: i,
+                    errorContent: "Trường này bị trống"
+                }))
+                return false;
+            } else {
+                if (i === 0) {
+                    if (requiredSaleQuantity <= 0) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "requiredSaleQuantity",
+                            optionalId: i,
+                            errorContent: "Mốc mua phải lớn hơn 0"
+                        }))
+                        return false;
+                    }
+                } else {
+                    let prevRequiredSaleQuantity = inputList[i - 1].requiredSaleQuantity;
+                    if (prevRequiredSaleQuantity !== undefined && (requiredSaleQuantity <= prevRequiredSaleQuantity)) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "requiredSaleQuantity",
+                            optionalId: i,
+                            errorContent: "Mốc mua phải lớn hơn mốc trước"
+                        }))
+                        return false;
+
+                    }
+                }
+            }
+        }
+
+        //Date error
+        if (startDate === null) {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "startDate",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        } else {
+            if (startDate < new Date()) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "startDate",
+                    errorContent: "T/g phải lớn hơn hiện tại"
+                }))
+                return false;
+            }
+            if (endDate === null) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "endDate",
+                    errorContent: "Trường này bị trống"
+                }))
+                return false;
+            } else {
+                if (endDate < startDate) {
+                    setError(prevState => ({
+                        ...prevState,
+                        status: true,
+                        errorLabel: "endDate",
+                        errorContent: "T/g kết thúc nhỏ hơn t/g bắt đầu"
+                    }))
+                    return false;
+                }
+            }
+        }
+        setError({status: false})
+        return true;
+    }
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        try {
-            setLoading(true)
-            if (quantity) {
-                let campaignRequest: ICampaignRequest = {
-                    startDate: toISOLocal(startDate),
-                    endDate: toISOLocal(endDate),
-                    promotionPlanId: promotionPlanId,
-                    quantity: quantity,
-                    milestones: inputList,
-                    isPublish: true,
-                }
-                let response = await campaignApi.updateCampaign(parseInt(id as string), campaignRequest);
-                setCampaign(response.data);
-            }
-        } catch (error) {
-            //TODO handle error
-        } finally {
-            setLoading(false)
-            setOpen(true)
+        if (!handleError()) {
+            return;
         }
+        // try {
+        //     setLoading(true)
+        //     if (quantity) {
+        //         let campaignRequest: ICampaignRequest = {
+        //             startDate: toISOLocal(startDate),
+        //             endDate: toISOLocal(endDate),
+        //             promotionPlanId: promotionPlanId,
+        //             quantity: quantity,
+        //             milestones: inputList,
+        //             isPublish: true,
+        //         }
+        //         let response = await campaignApi.updateCampaign(parseInt(id as string), campaignRequest);
+        //         setCampaign(response.data);
+        //     }
+        // } catch (error) {
+        //     //TODO handle error
+        // } finally {
+        //     setLoading(false)
+        //     setOpen(true)
+        // }
     }
 
     const handleClose = async () => {
@@ -173,6 +323,14 @@ const EditCampaign = () => {
                         <div className="col-span-12 text-2xl font-bold">Cài đặt số lượng bán</div>
                         <TextField label="Số lượng bán ra"
                                    value={quantity}
+                                   error={error.errorLabel === "quantity"}
+                                   onKeyPress={event => {
+                                       const regex = /\d/
+                                       if (!regex.test(event.key)) {
+                                           event.preventDefault();
+                                       }
+                                   }}
+                                   helperText={error.errorLabel === "quantity" ? error.errorContent : ""}
                                    onChange={(e) => setQuantity(parseInt(e.target.value))}
                                    className="w-2/5 col-span-12"
                         />
@@ -212,6 +370,15 @@ const EditCampaign = () => {
                                 <div key={index} className="grid grid-cols-12">
                                     <TextField label="Mốc giá"
                                                className="col-span-3"
+                                               onKeyPress={event => {
+                                                   const regex = /\d/
+                                                   if (!regex.test(event.key)) {
+                                                       event.preventDefault();
+                                                   }
+                                               }}
+                                               error={error.errorLabel === "price" && index === error.optionalId}
+                                               helperText={error.errorLabel === "price"
+                                               && index === error.optionalId ? error.errorContent : ""}
                                                value={input.price}
                                                onChange={(e) => {
                                                    let newValue = e.target.value;
@@ -224,6 +391,16 @@ const EditCampaign = () => {
                                     <TextField label="Số lượng cần đạt"
                                                className="col-start-6 col-span-3"
                                                value={input.requiredSaleQuantity}
+                                               onKeyPress={event => {
+                                                   const regex = /\d/
+                                                   if (!regex.test(event.key)) {
+                                                       event.preventDefault();
+                                                   }
+                                               }}
+                                               error={error.errorLabel === "requiredSaleQuantity"
+                                               && index === error.optionalId}
+                                               helperText={error.errorLabel === "requiredSaleQuantity"
+                                               && index === error.optionalId ? error.errorContent : ""}
                                                onChange={(e) => {
                                                    let newValue = e.target.value;
                                                    if (newValue === "") {
@@ -248,8 +425,7 @@ const EditCampaign = () => {
                                                 .filter((_, i) => i + 1 !== inputList.length))
                                         }
                                         }>
-                                        {/*<RemoveIcon fontSize="large"*/}
-                                        {/*            className="text-red-600"/>*/}
+
                                         <DeleteForeverIcon fontSize="large"
                                                            className="text-red-600"/>
 
@@ -261,9 +437,8 @@ const EditCampaign = () => {
                             {(inputList.length + 1 < parseInt(process.env.MAX_MILESTONE as string)) &&
                             <Button className="text-red-500 text-xl col-span-8"
                                     variant="text"
-                                    startIcon={<AddIcon />}
+                                    startIcon={<AddIcon/>}
                                     onClick={() => {
-                                        let arrLth = inputList.length;
                                         let newInput = {}
                                         setInputList(inputList => [...inputList, newInput])
                                     }}>

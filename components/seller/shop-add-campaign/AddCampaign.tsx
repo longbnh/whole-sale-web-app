@@ -8,7 +8,6 @@ import promotionPlanApi from "../../../api/promotionPlanApi";
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import RemoveIcon from '@mui/icons-material/Remove';
 import {APP_PATH, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
 import NumberFormat from "../../../utils/NumberFormat";
 import {ICampaign as ICampaignRequest} from "../../../shared/models/modifyApi/ICampaign";
@@ -16,6 +15,9 @@ import campaignApi from "../../../api/campaignApi";
 import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
 import {ICampaign} from "../../../shared/models/ICampaign";
 import {toISOLocal} from "../../../utils/LocalDateTimeUtil";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import AddIcon from "@mui/icons-material/Add";
+import {IErrorResponse} from "../../../shared/models/IErrorResponse";
 
 interface InputFieldProps {
     price?: number,
@@ -33,13 +35,14 @@ const AddCampaign = () => {
     const [promotionPlanId, setPromotionPlanId] = useState<number | undefined>();
     const [inputList, setInputList] = useState<InputFieldProps[]>([{}, {}]);
     const [startDate, setStartDate] = React.useState<Date | null>(
-        new Date('2014-08-18T21:11:54'),
+        new Date(),
     );
     const [endDate, setEndDate] = React.useState<Date | null>(
-        new Date('2014-08-18T21:11:54'),
+        new Date(),
     );
     const [quantity, setQuantity] = React.useState<number>();
     const [campaign, setCampaign] = useState<ICampaign>();
+    const [error, setError] = useState<IErrorResponse>({status: false});
 
     useEffect(() => {
         try {
@@ -72,8 +75,154 @@ const AddCampaign = () => {
         setEndDate(newValue);
     };
 
+    function handleError(): boolean {
+        //Quantity error
+        if (quantity === undefined) {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "quantity",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        } else {
+            if (quantity === 0) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "quantity",
+                    errorContent: "Số lượng bán ra phải lớn hơn 0"
+                }))
+                return false;
+            }
+        }
+
+        //Input list error
+        for (let i = 0; i < inputList.length; i++) {
+            let price = inputList[i].price;
+            let requiredSaleQuantity = inputList[i].requiredSaleQuantity;
+
+            //price error
+            if (price === undefined) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "price",
+                    optionalId: i,
+                    errorContent: "Trường này bị trống"
+                }))
+                return false;
+            } else {
+                if (i === 0) {
+                    if (price >= product!.originalPrice) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "price",
+                            optionalId: i,
+                            errorContent: "Giá phải bé hơn giá gốc"
+                        }))
+                        return false;
+                    }
+                } else {
+                    let prevPrice = inputList[i - 1].price;
+                    if (prevPrice !== undefined && (price >= prevPrice)) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "price",
+                            optionalId: i,
+                            errorContent: "Giá phải bé hơn giá trước"
+                        }))
+                        return false;
+                    }
+                }
+            }
+            if (requiredSaleQuantity === undefined) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "requiredSaleQuantity",
+                    optionalId: i,
+                    errorContent: "Trường này bị trống"
+                }))
+                return false;
+            } else {
+                if (i === 0) {
+                    if (requiredSaleQuantity <= 0) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "requiredSaleQuantity",
+                            optionalId: i,
+                            errorContent: "Mốc mua phải lớn hơn 0"
+                        }))
+                        return false;
+                    }
+                } else {
+                    let prevRequiredSaleQuantity = inputList[i-1].requiredSaleQuantity;
+                    if (prevRequiredSaleQuantity !== undefined && (requiredSaleQuantity <= prevRequiredSaleQuantity)) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "requiredSaleQuantity",
+                            optionalId: i,
+                            errorContent: "Mốc mua phải lớn hơn mốc trước"
+                        }))
+                        return false;
+                    }
+                }
+            }
+        }
+
+        //Date error
+        if (startDate === null) {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "startDate",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        } else {
+            if (startDate < new Date()) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "startDate",
+                    errorContent: "T/g phải lớn hơn hiện tại"
+                }))
+                return false;
+            }
+            if (endDate === null) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "endDate",
+                    errorContent: "Trường này bị trống"
+                }))
+                return false;
+            } else {
+                if (endDate < startDate) {
+                    setError(prevState => ({
+                        ...prevState,
+                        status: true,
+                        errorLabel: "endDate",
+                        errorContent: "T/g kết thúc nhỏ hơn t/g bắt đầu"
+                    }))
+                    return false;
+                }
+            }
+        }
+        setError({status: false})
+        return true;
+    }
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        if (!handleError()) {
+            return;
+        }
         try {
             setLoading(true)
             if (quantity) {
@@ -89,7 +238,7 @@ const AddCampaign = () => {
                 setCampaign(response.data);
 
             }
-        } catch(error) {
+        } catch (error) {
             //TODO handle error
         } finally {
             setOpen(true)
@@ -169,6 +318,14 @@ const AddCampaign = () => {
                     <div className="grid grid-cols-12 gap-y-5">
                         <div className="col-span-12 text-2xl font-bold">Cài đặt số lượng bán</div>
                         <TextField label="Số lượng bán ra"
+                                   error={error.errorLabel === "quantity"}
+                                   onKeyPress={event => {
+                                       const regex = /\d/
+                                       if (!regex.test(event.key)) {
+                                           event.preventDefault();
+                                       }
+                                   }}
+                                   helperText={error.errorLabel === "quantity" ? error.errorContent : ""}
                                    onChange={(e) => setQuantity(parseInt(e.target.value))}
                                    className="w-2/5 col-span-12"
                         />
@@ -209,6 +366,15 @@ const AddCampaign = () => {
                                     <TextField label="Mốc giá"
                                                className="col-span-3"
                                                value={input.price}
+                                               onKeyPress={event => {
+                                                   const regex = /\d/
+                                                   if (!regex.test(event.key)) {
+                                                       event.preventDefault();
+                                                   }
+                                               }}
+                                               error={error.errorLabel === "price" && index === error.optionalId}
+                                               helperText={error.errorLabel === "price"
+                                               && index === error.optionalId ? error.errorContent : ""}
                                                onChange={(e) => {
                                                    let newValue = e.target.value;
                                                    if (newValue === "") {
@@ -219,6 +385,16 @@ const AddCampaign = () => {
                                                }}/>
                                     <TextField label="Số lượng cần đạt"
                                                className="col-start-6 col-span-3"
+                                               onKeyPress={event => {
+                                                   const regex = /\d/
+                                                   if (!regex.test(event.key)) {
+                                                       event.preventDefault();
+                                                   }
+                                               }}
+                                               error={error.errorLabel === "requiredSaleQuantity"
+                                               && index === error.optionalId}
+                                               helperText={error.errorLabel === "requiredSaleQuantity"
+                                               && index === error.optionalId ? error.errorContent : ""}
                                                value={input.requiredSaleQuantity}
                                                onChange={(e) => {
                                                    let newValue = e.target.value;
@@ -244,21 +420,23 @@ const AddCampaign = () => {
                                                 .filter((_, i) => i + 1 !== inputList.length))
                                         }
                                         }>
-                                        <RemoveIcon fontSize="large"
-                                                    className="text-red-600"/>
+                                        <DeleteForeverIcon fontSize="large"
+                                                           className="text-red-600"/>
                                     </Button>}
                                 </div>
                             )
                         })}
                         <div className="grid grid-cols-12">
                             {(inputList.length + 1 < parseInt(process.env.MAX_MILESTONE as string)) &&
-                            <Button className="bg-red-600 hover:bg-red-500 col-start-7 col-span-2"
-                                    variant="contained"
+                            <Button className="text-red-500 text-xl col-span-8"
+                                    variant="text"
+                                    startIcon={<AddIcon/>}
                                     onClick={() => {
-                                        let arrLth = inputList.length;
                                         let newInput = {}
                                         setInputList(inputList => [...inputList, newInput])
-                                    }}>Thêm mốc</Button>
+                                    }}>
+                                Thêm mốc
+                            </Button>
                             }
                         </div>
                     </div>
@@ -270,13 +448,18 @@ const AddCampaign = () => {
                                 <DateTimePicker
                                     label="Ngày bắt đầu"
                                     value={startDate}
+                                    readOnly
+                                    minDateTime={new Date()}
                                     inputFormat="MM/dd/yyyy HH:mm"
                                     onChange={handleStartDate}
-                                    renderInput={(params) => <TextField className="col-span-3" {...params} />}
+                                    renderInput={(params) =>
+                                        <TextField className="col-span-3" {...params} />}
                                 />
                                 <DateTimePicker
                                     label="Ngày kết thúc"
                                     value={endDate}
+                                    readOnly
+                                    minDateTime={startDate || new Date()}
                                     inputFormat="MM/dd/yyyy HH:mm"
                                     onChange={handleEndDate}
                                     renderInput={(params) => <TextField
