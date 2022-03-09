@@ -17,7 +17,7 @@ const Total: React.FC<TotalProps> = (props) => {
     if (typeof window !== undefined) {
       const myStorage = window.localStorage;
       const arr = props.listTotal.map((item) => ({
-        campaignId: item.id,
+        campaignId: item.campaignId,
         quantity: item.quantity,
         totalPrice: item.totalPrice,
       }));

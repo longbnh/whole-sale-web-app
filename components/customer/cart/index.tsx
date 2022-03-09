@@ -13,15 +13,17 @@ const CartPage = () => {
   const [listTotal, setListTotal] = useState<ITotal[]>([]);
 
   useEffect(() => {
-    if (typeof window !== undefined) {
-      const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
-      const list: ITotal[] = JSON.parse(listChecked!);
-      if (list !== null) {
-        // console.log(list);
-        setListTotal(list);
-      }
+    // if (typeof window !== undefined) {
+    const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
+    const list: ITotal[] = JSON.parse(listChecked!);
+    if (list !== null) {
+      // console.log(list);
+      setListTotal(list);
     }
+    // }
   }, []);
+
+  console.log("render");
 
   return (
     <div className="mx-auto h-fit pb-10 w-1200 relative flex items-start">
