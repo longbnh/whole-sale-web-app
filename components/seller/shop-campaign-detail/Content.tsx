@@ -24,6 +24,9 @@ const Content = () => {
       "aria-controls": `simple-tabpanel-${index}`,
     };
   }
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabIndex(newValue);
+  }
 
   return (
     <div className="bg-gray-100 py-5 w-full ml-56 flex flex-col min-h-screen">
@@ -56,7 +59,7 @@ const Content = () => {
             >
               <Tab label="Thông tin cơ bản" {...a11yProps(0)} />
               <Tab label="Dữ liệu kinh doanh" {...a11yProps(1)} />
-              <Tab label="Đơn đặt hàng" disabled {...a11yProps(2)} />
+              <Tab label="Đơn đặt hàng" {...a11yProps(2)} />
               <Tab label="Cài đặt" {...a11yProps(3)} />
             </Tabs>
           </Box>

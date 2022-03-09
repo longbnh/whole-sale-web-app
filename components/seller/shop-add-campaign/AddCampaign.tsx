@@ -236,12 +236,11 @@ const AddCampaign = () => {
                 }
                 let response = await campaignApi.createCampaign(parseInt(id as string), campaignRequest);
                 setCampaign(response.data);
-
+                setOpen(true)
             }
         } catch (error) {
             //TODO handle error
         } finally {
-            setOpen(true)
             setLoading(false)
         }
     }
@@ -265,7 +264,7 @@ const AddCampaign = () => {
                 <div className="text-xl font-semibold p-4 ml-5">Đăng bán</div>
             </div>
             <CustomAlertDialog title="Thông báo"
-                               content="Cập nhật sản phẩm thành công"
+                               content="Đăng bán sản phẩm thành công"
                                btName={POPUP_CREATE_PRODUCT.Ok}
                                open={open}
                                handleClickClose={handleClose}/>
@@ -448,7 +447,6 @@ const AddCampaign = () => {
                                 <DateTimePicker
                                     label="Ngày bắt đầu"
                                     value={startDate}
-                                    readOnly
                                     minDateTime={new Date()}
                                     inputFormat="MM/dd/yyyy HH:mm"
                                     onChange={handleStartDate}
@@ -458,7 +456,6 @@ const AddCampaign = () => {
                                 <DateTimePicker
                                     label="Ngày kết thúc"
                                     value={endDate}
-                                    readOnly
                                     minDateTime={startDate || new Date()}
                                     inputFormat="MM/dd/yyyy HH:mm"
                                     onChange={handleEndDate}

@@ -26,7 +26,7 @@ export interface ICampaign {
   brand?: IBrand;
   description?: string;
   //for request that get multiple images
-  images?: IImage[];
+  images: IImage[];
   //for request that get only one image
   imageUrl?: string;
   shop?: IShop;

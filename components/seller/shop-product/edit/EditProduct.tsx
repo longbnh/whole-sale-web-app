@@ -19,13 +19,14 @@ import {CustomAlertDialog} from "../../../commons/CustomAlertDialog";
 import ICategory from "../../../../shared/models/ICategory";
 import IBrand from "../../../../shared/models/IBrand";
 import IOrigin from "../../../../shared/models/IOrigin";
-import {APP_PATH, BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../../shared/enum/enum";
-import {IProduct} from "../../../../shared/models/IProduct";
+import {APP_PATH, BRAND_VALUE, ORIGIN_VALUE, PAGE_REQUEST, POPUP_CREATE_PRODUCT} from "../../../../shared/enum/enum";
 import {IProduct as IProductRequest} from "../../../../shared/models/modifyApi/IProduct";
 import {useRouter} from "next/router";
 import {IImage} from "../../../../shared/models/IImage";
 import Autocomplete from "@mui/material/Autocomplete";
 import imageApi from "../../../../api/imageApi";
+import {matchProductStatusDisplayType} from "../../../../utils/PageRequestUtils";
+import PRODUCT_DISPLAY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_DISPLAY;
 
 interface IListCategory {
     categories: ICategory[];
@@ -60,6 +61,9 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
             if (id) {
                 productApi.getProduct(parseInt(id as string))
                     .then(res => {
+                        if (matchProductStatusDisplayType(res.data.status, PRODUCT_DISPLAY.ON_SALE)) {
+                            router.push(`${APP_PATH.SELLER.SHOP_LIST_PRODUCT}`)
+                        }
                         setProductRequest({
                             originalPrice: res.data.originalPrice,
                             description: res.data.description,
