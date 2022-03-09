@@ -32,10 +32,11 @@ const Content = () => {
 
     return (
         <div
-            className="relative bg-gray-100 py-5 w-full ml-56"
+            className="bg-gray-100 py-5 w-full ml-56 flex flex-col min-h-screen"
         >
             <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
-                <div className="flex bg-white mx-4 mt-5 max-h-full border rounded-xl px-5 py-2 items-center justify-start gap-5">
+                <div
+                    className="flex bg-white mx-4 mt-5 max-h-full border rounded-xl px-5 py-2 items-center justify-start gap-5">
                     <Button variant="text"
                             onClick={() => router.back()}
                             startIcon={
@@ -50,7 +51,7 @@ const Content = () => {
                 </div>
             </div>
 
-            <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
+            <div className="mx-4 overflow-y-auto overflow-x-hidden">
                 <div
                     className="bg-white mx-4 mt-5 p-2 max-h-full border rounded-xl">
                     <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
@@ -63,10 +64,11 @@ const Content = () => {
                     </Box>
                 </div>
             </div>
-            {(tabIndex === 0) && data && <GeneralInfo data={data.data}/>}
-            {(tabIndex === 1) && data && <SaleInfo data={data.data}/>}
-            {(tabIndex === 3) && data && <Setting data={data.data}/>}
-
+            <div className="grow">
+                {(tabIndex === 0) && data && <GeneralInfo data={data.data}/>}
+                {(tabIndex === 1) && data && <SaleInfo data={data.data}/>}
+                {(tabIndex === 3) && data && <Setting data={data.data}/>}
+            </div>
         </div>
     )
 }

@@ -45,6 +45,16 @@ const campaignApi = {
       },
     }
     return axiosClient.post<ICampaign>(url, campaign, config);
+  },
+  updateCampaign: (campaignId: number, campaign: ICampaignRequest) => {
+    const url = `${SHOP_API.Campaign}/${campaignId}`;
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        accountId: 2,
+      },
+    }
+    return axiosClient.put<ICampaign>(url, campaign, config);
   }
 };
 

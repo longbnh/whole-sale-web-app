@@ -1,37 +1,36 @@
 import {Backdrop, Button, CircularProgress, FormControlLabel, FormGroup, Switch, TextField} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {IProduct} from "../../../shared/models/IProduct";
-import productApi from "../../../api/productApi";
 import {IPromotionPlan} from "../../../shared/models/IPromotionPlan";
 import promotionPlanApi from "../../../api/promotionPlanApi";
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import RemoveIcon from '@mui/icons-material/Remove';
 import {APP_PATH, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
 import NumberFormat from "../../../utils/NumberFormat";
 import {ICampaign as ICampaignRequest} from "../../../shared/models/modifyApi/ICampaign";
 import campaignApi from "../../../api/campaignApi";
 import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
 import {ICampaign} from "../../../shared/models/ICampaign";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import AddIcon from '@mui/icons-material/Add';
 import {toISOLocal} from "../../../utils/LocalDateTimeUtil";
 
 interface InputFieldProps {
     price?: number,
     requiredSaleQuantity?: number,
+    milestoneNumber?: number;
 }
 
-const AddCampaign = () => {
+const EditCampaign = () => {
     const router = useRouter();
     const {id} = router.query;
-    const [product, setProduct] = useState<IProduct>();
     const [promotionPlans, setPromotionPlans] = useState<IPromotionPlan[]>([]);
     const [isPromoted, setIsPromoted] = useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [promotionPlanId, setPromotionPlanId] = useState<number | undefined>();
-    const [inputList, setInputList] = useState<InputFieldProps[]>([{}, {}]);
+    const [inputList, setInputList] = useState<InputFieldProps[]>([]);
     const [startDate, setStartDate] = React.useState<Date | null>(
         new Date('2014-08-18T21:11:54'),
     );
@@ -44,9 +43,14 @@ const AddCampaign = () => {
     useEffect(() => {
         try {
             if (id) {
-                productApi.getProduct(parseInt(id as string))
+                campaignApi.getCampaign(parseInt(id as string))
                     .then(response => {
-                        setProduct(response.data);
+                        let data = response.data;
+                        setCampaign(data);
+                        setQuantity(data.currentSaleQuantity);
+                        setInputList(data.mileStones.filter(milestone => milestone.requiredSaleQuantity !== 0));
+                        setStartDate(new Date(data.startDate));
+                        setEndDate(new Date(data.endDate));
                     })
                     .catch(error => {
                         //TODO handle error
@@ -85,15 +89,14 @@ const AddCampaign = () => {
                     milestones: inputList,
                     isPublish: true,
                 }
-                let response = await campaignApi.createCampaign(parseInt(id as string), campaignRequest);
+                let response = await campaignApi.updateCampaign(parseInt(id as string), campaignRequest);
                 setCampaign(response.data);
-
             }
-        } catch(error) {
+        } catch (error) {
             //TODO handle error
         } finally {
-            setOpen(true)
             setLoading(false)
+            setOpen(true)
         }
     }
 
@@ -108,33 +111,33 @@ const AddCampaign = () => {
         >
             <Backdrop
                 sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
-                open={!product}
+                open={!campaign}
             >
                 <CircularProgress color="inherit"/>
             </Backdrop>
             <div className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl h-auto">
-                <div className="text-xl font-semibold p-4 ml-5">Đăng bán</div>
+                <div className="text-2xl font-semibold p-4 ml-5">Đăng bán</div>
             </div>
             <CustomAlertDialog title="Thông báo"
                                content="Cập nhật sản phẩm thành công"
                                btName={POPUP_CREATE_PRODUCT.Ok}
                                open={open}
                                handleClickClose={handleClose}/>
-            {product &&
+            {campaign &&
             <div>
                 <div
                     className="bg-white flex mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl p-5 gap-x-56">
-                    <img src={product.productImages[0].url} className="w-56 h-56"/>
+                    <img src={campaign.images[0].url} className="w-56 h-56"/>
                     <div className="flex flex-col gap-y-3">
                         <div className="flex flex-row text-2xl font-bold">
-                            {product.name}
+                            {campaign.name}
                         </div>
                         <div className="flex flex-row text-xl justify-between gap-x-20">
                             <div>
                                 Danh mục:
                             </div>
                             <div>
-                                {product.category.name}
+                                {campaign.category.name}
                             </div>
                         </div>
                         <div className="flex flex-row text-xl justify-between">
@@ -142,7 +145,7 @@ const AddCampaign = () => {
                                 Giá gốc:
                             </div>
                             <div>
-                                {product.originalPrice}
+                                {campaign.mileStones[0].price}
                             </div>
                         </div>
                         <div className="flex flex-row text-xl justify-between">
@@ -150,7 +153,7 @@ const AddCampaign = () => {
                                 Xuất xứ:
                             </div>
                             <div>
-                                {product.origin.countryName}
+                                {campaign.origin}
                             </div>
                         </div>
                         <div className="flex flex-row text-xl justify-between">
@@ -158,7 +161,7 @@ const AddCampaign = () => {
                                 Thương hiệu:
                             </div>
                             <div>
-                                {product.brand.name}
+                                {campaign.brand?.name}
                             </div>
                         </div>
                     </div>
@@ -169,6 +172,7 @@ const AddCampaign = () => {
                     <div className="grid grid-cols-12 gap-y-5">
                         <div className="col-span-12 text-2xl font-bold">Cài đặt số lượng bán</div>
                         <TextField label="Số lượng bán ra"
+                                   value={quantity}
                                    onChange={(e) => setQuantity(parseInt(e.target.value))}
                                    className="w-2/5 col-span-12"
                         />
@@ -196,7 +200,7 @@ const AddCampaign = () => {
                         <div className="grid grid-cols-12">
                             <TextField label="Mốc giá"
                                        className="col-span-3"
-                                       value={NumberFormat(product.originalPrice)}
+                                       value={NumberFormat(campaign.mileStones[0].price)}
                                        disabled/>
                             <TextField label="Số lượng cần đạt"
                                        className="col-start-6 col-span-3"
@@ -244,21 +248,27 @@ const AddCampaign = () => {
                                                 .filter((_, i) => i + 1 !== inputList.length))
                                         }
                                         }>
-                                        <RemoveIcon fontSize="large"
-                                                    className="text-red-600"/>
+                                        {/*<RemoveIcon fontSize="large"*/}
+                                        {/*            className="text-red-600"/>*/}
+                                        <DeleteForeverIcon fontSize="large"
+                                                           className="text-red-600"/>
+
                                     </Button>}
                                 </div>
                             )
                         })}
                         <div className="grid grid-cols-12">
                             {(inputList.length + 1 < parseInt(process.env.MAX_MILESTONE as string)) &&
-                            <Button className="bg-red-600 hover:bg-red-500 col-start-7 col-span-2"
-                                    variant="contained"
+                            <Button className="text-red-500 text-xl col-span-8"
+                                    variant="text"
+                                    startIcon={<AddIcon />}
                                     onClick={() => {
                                         let arrLth = inputList.length;
                                         let newInput = {}
                                         setInputList(inputList => [...inputList, newInput])
-                                    }}>Thêm mốc</Button>
+                                    }}>
+                                Thêm mốc
+                            </Button>
                             }
                         </div>
                     </div>
@@ -301,4 +311,4 @@ const AddCampaign = () => {
     );
 };
 
-export default AddCampaign;
+export default EditCampaign;
