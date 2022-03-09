@@ -25,6 +25,7 @@ export enum SHOP_API {
   Address = "/customers/addresses",
   Image = "/images",
   Template = "/importTemplate",
+  PromotionPlan = "/promotions",
 }
 
 export namespace GOONG_PATH {
@@ -85,6 +86,8 @@ export namespace APP_PATH {
     SHOP_PRODUCT = "/seller/shopProduct",
     WELCOME = "/seller/welcome",
     PRODUCT = "/seller/product",
+    PRODUCT_EDIT = "/seller/product/edit",
+    CAMPAIGN_ADD = "/seller/campaign/add",
   }
 }
 

@@ -122,7 +122,7 @@ const Content = () => {
                         <ArrowCircleDownIcon className={`h-10 w-10 
                         ${matchOrderType(pageRequest.order, ORDER_QUERY.DESC)
                         && !matchSortType(pageRequest.sort, PRODUCT.NO_SEARCH)
-                            ? "text-green-500"
+                            ? "text-red-500"
                             : "text-gray-500"}`}/>
                         </IconButton>
                     </span>

@@ -1,5 +1,3 @@
-import {ISubCategory} from "../ICategory";
-
 export interface IProduct {
     name?: string;
     description?: string;

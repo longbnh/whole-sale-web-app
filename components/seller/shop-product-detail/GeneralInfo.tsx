@@ -100,7 +100,7 @@ const GeneralInfo: React.FC<ProductProps> = (props) => {
                                 Xuất xứ:
                             </div>
                             <div>
-                                {data.origin}
+                                {data.origin.countryName}
                             </div>
                         </div>
                     </div>

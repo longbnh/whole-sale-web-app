@@ -6,6 +6,7 @@ import {getLastActiveMilestone, getPercentageSaleOff} from "../../../utils/Campa
 import {IMilestone} from "../../../shared/models/IMilestone";
 import {QuestionMarkCircleIcon} from "@heroicons/react/solid";
 import Tooltip from '@mui/material/Tooltip';
+import {DateFormat} from "../../../utils/DateFormat";
 
 interface CampaignProps {
     data: ICampaign;
@@ -108,21 +109,11 @@ const SaleInfo: React.FC<CampaignProps> = (props) => {
                         <div className="col-start-2 text-xl">Từ</div>
                         <CustomDisableInput disabled
                                             className="col-span-6 w-1/4"
-                                            value={new Date(Date.parse(data.promotionPlan.startDate)).toLocaleDateString('vi-VI', {
-                                                weekday: 'long',
-                                                year: 'numeric',
-                                                month: 'short',
-                                                day: 'numeric'
-                                            })}/>
+                                            value={DateFormat(data.promotionPlan.startDate)}/>
                         <div className="col-start-2 text-xl">Đến</div>
                         <CustomDisableInput disabled
                                             className="col-span-6 w-1/4"
-                                            value={new Date(Date.parse(data.promotionPlan.endDate)).toLocaleDateString('vi-VI', {
-                                                weekday: 'long',
-                                                year: 'numeric',
-                                                month: 'short',
-                                                day: 'numeric'
-                                            })}/>
+                                            value={DateFormat(data.promotionPlan.endDate)}/>
                     </>}
                 </div>
 
@@ -200,23 +191,13 @@ const SaleInfo: React.FC<CampaignProps> = (props) => {
                     </div>
                     <CustomDisableInput disabled
                                         className="w-4/5"
-                                        value={new Date(Date.parse(data.startDate)).toLocaleDateString('vi-VI', {
-                                            weekday: 'long',
-                                            year: 'numeric',
-                                            month: 'short',
-                                            day: 'numeric'
-                                        })}/>
+                                        value={DateFormat(data.startDate)}/>
                     <div>
                         <span className="text-xl">Ngày kết thúc:</span>
                     </div>
                     <CustomDisableInput disabled
                                         className="w-4/5"
-                                        value={new Date(Date.parse(data.endDate)).toLocaleDateString('vi-VI', {
-                                            weekday: 'long',
-                                            year: 'numeric',
-                                            month: 'short',
-                                            day: 'numeric'
-                                        })}/>
+                                        value={DateFormat(data.endDate)}/>
                 </div>
             </div>
         </div>

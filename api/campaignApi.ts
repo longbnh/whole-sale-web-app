@@ -3,6 +3,7 @@ import axiosClient from "./axiosClient";
 import { IPagination } from "../shared/models/IPagination";
 import { ICampaign } from "../shared/models/ICampaign";
 import { IRequestPage } from "../shared/models/IRequestPage";
+import { ICampaign as ICampaignRequest } from "../shared/models/modifyApi/ICampaign";
 import { IOrderSeller } from "../shared/models/IOrder";
 
 const campaignApi = {
@@ -61,6 +62,26 @@ const campaignApi = {
       params: param,
       ...config,
     });
+  },
+  createCampaign: (productId: number, campaign: ICampaignRequest) => {
+    const url = `${SHOP_API.Product}/${productId}${SHOP_API.Campaign}`;
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        accountId: 2,
+      },
+    };
+    return axiosClient.post<ICampaign>(url, campaign, config);
+  },
+  updateCampaign: (campaignId: number, campaign: ICampaignRequest) => {
+    const url = `${SHOP_API.Campaign}/${campaignId}`;
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        accountId: 2,
+      },
+    };
+    return axiosClient.put<ICampaign>(url, campaign, config);
   },
 };
 

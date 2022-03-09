@@ -25,12 +25,8 @@ const Content = () => {
     };
   }
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabIndex(newValue);
-  };
-
   return (
-    <div className="relative bg-gray-100 py-5 w-full ml-56">
+    <div className="bg-gray-100 py-5 w-full ml-56 flex flex-col min-h-screen">
       <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
         <div className="flex bg-white mx-4 mt-5 max-h-full border rounded-xl px-5 py-2 items-center justify-start gap-5">
           <Button
@@ -50,7 +46,7 @@ const Content = () => {
         </div>
       </div>
 
-      <div className="mx-4 overflow-y-auto overflow-x-hidden max-h-full">
+      <div className="mx-4 overflow-y-auto overflow-x-hidden">
         <div className="bg-white mx-4 mt-5 p-2 max-h-full border rounded-xl">
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -60,16 +56,18 @@ const Content = () => {
             >
               <Tab label="Thông tin cơ bản" {...a11yProps(0)} />
               <Tab label="Dữ liệu kinh doanh" {...a11yProps(1)} />
-              <Tab label="Đơn đặt hàng" {...a11yProps(2)} />
+              <Tab label="Đơn đặt hàng" disabled {...a11yProps(2)} />
               <Tab label="Cài đặt" {...a11yProps(3)} />
             </Tabs>
           </Box>
         </div>
       </div>
-      {tabIndex === 0 && data && <GeneralInfo data={data.data} />}
-      {tabIndex === 1 && data && <SaleInfo data={data.data} />}
-      {tabIndex === 2 && data && <Order data={data.data} />}
-      {tabIndex === 3 && data && <Setting data={data.data} />}
+      <div className="grow">
+        {tabIndex === 0 && data && <GeneralInfo data={data.data} />}
+        {tabIndex === 1 && data && <SaleInfo data={data.data} />}
+        {tabIndex === 2 && data && <Order data={data.data} />}
+        {tabIndex === 3 && data && <Setting data={data.data} />}
+      </div>
     </div>
   );
 };
