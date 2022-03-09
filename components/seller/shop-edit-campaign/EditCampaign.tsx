@@ -208,7 +208,7 @@ const EditCampaign = () => {
                 }))
                 return false;
             } else {
-                if (endDate < startDate) {
+                if (endDate <= startDate) {
                     setError(prevState => ({
                         ...prevState,
                         status: true,
@@ -225,29 +225,29 @@ const EditCampaign = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        console.log(campaign)
         if (!handleError()) {
             return;
         }
-        // try {
-        //     setLoading(true)
-        //     if (quantity) {
-        //         let campaignRequest: ICampaignRequest = {
-        //             startDate: toISOLocal(startDate),
-        //             endDate: toISOLocal(endDate),
-        //             promotionPlanId: promotionPlanId,
-        //             quantity: quantity,
-        //             milestones: inputList,
-        //             isPublish: true,
-        //         }
-        //         let response = await campaignApi.updateCampaign(parseInt(id as string), campaignRequest);
-        //         setCampaign(response.data);
-        //     }
-        // } catch (error) {
-        //     //TODO handle error
-        // } finally {
-        //     setLoading(false)
-        //     setOpen(true)
-        // }
+        try {
+            setLoading(true)
+            if (quantity) {
+                let campaignRequest: ICampaignRequest = {
+                    startDate: toISOLocal(startDate),
+                    endDate: toISOLocal(endDate),
+                    promotionPlanId: promotionPlanId,
+                    quantity: quantity,
+                    milestones: inputList,
+                    isPublish: true,
+                }
+                await campaignApi.updateCampaign(parseInt(id as string), campaignRequest);
+            }
+        } catch (error) {
+            //TODO handle error
+        } finally {
+            setLoading(false)
+            setOpen(true)
+        }
     }
 
     const handleClose = async () => {
@@ -473,7 +473,7 @@ const EditCampaign = () => {
                     <div className="flex justify-end gap-x-5 mt-10">
                         <Button className="w-1/6 bg-red-600 hover:bg-red-500 text-white"
                                 onClick={handleSubmit}>
-                            Đăng bán
+                            Thay đổi
                         </Button>
                         <Button className="w-1/6 bg-gray-500 hover:bg-gray-400 text-white"
                                 onClick={() => router.push(`${APP_PATH.SELLER.PRODUCT}/${id}`)}>

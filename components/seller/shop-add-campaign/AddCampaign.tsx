@@ -203,7 +203,7 @@ const AddCampaign = () => {
                 }))
                 return false;
             } else {
-                if (endDate < startDate) {
+                if (endDate <= startDate) {
                     setError(prevState => ({
                         ...prevState,
                         status: true,

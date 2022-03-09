@@ -4,6 +4,8 @@ import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {PencilAltIcon} from "@heroicons/react/solid";
 import DeleteIcon from '@mui/icons-material/Delete';
+import {APP_PATH} from "../../../shared/enum/enum";
+import {useRouter} from "next/router";
 
 const slideShowProps = {
     indicators: true,
@@ -14,12 +16,13 @@ interface CampaignProps {
     data: ICampaign;
 }
 
-function checkUpdateCondition(campaign: ICampaign): boolean {
-    if (campaign.currentSaleQuantity > 0) return false;
-    return true;
-}
+// function checkUpdateCondition(campaign: ICampaign): boolean {
+//     if (campaign.currentSaleQuantity > 0) return false;
+//     return true;
+// }
 const Setting: React.FC<CampaignProps> = (props) => {
     const {data} = props;
+    const router = useRouter();
     return (
         <div className="mx-4 overflow-y-auto overflow-x-hidden">
             <div className="bg-white mx-4 mt-5 p-5 border rounded-xl">
@@ -45,7 +48,7 @@ const Setting: React.FC<CampaignProps> = (props) => {
                                     <div className="flex justify-end">
                                         <Button variant="contained"
                                                 className="bg-blue-500 text-white w-60"
-                                            // onClick={() => router.back()}
+                                            onClick={() => router.push(`${APP_PATH.SELLER.CAMPAIGN_EDIT}/${data.id}`)}
                                                 startIcon={
                                                     <PencilAltIcon
                                                         className="h-10 w-10"

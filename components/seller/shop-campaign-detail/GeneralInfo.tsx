@@ -1,10 +1,6 @@
 import React from "react";
 import {ICampaign} from "../../../shared/models/ICampaign";
-//@ts-ignore
 import {Slide} from 'react-slideshow-image';
-//@ts-ignore
-import ShowMoreText from "react-show-more-text";
-//@ts-ignore
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-slideshow-image/dist/styles.css'
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';

@@ -88,6 +88,7 @@ export namespace APP_PATH {
     PRODUCT = "/seller/product",
     PRODUCT_EDIT = "/seller/product/edit",
     CAMPAIGN_ADD = "/seller/campaign/add",
+    CAMPAIGN_EDIT = "/seller/campaign/edit"
   }
 }
 
