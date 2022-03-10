@@ -354,7 +354,6 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             rows={4}
                             size="small"
                             value={productRequest?.description}
-                            // value={props.categories.find(cate => cate.subCategories.find((subCate) => subCate.id === productRequest?.categoryId))?.name}
                             InputLabelProps={{shrink: (productRequest?.description !== undefined ? productRequest.description.length > 0 : false)}}
                             onChange={e => setProductRequest(prevState => ({
                                 ...prevState,
@@ -426,7 +425,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                                         disabled={loading}>
                                     {
                                         loading
-                                            ? <CircularProgress className="text-white"/>
+                                            ? <CircularProgress size={30} className="text-white"/>
                                             : <span className="text-xl">Thay đổi</span>
                                     }
                                 </Button>

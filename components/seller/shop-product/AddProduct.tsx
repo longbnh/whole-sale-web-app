@@ -296,7 +296,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                                         disabled={loading}>
                                     {
                                         loading
-                                            ? <CircularProgress/>
+                                            ? <CircularProgress size={30} className="text-white"/>
                                             : <span className="text-xl">Thêm</span>
                                     }
                                 </Button>
