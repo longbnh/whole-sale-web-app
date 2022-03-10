@@ -455,14 +455,14 @@ const EditCampaign = () => {
                                 <DateTimePicker
                                     label="Ngày bắt đầu"
                                     value={startDate}
-                                    inputFormat="MM/dd/yyyy HH:mm"
+                                    inputFormat="dd/MM/yyyy HH:mm"
                                     onChange={handleStartDate}
                                     renderInput={(params) => <TextField className="col-span-3" {...params} />}
                                 />
                                 <DateTimePicker
                                     label="Ngày kết thúc"
                                     value={endDate}
-                                    inputFormat="MM/dd/yyyy HH:mm"
+                                    inputFormat="dd/MM/yyyy HH:mm"
                                     onChange={handleEndDate}
                                     renderInput={(params) => <TextField
                                         className="col-span-3 col-start-6" {...params} />}
