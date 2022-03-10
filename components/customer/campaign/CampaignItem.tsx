@@ -60,7 +60,7 @@ const CampaignItem = () => {
     }
 
     checkValid();
-  }, []);
+  }, [error]);
 
   const renderer = (props: TimeRenderProps) => {
     const days = props.days.toLocaleString("en-US", {

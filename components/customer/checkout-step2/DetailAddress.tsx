@@ -105,6 +105,7 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
 
     const handleDragEnd = (e: any) => {
         const [lng, lat] = e.lngLat;
+        console.log(e.lngLat)
         setMarker({
             longitude: lng,
             latitude: lat

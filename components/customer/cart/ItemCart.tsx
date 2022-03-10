@@ -117,7 +117,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
     if (typeof window !== undefined) {
       const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
       const list: ITotal[] = JSON.parse(listChecked!);
-      const findItemCart = list.find(
+      const findItemCart = list && list.find(
         (item) => item.campaignId === props.item.campaign!.id
       );
       if (findItemCart !== undefined) {
