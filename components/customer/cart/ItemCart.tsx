@@ -135,6 +135,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
         classes={{ root: classes.root }}
         defaultChecked={handleChecked()}
         color="default"
+        key={props.item.campaign!.id.toString()}
         onChange={(event, checked) => {
           if (checked) {
             props.setListTotal([
