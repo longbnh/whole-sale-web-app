@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Checkbox } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -36,6 +36,8 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
   const [quantity, setQuantity] = useState<number>(props.item.quantity);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {}, [props.listTotal]);
 
   let currentPrice = props.item
     .campaign!.mileStones.sort(
@@ -83,22 +85,47 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
   };
 
   const deleteItem = async () => {
+    const findItemCart =
+      props.listTotal &&
+      props.listTotal.find(
+        (item) => item.campaignId === props.item.campaign!.id
+      );
+    if (findItemCart !== undefined) {
+      let index = props.listTotal.findIndex(
+        (item) => item.campaignId === props.item.campaign!.id
+      );
+      let temp = [...props.listTotal];
+      temp.splice(index, 1);
+      props.setListTotal(temp);
+
+      if (typeof window !== undefined) {
+        const myStorage = window.localStorage;
+        const arr = temp.map((item) => ({
+          campaignId: item.campaignId,
+          quantity: item.quantity,
+          totalPrice: item.totalPrice,
+        }));
+        myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify(arr));
+      }
+    }
     await cartApi.deleteItemCart(props.item.productId);
     props.swr.mutate();
     dispatch(setCart());
   };
 
   const handleChecked = () => {
-    const findItemCart =
-      props.listTotal &&
-      props.listTotal.find(
+    if (typeof window !== undefined) {
+      const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
+      const list: ITotal[] = JSON.parse(listChecked!);
+      const findItemCart = list.find(
         (item) => item.campaignId === props.item.campaign!.id
       );
-
-    if (findItemCart !== undefined) {
-      return true;
+      if (findItemCart !== undefined) {
+        return true;
+      } else {
+        return false;
+      }
     }
-    return false;
   };
 
   return (
@@ -108,6 +135,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
         classes={{ root: classes.root }}
         defaultChecked={handleChecked()}
         color="default"
+        key={props.item.campaign!.id.toString()}
         onChange={(event, checked) => {
           if (checked) {
             props.setListTotal([

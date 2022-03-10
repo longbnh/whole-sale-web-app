@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouter } from "next/router";
 import useSWRInfinite from "swr/infinite";
 import { Checkbox, Divider, Skeleton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,8 +16,6 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = (props) => {
-  const router = useRouter();
-
   const getKey = (
     pageIndex: number,
     previousPageData: IPagination<ICartItem>
@@ -75,6 +72,7 @@ const Cart: React.FC<CartProps> = (props) => {
                   <div key={key} className="py-2">
                     {item.hasCampaign ? (
                       <ItemCart
+                        key={key}
                         item={item}
                         setListTotal={props.setListTotal}
                         listTotal={props.listTotal}

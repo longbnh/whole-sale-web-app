@@ -13,14 +13,14 @@ const CartPage = () => {
   const [listTotal, setListTotal] = useState<ITotal[]>([]);
 
   useEffect(() => {
-    if (typeof window !== undefined) {
-      const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
-      const list: ITotal[] = JSON.parse(listChecked!);
-      if (list !== null) {
-        // console.log(list);
-        setListTotal(list);
-      }
+    // if (typeof window !== undefined) {
+    const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
+    const list: ITotal[] = JSON.parse(listChecked!);
+    if (list !== null) {
+      // console.log(list);
+      setListTotal(list);
     }
+    // }
   }, []);
 
   return (
