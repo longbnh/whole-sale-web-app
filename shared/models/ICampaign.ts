@@ -8,6 +8,7 @@ import { CampaignDisplayStatus } from "../type/paginationTypes";
 
 export interface ICampaign {
   id: number;
+  productId: number;
   name: string;
   startDate: string;
   endDate: string;
@@ -19,8 +20,13 @@ export interface ICampaign {
   rating?: {
     totalReview: number;
     averageRating: number;
+    rating1Count: number;
+    rating2Count: number;
+    rating3Count: number;
+    rating4Count: number;
+    rating5Count: number;
   };
-  catePath: string;
+  catePath?: string;
   category: ISubCategory;
   origin?: string;
   brand?: IBrand;

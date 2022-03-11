@@ -20,6 +20,7 @@ const Total: React.FC<TotalProps> = (props) => {
         campaignId: item.campaignId,
         quantity: item.quantity,
         totalPrice: item.totalPrice,
+        productId: item.productId,
       }));
       myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify(arr));
       await router.push(APP_PATH.CUSTOMER.CHECKOUT_2);

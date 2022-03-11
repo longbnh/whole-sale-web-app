@@ -3,6 +3,7 @@ import { ICampaign } from "./ICampaign";
 export interface orderInfo {
   campaignId: number;
   quantity: number;
+  productId: number;
 }
 
 export interface IOrder {

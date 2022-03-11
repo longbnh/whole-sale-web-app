@@ -10,7 +10,6 @@ import { ICartItem } from "../../../shared/models/ICartItem";
 import { ITotal } from ".";
 import Link from "next/link";
 import cartApi from "../../../api/cartApi";
-import { LOCAL_STORAGE } from "../../../shared/enum/enum";
 import { SWRInfiniteResponse } from "swr/infinite/dist/infinite";
 import { IPagination } from "../../../shared/models/IPagination";
 import { useDispatch } from "react-redux";
@@ -97,35 +96,10 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
       let temp = [...props.listTotal];
       temp.splice(index, 1);
       props.setListTotal(temp);
-
-      if (typeof window !== undefined) {
-        const myStorage = window.localStorage;
-        const arr = temp.map((item) => ({
-          campaignId: item.campaignId,
-          quantity: item.quantity,
-          totalPrice: item.totalPrice,
-        }));
-        myStorage.setItem(LOCAL_STORAGE.CART_ITEM, JSON.stringify(arr));
-      }
     }
     await cartApi.deleteItemCart(props.item.productId);
     props.swr.mutate();
     dispatch(setCart());
-  };
-
-  const handleChecked = () => {
-    if (typeof window !== undefined) {
-      const listChecked = window.localStorage.getItem(LOCAL_STORAGE.CART_ITEM);
-      const list: ITotal[] = JSON.parse(listChecked!);
-      const findItemCart = list && list.find(
-        (item) => item.campaignId === props.item.campaign!.id
-      );
-      if (findItemCart !== undefined) {
-        return true;
-      } else {
-        return false;
-      }
-    }
   };
 
   return (
@@ -133,7 +107,6 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
       <Checkbox
         id={props.item.campaign!.id.toString()}
         classes={{ root: classes.root }}
-        defaultChecked={handleChecked()}
         color="default"
         key={props.item.campaign!.id.toString()}
         onChange={(event, checked) => {
@@ -144,6 +117,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
                 campaignId: props.item.campaign!.id,
                 totalPrice: (currentPrice as number) * quantity,
                 quantity: quantity,
+                productId: props.item.productId,
               },
             ]);
           } else {

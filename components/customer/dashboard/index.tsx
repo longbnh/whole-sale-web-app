@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import categoryApi from "../../../api/categoryApi";
 import ICategory from "../../../shared/models/ICategory";
 import Category from "./Category";
@@ -6,8 +6,11 @@ import Hotdeal from "./Hotdeal";
 
 import dashboard from "../../../public/json/dashboard.json";
 import campaignApi from "../../../api/campaignApi";
-import {IRequestPage, IRequestPageInitialState} from "../../../shared/models/IRequestPage";
-import {ICampaign} from "../../../shared/models/ICampaign";
+import {
+  IRequestPage,
+  IRequestPageInitialState,
+} from "../../../shared/models/IRequestPage";
+import { ICampaign } from "../../../shared/models/ICampaign";
 
 const DashboardCustomer = () => {
   const [category, setCategory] = useState<ICategory[]>([]);
@@ -21,9 +24,10 @@ const DashboardCustomer = () => {
 
   const getCampaignByCategory = async () => {
     let page: IRequestPage = IRequestPageInitialState;
-    const response = await campaignApi.getCampaignByCategory(7, "", page);
-    setListHotDeal(response.data.content);
-    setListNearby(response.data.content);
+    const responseHotDeal = await campaignApi.getAllCampaign("", page);
+    setListHotDeal(responseHotDeal.data.content);
+    // const
+    setListNearby(responseHotDeal.data.content);
   };
 
   useEffect(() => {

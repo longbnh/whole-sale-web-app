@@ -83,6 +83,11 @@ const campaignApi = {
     };
     return axiosClient.put<ICampaign>(url, campaign, config);
   },
+  getAllCampaign: (search: string, pageRequest?: IRequestPage) => {
+    const url = `${SHOP_API.Campaign}`;
+    const param = { ...pageRequest, search: search };
+    return axiosClient.get(url, { params: param });
+  },
 };
 
 export default campaignApi;

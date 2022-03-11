@@ -118,6 +118,7 @@ const CampaignItem = () => {
         campaignId,
         quantity,
         totalPrice: getCurrentPrice(data!.data) * quantity,
+        productId: data?.data.id,
       };
       await myStorage.setItem(
         LOCAL_STORAGE.CART_ITEM,
@@ -177,7 +178,7 @@ const CampaignItem = () => {
         <span className="text-xl text-blue-600">
           <Link href="/">Trang chủ</Link>
         </span>
-        {data && getCatePath(data.data.catePath)}
+        {data && getCatePath(data.data.catePath!)}
       </div>
       <div className="bg-white mt-5 mx-auto max-h-full rounded-lg">
         <CustomAlertDialog
