@@ -47,7 +47,7 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
         () =>
             throttle((input: string,) => goongMapApi.searchByKeyword(
                 `${input} ${ward.name} ${district.name} ${city.name}`
-            ), 200,), [],
+            ), 2000,), [],
     );
 
     useEffect(() => {

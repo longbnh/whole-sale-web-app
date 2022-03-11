@@ -121,7 +121,7 @@ const OrderItem: React.FC<OrderItemProps> = ({
                 size="small"
               /> */}
               <div className="text-xl text-red-500">
-                {orderStatus.find((item) => item.statusId === data.status).vn}
+                {orderStatus.find((item) => item.statusId === data.status)!.vn}
               </div>
             </div>
           </div>
