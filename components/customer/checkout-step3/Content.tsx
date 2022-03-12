@@ -86,6 +86,7 @@ const Content = () => {
       if (request.isAxiosError(error) && error.response) {
         setOpen({
           open: true,
+          //@ts-ignore
           message: errorCode.find(
             //@ts-ignore
             (item) => item.title === error.response.data.title
