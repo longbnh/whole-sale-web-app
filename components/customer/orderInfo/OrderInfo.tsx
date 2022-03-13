@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import React from "react";
 import {useRouter} from "next/router";
 import {ICampaign} from "../../../shared/models/ICampaign";
+import Image from 'next/image'
 
 interface orderInfo {
     campaignId: number;
@@ -23,7 +24,7 @@ export const OrderInfo: React.FC<OrderInfoProps> = ({campaignsInfo, orderInfo, h
             <ListItem className="grid grid-cols-4 mb-5 items-start w-15 gap-x-5">
                 <div className="col-span-1">
                     {campaign.images && <ListItemIcon>
-                        <img alt={`campaign-${campaign.images[0].id}`}
+                        <Image alt={`campaign-${campaign.images[0].id}`}
                              width={90}
                              height={90}
                              src={campaign.images[0].url}/>

@@ -22,7 +22,7 @@ import CAMPAIGN_QUERY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_QUERY;
 import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
 import ORDER_QUERY = PAGE_REQUEST.ORDER.ORDER_QUERY;
 import CAMPAIGN = PAGE_REQUEST.SORT.CAMPAIGN;
-
+import Image from 'next/image'
 
 interface ICampaignStatus {
     id: StatusQueryType;
@@ -177,7 +177,7 @@ const Content = () => {
                                       divider
                                       className="my-5 p-5 relative flex gap-16">
                                 <Avatar sx={{width: 100, height: 100}} variant="square">
-                                    <img src={campaign.imageUrl}/>
+                                    <Image src={campaign.imageUrl} alt={"campaignImage"}/>
                                 </Avatar>
                                 <div className="grid grid-cols-1">
                                     <div className="font-bold text-2xl">

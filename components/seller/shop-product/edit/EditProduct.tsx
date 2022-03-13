@@ -27,6 +27,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import imageApi from "../../../../api/imageApi";
 import {matchProductStatusDisplayType} from "../../../../utils/PageRequestUtils";
 import PRODUCT_DISPLAY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_DISPLAY;
+import Image from 'next/image'
 
 interface IListCategory {
     categories: ICategory[];
@@ -90,7 +91,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
         } catch (err) {
             console.log(err);
         }
-    }, [id, props]);
+    }, [id, props, router]);
 
     const onChangePicture = (e: any) => {
         let updatePictures = [...newPictures] as File[];
@@ -207,7 +208,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                         {Array.from(newPictures).map((picture, index) => {
                             return (
                                 <div key={index} className="w-32 h-32 relative">
-                                    <img
+                                    <Image
                                         alt="product"
                                         src={URL.createObjectURL(picture)}
                                         className="w-32 h-32"
@@ -224,7 +225,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                         {Array.from(oldPictures).map((picture, index) => {
                             return (
                                 <div key={index} className="w-32 h-32 relative">
-                                    <img
+                                    <Image
                                         alt="product"
                                         src={picture.url}
                                         className="w-32 h-32"

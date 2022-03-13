@@ -23,7 +23,7 @@ const Content:FC<IPaymentResponse> = (props) => {
             vnp_Amount: vnp_Amount / 100,
             vnp_TransactionStatus: vnp_TransactionStatus as string,
         });
-    }, [])
+    }, [vnp_Amount, vnp_TransactionStatus])
     function getResult() {
         console.log(response)
         if (response && response.vnp_TransactionStatus === SUCCESS) {

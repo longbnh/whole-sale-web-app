@@ -18,6 +18,7 @@ import {toISOLocal} from "../../../utils/LocalDateTimeUtil";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import AddIcon from "@mui/icons-material/Add";
 import {IErrorResponse} from "../../../shared/models/IErrorResponse";
+import Image from 'next/image'
 
 interface InputFieldProps {
     price?: number,
@@ -272,7 +273,7 @@ const AddCampaign = () => {
             <div>
                 <div
                     className="bg-white flex mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl p-5 gap-x-56">
-                    <img src={product.productImages[0].url} className="w-56 h-56"/>
+                    <Image src={product.productImages[0].url} alt={"productImage"} className="w-56 h-56"/>
                     <div className="flex flex-col gap-y-3">
                         <div className="flex flex-row text-2xl font-bold">
                             {product.name}

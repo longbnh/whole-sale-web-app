@@ -23,6 +23,7 @@ import {IProduct as IProductRequest} from "../../../shared/models/modifyApi/IPro
 import {IProduct} from "../../../shared/models/IProduct";
 import imageApi from "../../../api/imageApi";
 import {useRouter} from "next/router";
+import Image from 'next/image'
 
 interface IListCategory {
     categories: ICategory[];
@@ -149,7 +150,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         {Array.from(pictures).map((picture, index) => {
                             return (
                                 <div key={index} className="w-32 h-32 relative">
-                                    <img
+                                    <Image
                                         alt="product"
                                         src={URL.createObjectURL(picture)}
                                         className="w-32 h-32"

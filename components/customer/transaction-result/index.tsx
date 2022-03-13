@@ -19,7 +19,7 @@ const Result = () => {
             }
         }
 
-    }, [query])
+    }, [query, router, vnp_TransactionStatus, vnp_Amount])
     if (valid) {
         return <Content vnp_Amount={parseInt(vnp_Amount as string)}
                         vnp_TransactionStatus={vnp_TransactionStatus as string}/>;

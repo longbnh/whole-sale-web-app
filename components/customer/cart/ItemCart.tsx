@@ -120,11 +120,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
       const findItemCart = list && list.find(
         (item) => item.campaignId === props.item.campaign!.id
       );
-      if (findItemCart !== undefined) {
-        return true;
-      } else {
-        return false;
-      }
+      return findItemCart !== undefined;
     }
   };
 
@@ -155,7 +151,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
           }
         }}
       />
-      <Image src={props.item.imageUrl} width={90} height={90} />
+      <Image src={props.item.imageUrl} width={90} height={90} alt="cartItem" />
       <Link href={`campaign/${props.item.campaign?.id}`}>
         <div className="w-1/3 text-sm mx-3 hover:text-red-400 cursor-pointer">
           {props.item.name}

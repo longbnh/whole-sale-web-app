@@ -37,6 +37,7 @@ const ProductItem: React.FC<ProductItemProps> = (props) => {
             <div className="break-words text-sm">
               {item.imageUrl && <Image
                   src={item.imageUrl}
+                  alt={"item"}
                   className={
                     "rounded-md cursor-pointer mb-3 hover:scale-110 ease-in-out duration-300"
                   }
@@ -70,7 +71,7 @@ const ProductItem: React.FC<ProductItemProps> = (props) => {
                   <div className="relative ml-2 w-11 h-11">
                     <div className="absolute bottom-3 w-full h-full">
                       <div className="absolute z-20 bottom-0 right-0">
-                        <Image src={"/fire.svg"} width={43} height={43} />
+                        <Image src={"/fire.svg"} width={43} height={43} alt={"fire"} />
                       </div>
                       <div className="absolute text-white font-semibold text-xs z-30 top-4 right-2">
                         {

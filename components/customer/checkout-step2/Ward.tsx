@@ -19,7 +19,7 @@ export const Ward: React.FC<AddressUnitProps> = ({handleClick, unit, id}) => {
                     //TODO handle error here
                 })
         }
-    }, [])
+    }, [unit])
 
     const handleSearchWard = (e:any) => {
         const value = e.target.value;

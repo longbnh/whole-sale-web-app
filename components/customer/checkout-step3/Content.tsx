@@ -19,6 +19,7 @@ import useSWR from "swr";
 import {LOCAL_STORAGE} from "../../../shared/enum/enum";
 import {IOrder, orderInfo} from "../../../shared/models/IOrder";
 import {OrderInfo} from "../orderInfo/OrderInfo";
+import Image from 'next/image'
 
 const Content = () => {
     const router = useRouter();
@@ -102,7 +103,7 @@ const Content = () => {
                                                         <ListItemIcon>
                                                             <FormControlLabel value={paymentType.id} control={<Radio/>}
                                                                               label={
-                                                                                  <img alt={`logo-${paymentType.name}`}
+                                                                                  <Image alt={`logo-${paymentType.name}`}
                                                                                        width={120}
                                                                                        height={60}
                                                                                        src={`${paymentType.name}Logo.svg`}/>
