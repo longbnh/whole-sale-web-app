@@ -171,7 +171,7 @@ const Content = () => {
                                       className="my-5 p-5 relative flex gap-16">
                                 {product.productImages &&
                                 <Avatar sx={{width: 100, height: 100}} variant="square">
-                                    <Image src={(product.productImages as IImage[])[0].url} alt={"productImage"}/>
+                                    <Image src={(product.productImages as IImage[])[0].url} alt={"productImage"} width={100} height={100}/>
                                 </Avatar>}
                                 <div className="grid grid-cols-1">
                                     <div className="font-bold text-2xl">

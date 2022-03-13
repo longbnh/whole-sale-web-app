@@ -153,7 +153,8 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                                     <Image
                                         alt="product"
                                         src={URL.createObjectURL(picture)}
-                                        className="w-32 h-32"
+                                        width={200}
+                                        height={200}
                                     />
                                     <IconButton
                                         className="absolute top-0 right-0 p-0 bg-gray-600"

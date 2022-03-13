@@ -177,7 +177,7 @@ const Content = () => {
                                       divider
                                       className="my-5 p-5 relative flex gap-16">
                                 <Avatar sx={{width: 100, height: 100}} variant="square">
-                                    <Image src={campaign.imageUrl} alt={"campaignImage"}/>
+                                    <Image src={campaign.imageUrl} alt={"campaignImage"} width={200} height={200}/>
                                 </Avatar>
                                 <div className="grid grid-cols-1">
                                     <div className="font-bold text-2xl">

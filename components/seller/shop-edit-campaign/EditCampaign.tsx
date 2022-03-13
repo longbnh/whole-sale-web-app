@@ -278,7 +278,7 @@ const EditCampaign = () => {
             <div>
                 <div
                     className="bg-white flex mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl p-5 gap-x-56">
-                    <Image src={campaign.images[0].url} alt={"campaignImage"} className="w-56 h-56"/>
+                    <Image src={campaign.images[0].url} alt={"campaignImage"} width={200} height={200}/>
                     <div className="flex flex-col gap-y-3">
                         <div className="flex flex-row text-2xl font-bold">
                             {campaign.name}
