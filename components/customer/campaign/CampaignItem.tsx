@@ -54,8 +54,6 @@ interface TimeRenderProps {
 
 const CampaignItem = () => {
   const [quantity, setQuantity] = useState<number>(1);
-  const [open, setOpen] = useState<boolean>(false);
-  const [avail, setAvail] = useState<boolean>(true);
   const router = useRouter();
   const { id } = router.query;
 
@@ -93,7 +91,6 @@ const CampaignItem = () => {
     });
     const { completed } = props;
     if (completed || error !== undefined) {
-      setAvail(false);
       return <div className="text-4xl text-red-500 font-bold">ĐÃ KẾT THÚC</div>;
     } else {
       return (
