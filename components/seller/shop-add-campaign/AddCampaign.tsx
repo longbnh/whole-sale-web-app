@@ -161,7 +161,7 @@ const AddCampaign = () => {
                         return false;
                     }
                 } else {
-                    let prevRequiredSaleQuantity = inputList[i-1].requiredSaleQuantity;
+                    let prevRequiredSaleQuantity = inputList[i - 1].requiredSaleQuantity;
                     if (prevRequiredSaleQuantity !== undefined && (requiredSaleQuantity <= prevRequiredSaleQuantity)) {
                         setError(prevState => ({
                             ...prevState,
@@ -448,11 +448,14 @@ const AddCampaign = () => {
                                 <DateTimePicker
                                     label="Ngày bắt đầu"
                                     value={startDate}
-                                    minDateTime={new Date()}
+                                    // minDateTime={new Date()}
                                     inputFormat="dd/MM/yyyy HH:mm"
                                     onChange={handleStartDate}
                                     renderInput={(params) =>
-                                        <TextField className="col-span-3" {...params} />}
+                                        <TextField className="col-span-3" {...params}
+                                                   error={error.errorLabel === "startDate"}
+                                                   helperText={error.errorLabel === "startDate"
+                                                   && error.errorContent}/>}
                                 />
                                 <DateTimePicker
                                     label="Ngày kết thúc"
@@ -460,8 +463,11 @@ const AddCampaign = () => {
                                     minDateTime={startDate || new Date()}
                                     inputFormat="dd/MM/yyyy HH:mm"
                                     onChange={handleEndDate}
-                                    renderInput={(params) => <TextField
-                                        className="col-span-3 col-start-6" {...params} />}
+                                    renderInput={(params) =>
+                                        <TextField className="col-span-3 col-start-6" {...params}
+                                                   error={error.errorLabel === "endDate"}
+                                                   helperText={error.errorLabel === "endDate"
+                                                   && error.errorContent} />}
                                 />
                             </div>
                         </LocalizationProvider>
