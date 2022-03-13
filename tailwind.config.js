@@ -15,6 +15,7 @@ module.exports = {
       height: {
         "22/25": "88%",
         155: "155px",
+        "all-but-header": "calc(100vh - 6.25rem)",
       },
       width: {
         "22%": "22%",
