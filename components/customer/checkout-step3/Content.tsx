@@ -106,7 +106,7 @@ const Content = () => {
                                                                                   <Image alt={`logo-${paymentType.name}`}
                                                                                        width={120}
                                                                                        height={60}
-                                                                                       src={`${paymentType.name}Logo.svg`}/>
+                                                                                       src={`/${paymentType.name}Logo.svg`}/>
                                                                               }/>
                                                         </ListItemIcon>
                                                         <ListItemText id={paymentType.id.toString()}
