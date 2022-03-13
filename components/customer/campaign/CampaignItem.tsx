@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Divider, TextField } from "@mui/material";
+import {Avatar, Backdrop, CircularProgress, Divider, TextField} from "@mui/material";
 import {
   getCurrentPrice,
   getLastActiveMilestone,
@@ -39,9 +39,23 @@ interface TimeRenderProps {
   completed: boolean;
 }
 
+// function useCampaign(id) {
+//   const { data, error } = useSWR([id], campaignApi.getCampaign, {
+//     revalidateOnFocus: true,
+//     refreshInterval: 5000,
+//   });
+//
+//   return {
+//     data: data,
+//     isLoading: !data && !error,
+//     isError: error,
+//   }
+// }
+
 const CampaignItem = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [open, setOpen] = useState<boolean>(false);
+  const [avail, setAvail] = useState<boolean>(true);
   const router = useRouter();
   const { id } = router.query;
 
@@ -52,9 +66,11 @@ const CampaignItem = () => {
     refreshInterval: 5000,
   });
 
+
+
   useEffect(() => {
     async function checkValid() {
-      if (error) {
+      if (data === undefined && error) {
         await router.push(APP_PATH.CUSTOMER.INDEX);
       }
     }
@@ -76,9 +92,9 @@ const CampaignItem = () => {
       minimumIntegerDigits: 2,
     });
     const { completed } = props;
-    if (completed) {
-      setOpen(true);
-      return <div className="text-4xl text-red-500 font-bold">HẾT HẠN</div>;
+    if (completed || error !== undefined) {
+      setAvail(false);
+      return <div className="text-4xl text-red-500 font-bold">ĐÃ KẾT THÚC</div>;
     } else {
       return (
         <div className="text-4xl text-red-500 font-bold">
@@ -169,7 +185,16 @@ const CampaignItem = () => {
     );
   };
 
-  const notiContent = "Sản phẩm đã hết hạn mua, xin hãy quay trở lại";
+  if (!data) {
+    return (
+        <Backdrop
+            sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+            open={true}
+        >
+          <CircularProgress color="inherit"/>
+        </Backdrop>
+    )
+  }
 
   return (
     <div className="mx-auto w-1200">
@@ -180,13 +205,6 @@ const CampaignItem = () => {
         {data && getCatePath(data.data.catePath)}
       </div>
       <div className="bg-white mt-5 mx-auto max-h-full rounded-lg">
-        <CustomAlertDialog
-          title={POPUP_CREATE_PRODUCT.Title}
-          content={notiContent}
-          btName={POPUP_CREATE_PRODUCT.Ok}
-          handleClickClose={() => router.push(APP_PATH.CUSTOMER.INDEX)}
-          open={open}
-        />
         <div className="flex flex-col align-center gap-5 justify-start p-4">
           <div className="grid grid-cols-12">
             <div className="col-start-1 col-span-4">
@@ -219,6 +237,7 @@ const CampaignItem = () => {
                 <Button
                   onClick={(e) => handleQuantityChange(e, -1)}
                   variant="outlined"
+                  disabled={error !== undefined}
                   style={{ fontSize: "30px" }}
                   className="h-16 w-16"
                 >
@@ -227,6 +246,7 @@ const CampaignItem = () => {
                 <TextField
                   onChange={(e) => handleQuantityChange(e, 0)}
                   value={quantity}
+                  disabled={error !== undefined}
                   className="mx-5 h-16 w-16"
                   sx={{
                     "& .MuiInputBase-root": {
@@ -242,6 +262,7 @@ const CampaignItem = () => {
                 <Button
                   onClick={(e) => handleQuantityChange(e, +1)}
                   variant="outlined"
+                  disabled={error !== undefined}
                   style={{ fontSize: "30px" }}
                   className="h-16 w-16"
                 >
@@ -249,27 +270,17 @@ const CampaignItem = () => {
                 </Button>
                 <Button
                   onClick={handleCheckOut}
-                  variant="outlined"
-                  disabled={open}
-                  style={{
-                    fontSize: "20px",
-                    backgroundColor: "#ff0000",
-                    color: "#FFFFFF",
-                  }}
-                  className="h-16 w-auto ml-16"
+                  variant="contained"
+                  disabled={error !== undefined}
+                  className="h-16 w-40 ml-16 bg-red-600 text-white hover:bg-red-500"
                 >
                   Mua Hàng
                 </Button>
                 <Button
                   onClick={handleAddToCart}
-                  variant="outlined"
-                  disabled={open}
-                  style={{
-                    fontSize: "20px",
-                    backgroundColor: "#ff0000",
-                    color: "#FFFFFF",
-                  }}
-                  className="h-16 w-auto ml-12"
+                  variant="contained"
+                  disabled={error !== undefined}
+                  className="h-16 w-40 ml-12 bg-red-600 text-white hover:bg-red-500"
                 >
                   Thêm vào giỏ
                 </Button>
