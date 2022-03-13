@@ -55,7 +55,7 @@ const Content = () => {
         const order: IOrder = {
             campaigns: orderInfo,
             addressId: aId,
-            returnUrl: "http://localhost:3000/cart",
+            returnUrl: "http://localhost:3000/transaction-result",
             paymentType: paymentType,
         }
 
