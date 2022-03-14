@@ -303,7 +303,6 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         className="w-full"
                         error={error.errorLabel === "price"}
                         helperText={error.errorLabel === "price" ? error.errorContent : ""}
-                        inputMode="numeric"
                         size="small"
                         autoComplete="off"
                         onKeyPress={event => {
@@ -321,8 +320,10 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         value={(price !== undefined && NumberFormat(price)) || ''}
                         onChange={handlePrice}
                         type="text"
-                        InputProps={{inputProps: {min: 0, step: 500},
-                            endAdornment: <InputAdornment position="end">đ</InputAdornment>,}}
+                        InputProps={{inputProps: {maxLength: 14},
+                            endAdornment: <InputAdornment position="end">
+                                đ (Dưới {NumberFormat(100000000000)}đ)
+                        </InputAdornment>,}}
                     />
                     <FormControl fullWidth error={error.errorLabel === "categoryOne"}>
                         <InputLabel id="demo-simple-select-label">
