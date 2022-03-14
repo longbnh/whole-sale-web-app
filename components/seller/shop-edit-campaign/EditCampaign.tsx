@@ -510,7 +510,8 @@ const EditCampaign = () => {
                                     renderInput={(params) =>
                                         <TextField className="col-span-3" {...params}
                                                    onCut={(e) => e.preventDefault()}
-                                                   onKeyPress={(e) => e.preventDefault()}
+                                                   onPaste={(e) => e.preventDefault()}
+                                                   onKeyDown={(e) => e.preventDefault()}
                                         />}
                                 />
                                 <DateTimePicker
@@ -519,7 +520,8 @@ const EditCampaign = () => {
                                     inputFormat="dd/MM/yyyy HH:mm"
                                     onChange={handleEndDate}
                                     renderInput={(params) =>
-                                        <TextField onKeyPress={(e) => e.preventDefault()}
+                                        <TextField onKeyDown={(e) => e.preventDefault()}
+                                                   onPaste={(e) => e.preventDefault()}
                                                    onCut={(e) => e.preventDefault()}
                                                    className="col-span-3 col-start-6" {...params} />}
                                 />

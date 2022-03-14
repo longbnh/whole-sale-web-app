@@ -508,7 +508,8 @@ const AddCampaign = () => {
                                         <TextField className="col-span-3" {...params}
                                                    error={error.errorLabel === "startDate"}
                                                    onCut={(e) => e.preventDefault()}
-                                                   onKeyPress={(e) => e.preventDefault()}
+                                                   onPaste={(e) => e.preventDefault()}
+                                                   onKeyDown={(e) => e.preventDefault()}
                                                    helperText={error.errorLabel === "startDate"
                                                    && error.errorContent}/>}
                                 />
@@ -521,7 +522,8 @@ const AddCampaign = () => {
                                     renderInput={(params) =>
                                         <TextField className="col-span-3 col-start-6" {...params}
                                                    onCut={(e) => e.preventDefault()}
-                                                   onKeyPress={(e) => e.preventDefault()}
+                                                   onPaste={(e) => e.preventDefault()}
+                                                   onKeyDown={(e) => e.preventDefault()}
                                                    error={error.errorLabel === "endDate"}
                                                    helperText={error.errorLabel === "endDate"
                                                    && error.errorContent}/>}
