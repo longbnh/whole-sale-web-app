@@ -9,6 +9,8 @@ interface CustomAutoCompleteProps {
     title: string;
     displayValue: string;
     value?: any;
+    error?: boolean;
+    errorContent?: string;
 }
 
 export const isString = (item: any): item is string => {
@@ -22,6 +24,8 @@ const CustomAutoComplete: React.FC<CustomAutoCompleteProps> = ({
                                                                    title,
                                                                    displayValue,
                                                                    value,
+                                                                   error,
+                                                                   errorContent,
                                                                }) => {
 
     return (
@@ -35,6 +39,8 @@ const CustomAutoComplete: React.FC<CustomAutoCompleteProps> = ({
                     <TextField
                         {...params}
                         label={title}
+                        error={error}
+                        helperText={errorContent}
                         InputProps={{
                             ...params.InputProps,
                             type: 'search',
