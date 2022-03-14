@@ -1,4 +1,13 @@
-import {Backdrop, Button, CircularProgress, FormControlLabel, FormGroup, Switch, TextField} from "@mui/material";
+import {
+    Backdrop,
+    Button,
+    CircularProgress,
+    FormControlLabel,
+    FormGroup,
+    InputAdornment,
+    Switch,
+    TextField
+} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {IProduct} from "../../../shared/models/IProduct";
@@ -41,7 +50,7 @@ const AddCampaign = () => {
     const [endDate, setEndDate] = React.useState<Date | null>(
         new Date(),
     );
-    const [quantity, setQuantity] = React.useState<number>();
+    const [quantity, setQuantity] = React.useState<number | undefined>();
     const [campaign, setCampaign] = useState<ICampaign>();
     const [error, setError] = useState<IErrorResponse>({status: false});
 
@@ -291,7 +300,7 @@ const AddCampaign = () => {
                                 Giá gốc:
                             </div>
                             <div>
-                                {product.originalPrice}
+                                {NumberFormat(product.originalPrice)}đ
                             </div>
                         </div>
                         <div className="flex flex-row text-xl justify-between">
@@ -325,8 +334,16 @@ const AddCampaign = () => {
                                            event.preventDefault();
                                        }
                                    }}
+                                   value={(quantity !== undefined && NumberFormat(quantity)) || ''}
                                    helperText={error.errorLabel === "quantity" ? error.errorContent : ""}
-                                   onChange={(e) => setQuantity(parseInt(e.target.value))}
+                                   onChange={(e) => {
+                                       let newValue = e.target.value;
+                                       if (newValue !== "") {
+                                           setQuantity(parseInt(newValue.replace(/,/g, '')))
+                                       }
+                                       else {
+                                           setQuantity(undefined)
+                                       }}}
                                    className="w-2/5 col-span-12"
                         />
                     </div>
@@ -365,22 +382,27 @@ const AddCampaign = () => {
                                 <div key={index} className="grid grid-cols-12">
                                     <TextField label="Mốc giá"
                                                className="col-span-3"
-                                               value={input.price}
+                                               value={(input.price !== undefined && NumberFormat(input.price)) || ''}
                                                onKeyPress={event => {
                                                    const regex = /\d/
                                                    if (!regex.test(event.key)) {
                                                        event.preventDefault();
                                                    }
                                                }}
+                                               InputProps={{
+                                                   endAdornment: <InputAdornment position="end">đ</InputAdornment>,
+                                               }}
                                                error={error.errorLabel === "price" && index === error.optionalId}
                                                helperText={error.errorLabel === "price"
                                                && index === error.optionalId ? error.errorContent : ""}
                                                onChange={(e) => {
                                                    let newValue = e.target.value;
-                                                   if (newValue === "") {
-                                                       newValue = "0"
+                                                   if (newValue !== "") {
+                                                       input.price = parseInt((newValue as string).replace(/,/g, ''));
                                                    }
-                                                   input.price = parseInt(newValue as string);
+                                                   else {
+                                                       input.price = undefined;
+                                                   }
                                                    setInputList([...inputList])
                                                }}/>
                                     <TextField label="Số lượng cần đạt"
@@ -395,13 +417,16 @@ const AddCampaign = () => {
                                                && index === error.optionalId}
                                                helperText={error.errorLabel === "requiredSaleQuantity"
                                                && index === error.optionalId ? error.errorContent : ""}
-                                               value={input.requiredSaleQuantity}
+                                               value={(input.requiredSaleQuantity !== undefined
+                                                   && NumberFormat(input.requiredSaleQuantity)) || ""}
                                                onChange={(e) => {
                                                    let newValue = e.target.value;
-                                                   if (newValue === "") {
-                                                       newValue = "0"
+                                                   if (newValue !== "") {
+                                                       input.requiredSaleQuantity = parseInt((newValue as string).replace(/,/g, ''));
                                                    }
-                                                   input.requiredSaleQuantity = parseInt(newValue as string);
+                                                   else {
+                                                       input.requiredSaleQuantity = undefined;
+                                                   }
                                                    setInputList([...inputList])
                                                }}/>
                                     {(index + 1 === inputList.length)
@@ -454,6 +479,8 @@ const AddCampaign = () => {
                                     renderInput={(params) =>
                                         <TextField className="col-span-3" {...params}
                                                    error={error.errorLabel === "startDate"}
+                                                   onCut={(e) => e.preventDefault()}
+                                                   onKeyPress={(e) => e.preventDefault()}
                                                    helperText={error.errorLabel === "startDate"
                                                    && error.errorContent}/>}
                                 />
@@ -465,6 +492,8 @@ const AddCampaign = () => {
                                     onChange={handleEndDate}
                                     renderInput={(params) =>
                                         <TextField className="col-span-3 col-start-6" {...params}
+                                                   onCut={(e) => e.preventDefault()}
+                                                   onKeyPress={(e) => e.preventDefault()}
                                                    error={error.errorLabel === "endDate"}
                                                    helperText={error.errorLabel === "endDate"
                                                    && error.errorContent} />}

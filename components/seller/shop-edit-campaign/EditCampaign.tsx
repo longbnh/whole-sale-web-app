@@ -1,4 +1,13 @@
-import {Backdrop, Button, CircularProgress, FormControlLabel, FormGroup, Switch, TextField} from "@mui/material";
+import {
+    Backdrop,
+    Button,
+    CircularProgress,
+    FormControlLabel,
+    FormGroup,
+    InputAdornment,
+    Switch,
+    TextField
+} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {IPromotionPlan} from "../../../shared/models/IPromotionPlan";
@@ -256,16 +265,21 @@ const EditCampaign = () => {
         await router.push(`${APP_PATH.SELLER.CAMPAIGN}/${id}`)
     }
 
-    return (
-        <div
-            className="w-full relative flex flex-col bg-gray-100 ml-56 min-h-screen py-5"
-        >
+    if (!campaign) {
+        return (
             <Backdrop
                 sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
                 open={!campaign}
             >
                 <CircularProgress color="inherit"/>
             </Backdrop>
+        )
+    }
+
+    return (
+        <div
+            className="w-full relative flex flex-col bg-gray-100 ml-56 min-h-screen py-5"
+        >
             <div className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl h-auto">
                 <div className="text-2xl font-semibold p-4 ml-5">Đăng bán</div>
             </div>
@@ -296,7 +310,7 @@ const EditCampaign = () => {
                                 Giá gốc:
                             </div>
                             <div>
-                                {campaign.mileStones[0].price}
+                                {NumberFormat(campaign.mileStones[0].price)}đ
                             </div>
                         </div>
                         <div className="flex flex-row text-xl justify-between">
@@ -323,7 +337,7 @@ const EditCampaign = () => {
                     <div className="grid grid-cols-12 gap-y-5">
                         <div className="col-span-12 text-2xl font-bold">Cài đặt số lượng bán</div>
                         <TextField label="Số lượng bán ra"
-                                   value={quantity}
+                                   value={(quantity !== undefined && NumberFormat(quantity)) || ''}
                                    error={error.errorLabel === "quantity"}
                                    onKeyPress={event => {
                                        const regex = /\d/
@@ -332,7 +346,14 @@ const EditCampaign = () => {
                                        }
                                    }}
                                    helperText={error.errorLabel === "quantity" ? error.errorContent : ""}
-                                   onChange={(e) => setQuantity(parseInt(e.target.value))}
+                                   onChange={(e) => {
+                                       let newValue = e.target.value;
+                                       if (newValue !== "") {
+                                           setQuantity(parseInt(newValue.replace(/,/g, '')))
+                                       } else {
+                                           setQuantity(undefined)
+                                       }
+                                   }}
                                    className="w-2/5 col-span-12"
                         />
                     </div>
@@ -380,18 +401,23 @@ const EditCampaign = () => {
                                                error={error.errorLabel === "price" && index === error.optionalId}
                                                helperText={error.errorLabel === "price"
                                                && index === error.optionalId ? error.errorContent : ""}
-                                               value={input.price}
+                                               value={(input.price !== undefined && NumberFormat(input.price)) || ''}
+                                               InputProps={{
+                                                   endAdornment: <InputAdornment position="end">đ</InputAdornment>,
+                                               }}
                                                onChange={(e) => {
                                                    let newValue = e.target.value;
-                                                   if (newValue === "") {
-                                                       newValue = "0"
+                                                   if (newValue !== "") {
+                                                       input.price = parseInt((newValue as string).replace(/,/g, ''));
+                                                   } else {
+                                                       input.price = undefined;
                                                    }
-                                                   input.price = parseInt(newValue as string);
                                                    setInputList([...inputList])
                                                }}/>
                                     <TextField label="Số lượng cần đạt"
                                                className="col-start-6 col-span-3"
-                                               value={input.requiredSaleQuantity}
+                                               value={(input.requiredSaleQuantity !== undefined
+                                                   && NumberFormat(input.requiredSaleQuantity)) || ""}
                                                onKeyPress={event => {
                                                    const regex = /\d/
                                                    if (!regex.test(event.key)) {
@@ -404,10 +430,11 @@ const EditCampaign = () => {
                                                && index === error.optionalId ? error.errorContent : ""}
                                                onChange={(e) => {
                                                    let newValue = e.target.value;
-                                                   if (newValue === "") {
-                                                       newValue = "0"
+                                                   if (newValue !== "") {
+                                                       input.requiredSaleQuantity = parseInt((newValue as string).replace(/,/g, ''));
+                                                   } else {
+                                                       input.requiredSaleQuantity = undefined;
                                                    }
-                                                   input.requiredSaleQuantity = parseInt(newValue as string);
                                                    setInputList([...inputList])
                                                }}/>
                                     {(index + 1 === inputList.length)
@@ -458,15 +485,21 @@ const EditCampaign = () => {
                                     value={startDate}
                                     inputFormat="dd/MM/yyyy HH:mm"
                                     onChange={handleStartDate}
-                                    renderInput={(params) => <TextField className="col-span-3" {...params} />}
+                                    renderInput={(params) =>
+                                        <TextField className="col-span-3" {...params}
+                                                   onCut={(e) => e.preventDefault()}
+                                                   onKeyPress={(e) => e.preventDefault()}
+                                        />}
                                 />
                                 <DateTimePicker
                                     label="Ngày kết thúc"
                                     value={endDate}
                                     inputFormat="dd/MM/yyyy HH:mm"
                                     onChange={handleEndDate}
-                                    renderInput={(params) => <TextField
-                                        className="col-span-3 col-start-6" {...params} />}
+                                    renderInput={(params) =>
+                                        <TextField onKeyPress={(e) => e.preventDefault()}
+                                                   onCut={(e) => e.preventDefault()}
+                                                   className="col-span-3 col-start-6" {...params} />}
                                 />
                             </div>
                         </LocalizationProvider>
