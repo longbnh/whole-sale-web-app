@@ -55,27 +55,35 @@ const AddCampaign = () => {
     const [error, setError] = useState<IErrorResponse>({status: false});
 
     useEffect(() => {
-        try {
-            if (id) {
-                productApi.getProduct(parseInt(id as string))
-                    .then(response => {
-                        setProduct(response.data);
-                    })
-                    .catch(error => {
-                        //TODO handle error
-                    })
-            }
-            promotionPlanApi.getPromotionPlans()
+        if (id) {
+            productApi.getProduct(parseInt(id as string))
                 .then(response => {
-                    setPromotionPlans(response.data)
+                    setProduct(response.data);
                 })
                 .catch(error => {
-                    //TODO handle error
+                    if (error.status === 404) {
+                        setError({
+                            errorLabel: "product",
+                            errorContent: "Không tìm thấy sản phẩm bạn mong muốn",
+                            status: true,
+                        })
+                    }
+                    else {
+                        setError({
+                            errorLabel: "product",
+                            errorContent: "Đã có lỗi xảy ra",
+                            status: true,
+                        })
+                    }
                 })
-        } catch (error) {
-            //TODO handle error
         }
-
+        promotionPlanApi.getPromotionPlans()
+            .then(response => {
+                setPromotionPlans(response.data)
+            })
+            .catch(error => {
+                //TODO handle error
+            })
     }, [id])
 
     const handleStartDate = (newValue: Date | null) => {
@@ -260,16 +268,28 @@ const AddCampaign = () => {
         await router.push(`${APP_PATH.SELLER.CAMPAIGN}/${id}`)
     }
 
+    if (!product) {
+        return (
+            <>
+                <Backdrop
+                    sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+                    open={!product}
+                >
+                    <CircularProgress color="inherit"/>
+                </Backdrop>
+                {error && error.errorLabel === "product" && <CustomAlertDialog title="Thông báo"
+                                                                               content={error.errorContent as string}
+                                                                               btName={POPUP_CREATE_PRODUCT.Ok}
+                                                                               open={true}
+                                                                               handleClickClose={() => router.push("/seller")}/>}
+            </>
+        )
+    };
+
     return (
         <div
             className="w-full relative flex flex-col bg-gray-100 ml-56 min-h-screen py-5"
         >
-            <Backdrop
-                sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
-                open={!product}
-            >
-                <CircularProgress color="inherit"/>
-            </Backdrop>
             <div className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl h-auto">
                 <div className="text-xl font-semibold p-4 ml-5">Đăng bán</div>
             </div>
@@ -340,10 +360,10 @@ const AddCampaign = () => {
                                        let newValue = e.target.value;
                                        if (newValue !== "") {
                                            setQuantity(parseInt(newValue.replace(/,/g, '')))
-                                       }
-                                       else {
+                                       } else {
                                            setQuantity(undefined)
-                                       }}}
+                                       }
+                                   }}
                                    className="w-2/5 col-span-12"
                         />
                     </div>
@@ -399,8 +419,7 @@ const AddCampaign = () => {
                                                    let newValue = e.target.value;
                                                    if (newValue !== "") {
                                                        input.price = parseInt((newValue as string).replace(/,/g, ''));
-                                                   }
-                                                   else {
+                                                   } else {
                                                        input.price = undefined;
                                                    }
                                                    setInputList([...inputList])
@@ -423,8 +442,7 @@ const AddCampaign = () => {
                                                    let newValue = e.target.value;
                                                    if (newValue !== "") {
                                                        input.requiredSaleQuantity = parseInt((newValue as string).replace(/,/g, ''));
-                                                   }
-                                                   else {
+                                                   } else {
                                                        input.requiredSaleQuantity = undefined;
                                                    }
                                                    setInputList([...inputList])
@@ -496,7 +514,7 @@ const AddCampaign = () => {
                                                    onKeyPress={(e) => e.preventDefault()}
                                                    error={error.errorLabel === "endDate"}
                                                    helperText={error.errorLabel === "endDate"
-                                                   && error.errorContent} />}
+                                                   && error.errorContent}/>}
                                 />
                             </div>
                         </LocalizationProvider>

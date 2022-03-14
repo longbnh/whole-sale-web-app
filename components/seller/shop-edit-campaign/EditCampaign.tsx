@@ -53,31 +53,39 @@ const EditCampaign = () => {
     const [error, setError] = useState<IErrorResponse>({status: false});
 
     useEffect(() => {
-        try {
-            if (id) {
-                campaignApi.getCampaignForSeller(parseInt(id as string))
-                    .then(response => {
-                        let data = response.data;
-                        setCampaign(data);
-                        setQuantity(data.currentSaleQuantity);
-                        setInputList(data.mileStones.filter(milestone => milestone.requiredSaleQuantity !== 0));
-                        setStartDate(new Date(data.startDate));
-                        setEndDate(new Date(data.endDate));
-                    })
-                    .catch(error => {
-                        //TODO handle error
-                    })
-            }
-            promotionPlanApi.getPromotionPlans()
+        if (id) {
+            campaignApi.getCampaignForSeller(parseInt(id as string))
                 .then(response => {
-                    setPromotionPlans(response.data)
+                    let data = response.data;
+                    setCampaign(data);
+                    setQuantity(data.currentSaleQuantity);
+                    setInputList(data.mileStones.filter(milestone => milestone.requiredSaleQuantity !== 0));
+                    setStartDate(new Date(data.startDate));
+                    setEndDate(new Date(data.endDate));
                 })
                 .catch(error => {
-                    //TODO handle error
+                    if (error.status === 404) {
+                        setError({
+                            errorLabel: "campaign",
+                            errorContent: "Không tìm thấy sản phẩm bạn mong muốn",
+                            status: true,
+                        })
+                    } else {
+                        setError({
+                            errorLabel: "campaign",
+                            errorContent: "Đã có lỗi xảy ra",
+                            status: true,
+                        })
+                    }
                 })
-        } catch (error) {
-            //TODO handle error
         }
+        promotionPlanApi.getPromotionPlans()
+            .then(response => {
+                setPromotionPlans(response.data)
+            })
+            .catch(error => {
+                //TODO handle error
+            })
 
     }, [id])
 
@@ -267,12 +275,19 @@ const EditCampaign = () => {
 
     if (!campaign) {
         return (
-            <Backdrop
-                sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
-                open={!campaign}
-            >
-                <CircularProgress color="inherit"/>
-            </Backdrop>
+            <>
+                <Backdrop
+                    sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+                    open={!campaign}
+                >
+                    <CircularProgress color="inherit"/>
+                </Backdrop>
+                {error && error.errorLabel === "campaign" && <CustomAlertDialog title="Thông báo"
+                                                                               content={error.errorContent as string}
+                                                                               btName={POPUP_CREATE_PRODUCT.Ok}
+                                                                               open={true}
+                                                                               handleClickClose={() => router.push("/seller")}/>}
+            </>
         )
     }
 
