@@ -4,7 +4,7 @@ import {
     Button,
     CircularProgress,
     FormControl, FormHelperText,
-    IconButton,
+    IconButton, InputAdornment,
     InputLabel,
     MenuItem,
     Select,
@@ -25,6 +25,7 @@ import imageApi from "../../../api/imageApi";
 import {useRouter} from "next/router";
 import Image from 'next/image'
 import {IErrorResponse} from "../../../shared/models/IErrorResponse";
+import NumberFormat from "../../../utils/NumberFormat";
 
 interface IListCategory {
     categories: ICategory[];
@@ -311,10 +312,11 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                                 event.preventDefault();
                             }
                         }}
-                        value={price}
+                        value={(price !== undefined && NumberFormat(price)) || ''}
                         onChange={handlePrice}
                         type="text"
-                        InputProps={{inputProps: {min: 0, step: 500}}}
+                        InputProps={{inputProps: {min: 0, step: 500},
+                            endAdornment: <InputAdornment position="end">đ</InputAdornment>,}}
                     />
                     <FormControl fullWidth error={error.errorLabel === "categoryOne"}>
                         <InputLabel id="demo-simple-select-label">
