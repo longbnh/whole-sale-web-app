@@ -23,6 +23,7 @@ import customerApi from "../../../api/customerApi";
 import { IRequestPage } from "../../../shared/models/IRequestPage";
 import { IPagination } from "../../../shared/models/IPagination";
 import { IOrderCustomer } from "../../../shared/models/IOrder";
+import { useRouter } from "next/router";
 
 const styles = () => ({
   root: {
@@ -67,22 +68,40 @@ const OrderHistoryPage = (
   props: OrderHistoryPageProps & WithStyles<typeof styles>
 ) => {
   const { classes } = props;
-  const [value, setValue] = useState<Date | null>(new Date());
-  const [page, setPage] = useState<number>(1);
+  const router = useRouter();
+
+  const [time, setTime] = useState<Date | null>(new Date());
+  const [page, setPage] = useState<number>(
+    Object.keys(router.query).length === 0
+      ? 1
+      : parseInt(router.query.page as string)
+  );
   const [orderHistory, setOrderHistory] =
     useState<IPagination<IOrderCustomer>>();
+  const [search, setSearch] = useState<string>("");
+  const [click, setClick] = useState<boolean>(true);
 
   const getOrderHistory = async () => {
     let paging: IRequestPage = { page: page, pageSize: 10 };
     let utc = moment().utcOffset();
-    const response = await customerApi.getOrderHistory(paging);
+    const response = await customerApi.getOrderHistory(paging, search);
     setOrderHistory(response.data);
   };
 
   useEffect(() => {
     getOrderHistory();
     window.scrollTo(0, 0);
-  }, [page]);
+  }, [page, click]);
+
+  const handleChangeSearchValue = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearch(event.target.value);
+  };
+
+  const handleSubmitSearch = () => {
+    setClick(!click);
+  };
 
   return (
     <div className="mx-auto flex flex-col" style={{ width: "73%" }}>
@@ -115,6 +134,7 @@ const OrderHistoryPage = (
                         borderRadius: 1,
                       }}
                       classes={classes}
+                      onChange={handleChangeSearchValue}
                       placeholder="Tìm kiếm mã đơn hàng"
                       inputProps={{ "aria-label": "Tìm kiếm sản phẩm" }}
                     />
@@ -126,9 +146,9 @@ const OrderHistoryPage = (
                   <DatePicker
                     views={["year", "month"]}
                     label="Năm và tháng"
-                    value={value}
+                    value={time}
                     onChange={(newValue) => {
-                      setValue(newValue);
+                      setTime(newValue);
                     }}
                     renderInput={(params) => (
                       <RedTextField
@@ -145,6 +165,7 @@ const OrderHistoryPage = (
                   content="Tìm kiếm"
                   borderRadius={4}
                   boxShadow={false}
+                  onClick={handleSubmitSearch}
                 />
               </div>
             </div>

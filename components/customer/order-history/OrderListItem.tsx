@@ -16,7 +16,7 @@ interface OrderListItemProps {
   order: IOrderCustomer;
 }
 
-const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
+const OrderListItem: React.FC<OrderListItemProps> = ({ order, page }) => {
   let originPrice = order.campaign!.mileStones.find(
     (item) => item.milestoneNumber === 0
   )?.price;
@@ -38,7 +38,7 @@ const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
         </div>
       </div>
       <Divider />
-      <Link href={`/purchase/${order.orderNumber}?page=5`}>
+      <Link href={`/purchase/${order.orderNumber}?page=${page}`}>
         <div className="flex my-2 w-full cursor-pointer hover:opacity-75">
           <Image src={order.campaign.imageUrl!} width={80} height={80} />
           <div className="mt-2 ml-10 w-1/2">

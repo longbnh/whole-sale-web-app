@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -46,7 +46,7 @@ function QontoStepIcon(props: StepIconProps) {
   );
 }
 
-export default function ProcessStatusOrder() {
+export default function ProcessStatusOrder({ step: step }) {
   const steps = [
     { statusId: 0, statusString: "GetAll", vn: "Đơn hàng đã đặt" },
     orderStatus.find((item) => item.statusId === 2),
@@ -55,8 +55,12 @@ export default function ProcessStatusOrder() {
     orderStatus.find((item) => item.statusId === 12),
   ];
 
+  const findLastStep = steps.filter(
+    (item) => (step as number) >= item!.statusId
+  );
+
   return (
-    <Stepper orientation="vertical" activeStep={0}>
+    <Stepper orientation="vertical" activeStep={findLastStep.length - 1}>
       {steps.map((item) => (
         <Step key={item!.statusId}>
           <StepLabel

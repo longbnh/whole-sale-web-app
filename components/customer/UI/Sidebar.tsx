@@ -4,6 +4,7 @@ import { Avatar } from "@mui/material";
 import Image from "next/image";
 import classNames from "classnames";
 import { APP_PATH } from "../../../shared/enum/enum";
+import Link from "next/link";
 
 const Sidebar = () => {
   const route = useRouter();
@@ -21,14 +22,16 @@ const Sidebar = () => {
         <Image width={25} height={25} src="/User.svg" layout="fixed" />
         <div className="ml-2">Tài khoản của tôi</div>
       </div>
-      <div
-        className={classNames("flex mt-5 ml-5", {
-          "text-red-500": route.asPath === APP_PATH.CUSTOMER.PURCHASE,
-        })}
-      >
-        <Image width={25} height={25} src="/Order.svg" layout="fixed" />
-        <div className="ml-2">Đơn hàng</div>
-      </div>
+      <Link href="/purchase">
+        <div
+          className={classNames("flex mt-5 ml-5 cursor-pointer", {
+            "text-red-500": route.asPath === APP_PATH.CUSTOMER.PURCHASE,
+          })}
+        >
+          <Image width={25} height={25} src="/Order.svg" layout="fixed" />
+          <div className="ml-2">Đơn hàng</div>
+        </div>
+      </Link>
     </div>
   );
 };

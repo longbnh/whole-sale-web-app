@@ -11,7 +11,7 @@ const InformationOrder: React.FC<InformationOrderProps> = ({
   orderHistory,
 }) => {
   return (
-    <div className="flex">
+    <div className="flex my-6">
       <div className="w-[60%]">
         <div className="text-xl font-semibold">Địa chỉ giao hàng</div>
         <div className="mt-5 ml-2">
@@ -37,6 +37,7 @@ const InformationOrder: React.FC<InformationOrderProps> = ({
           </div>
           <div className="w-[151px] mt-5 border-2">
             <CustomButton
+              disable={orderHistory?.status === 2 || orderHistory?.status === 4}
               content={
                 <div className="text-black font-light">Hủy đơn hàng</div>
               }
@@ -50,7 +51,7 @@ const InformationOrder: React.FC<InformationOrderProps> = ({
         </div>
       </div>
       <div className="border-l-2 pl-5">
-        <ProcessStatusOrder />
+        {orderHistory && <ProcessStatusOrder step={orderHistory.status} />}
       </div>
     </div>
   );

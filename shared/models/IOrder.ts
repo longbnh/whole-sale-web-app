@@ -44,4 +44,6 @@ export interface IOrderTime {
 export interface IOrderCustomer extends IOrderSeller {
   shop: IShop;
   hasCashback: boolean;
+  paymentType: number;
+  paymentTypeString: string;
 }
