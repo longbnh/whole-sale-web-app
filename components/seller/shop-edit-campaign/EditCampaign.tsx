@@ -512,6 +512,7 @@ const EditCampaign = () => {
                                                    onCut={(e) => e.preventDefault()}
                                                    onPaste={(e) => e.preventDefault()}
                                                    onKeyDown={(e) => e.preventDefault()}
+                                                   onDrop={(e) => e.preventDefault()}
                                         />}
                                 />
                                 <DateTimePicker
@@ -523,6 +524,7 @@ const EditCampaign = () => {
                                         <TextField onKeyDown={(e) => e.preventDefault()}
                                                    onPaste={(e) => e.preventDefault()}
                                                    onCut={(e) => e.preventDefault()}
+                                                   onDrop={(e) => e.preventDefault()}
                                                    className="col-span-3 col-start-6" {...params} />}
                                 />
                             </div>

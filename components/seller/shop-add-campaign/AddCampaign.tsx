@@ -510,6 +510,7 @@ const AddCampaign = () => {
                                                    onCut={(e) => e.preventDefault()}
                                                    onPaste={(e) => e.preventDefault()}
                                                    onKeyDown={(e) => e.preventDefault()}
+                                                   onDrop={(e) => e.preventDefault()}
                                                    helperText={error.errorLabel === "startDate"
                                                    && error.errorContent}/>}
                                 />
@@ -524,6 +525,7 @@ const AddCampaign = () => {
                                                    onCut={(e) => e.preventDefault()}
                                                    onPaste={(e) => e.preventDefault()}
                                                    onKeyDown={(e) => e.preventDefault()}
+                                                   onDrop={(e) => e.preventDefault()}
                                                    error={error.errorLabel === "endDate"}
                                                    helperText={error.errorLabel === "endDate"
                                                    && error.errorContent}/>}
