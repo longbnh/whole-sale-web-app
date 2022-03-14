@@ -9,7 +9,7 @@ const LayoutSidebarPurchase: React.FC<LayoutSidebarPurchaseProps> = ({
   children,
 }) => {
   return (
-    <div className="relative flex flex-row mx-auto h-fit py-4 w-1200 items-start">
+    <div className="relative flex flex-row mx-auto h-full py-4 w-1200 items-start">
       <Sidebar />
       {children}
     </div>

@@ -10,8 +10,8 @@ const Sidebar = () => {
 
   return (
     <div
-      className="px-2 flex bg-white w-72 flex-col rounded-lg overflow-x-hidden overflow-y-hidden"
-      style={{ height: "calc(100vh - 120px)" }}
+      className="px-2 flex flex-col sticky flex-start top-0 bg-white w-72 rounded-lg"
+      style={{ height: "calc(100vh - 20px)" }}
     >
       <div className="mt-5 ml-5 flex text-lg font-medium">
         <Avatar className="bg-slate-300">U</Avatar>

@@ -11,6 +11,7 @@ export enum ORIGIN_VALUE {
 export enum CUSTOMER_API {
   Customer = "/customers",
   Cart = "/cart",
+  Order = "/orders",
 }
 
 export enum SHOP_API {
@@ -88,7 +89,7 @@ export namespace APP_PATH {
     PRODUCT = "/seller/product",
     PRODUCT_EDIT = "/seller/product/edit",
     CAMPAIGN_ADD = "/seller/campaign/add",
-    CAMPAIGN_EDIT = "/seller/campaign/edit"
+    CAMPAIGN_EDIT = "/seller/campaign/edit",
   }
 }
 

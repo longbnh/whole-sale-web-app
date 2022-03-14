@@ -1,4 +1,5 @@
 import { ICampaign } from "./ICampaign";
+import { IShop } from "./IShop";
 
 export interface orderInfo {
   campaignId: number;
@@ -38,4 +39,9 @@ export interface IOrderTime {
   dateType: number;
   dateTypeString: string;
   time: Date;
+}
+
+export interface IOrderCustomer extends IOrderSeller {
+  shop: IShop;
+  hasCashback: boolean;
 }

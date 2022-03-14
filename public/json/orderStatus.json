@@ -7,6 +7,21 @@
     "statusString": "PaymentSuccessButNotEnoughQuantity",
     "vn": "Hết hàng"
   },
-  { "statusId": 5, "statusString": "WaitingReview", "vn": "Đánh giá" },
-  { "statusId": 6, "statusString": "Completed", "vn": "Hoàn tất" }
+  { "statusId": 5, "statusString": "IsPackaged", "vn": "Đã đóng gói" },
+  { "statusId": 6, "statusString": "OnDelivery", "vn": "Xác nhận giao hàng" },
+  { "statusId": 7, "statusString": "PackagedDelivered", "vn": "Đã giao hàng" },
+  { "statusId": 8, "statusString": "PackagedReceived", "vn": "Đã nhận hàng" },
+  {
+    "statusId": 9,
+    "statusString": "PackagedReturn",
+    "vn": "Giao hàng thất bại"
+  },
+  {
+    "statusId": 10,
+    "statusString": "OnRefundRequest",
+    "vn": "Yên cầu hoàn tiền"
+  },
+  { "statusId": 11, "statusString": "Refunded", "vn": "Hoàn tiền" },
+  { "statusId": 12, "statusString": "WaitingReview", "vn": "Đánh giá" },
+  { "statusId": 13, "statusString": "Completed", "vn": "Hoàn tất" }
 ]

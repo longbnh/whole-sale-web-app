@@ -1,7 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import moment from "moment";
 
 import { Popover } from "@headlessui/react";
-import { Divider, OutlinedInput, Paper, TextField } from "@mui/material";
+import {
+  Divider,
+  OutlinedInput,
+  Pagination,
+  Paper,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { withStyles, WithStyles } from "@mui/styles";
 import DatePicker from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -11,6 +19,10 @@ import styled from "@emotion/styled";
 
 import CustomButtons from "../../commons/CustomButton";
 import OrderListItem from "./OrderListItem";
+import customerApi from "../../../api/customerApi";
+import { IRequestPage } from "../../../shared/models/IRequestPage";
+import { IPagination } from "../../../shared/models/IPagination";
+import { IOrderCustomer } from "../../../shared/models/IOrder";
 
 const styles = () => ({
   root: {
@@ -56,9 +68,24 @@ const OrderHistoryPage = (
 ) => {
   const { classes } = props;
   const [value, setValue] = useState<Date | null>(new Date());
+  const [page, setPage] = useState<number>(1);
+  const [orderHistory, setOrderHistory] =
+    useState<IPagination<IOrderCustomer>>();
+
+  const getOrderHistory = async () => {
+    let paging: IRequestPage = { page: page, pageSize: 10 };
+    let utc = moment().utcOffset();
+    const response = await customerApi.getOrderHistory(paging);
+    setOrderHistory(response.data);
+  };
+
+  useEffect(() => {
+    getOrderHistory();
+    window.scrollTo(0, 0);
+  }, [page]);
 
   return (
-    <div className="mx-auto " style={{ width: "73%" }}>
+    <div className="mx-auto flex flex-col" style={{ width: "73%" }}>
       <div className=" bg-white rounded-lg">
         <div className="uppercase text-xl font-medium p-4">
           Tìm kiếm đơn hàng
@@ -124,7 +151,23 @@ const OrderHistoryPage = (
           </Popover>
         </div>
       </div>
-      <OrderListItem />
+      {orderHistory &&
+        orderHistory!.content.map((item, key) => {
+          return <OrderListItem order={item} key={key} page={page} />;
+        })}
+      {orderHistory && orderHistory.content.length > 0 && (
+        <div className="flex justify-end mt-16">
+          <Stack spacing={2}>
+            <Pagination
+              count={orderHistory!.totalPage}
+              page={page}
+              onChange={(e, page) => setPage(page)}
+              variant="outlined"
+              shape="rounded"
+            />
+          </Stack>
+        </div>
+      )}
     </div>
   );
 };
