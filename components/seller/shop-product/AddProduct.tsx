@@ -3,15 +3,16 @@ import {styled} from "@mui/material/styles";
 import {
     Button,
     CircularProgress,
-    FormControl, FormHelperText,
-    IconButton, InputAdornment,
+    FormControl,
+    FormHelperText,
+    IconButton,
+    InputAdornment,
     InputLabel,
     MenuItem,
     Select,
     TextField,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import Box from "@mui/material/Box";
 import CustomAutoComplete from "../../commons/CustomAutoComplete";
 import productApi from "../../../api/productApi";
 import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
@@ -100,12 +101,10 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     };
 
     const handleBrand = (e: any, val: IBrand) => {
-        let selectedBrand = props.brands.find((brand) => brand.id === val.id)
-        setBrand(selectedBrand);
+        setBrand(val);
     };
     const handleOrigin = (e: any, val: IOrigin) => {
-        let selectedOrigin = props.origins.find((origin) => origin.id === val.id)
-        setOrigin(selectedOrigin);
+        setOrigin(val);
     };
 
     const handlePrice = (e: any) => {
@@ -182,7 +181,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         //     return false;
         // }
 
-        if (brand === undefined) {
+        if (brand === undefined || brand === null) {
             setError(prevState => ({
                 ...prevState,
                 status: true,
@@ -192,7 +191,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             return false;
         }
 
-        if (origin === undefined) {
+        if (origin === undefined || origin === null) {
             setError(prevState => ({
                 ...prevState,
                 status: true,
@@ -393,7 +392,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         error={error.errorLabel === "brand"}
                         errorContent={error.errorLabel === "brand" ? error.errorContent : ""}
                         displayValue={BRAND_VALUE.Name}
-                        value={brand?.name}
+                        value={brand ?? null}
                         onChange={handleBrand}
                     />
                     <CustomAutoComplete
@@ -402,7 +401,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         error={error.errorLabel === "origin"}
                         errorContent={error.errorLabel === "origin" ? error.errorContent : ""}
                         displayValue={ORIGIN_VALUE.Name}
-                        value={origin?.countryName}
+                        value={origin ?? null}
                         onChange={handleOrigin}
                     />
                     <div className="flex justify-end">

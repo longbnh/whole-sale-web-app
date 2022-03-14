@@ -31,7 +31,6 @@ const CustomAutoComplete: React.FC<CustomAutoCompleteProps> = ({
     return (
         <Stack spacing={2} sx={{width: 300}}>
             <Autocomplete
-                disableClearable
                 autoComplete
                 autoHighlight
                 value={value}
@@ -43,7 +42,7 @@ const CustomAutoComplete: React.FC<CustomAutoCompleteProps> = ({
                         helperText={errorContent}
                         InputProps={{
                             ...params.InputProps,
-                            type: 'search',
+                            type: 'text',
                         }}
                     />
                 )}
