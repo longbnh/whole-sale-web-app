@@ -149,6 +149,17 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             }))
             return false;
         }
+        else {
+            if (price === 0) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "price",
+                    errorContent: "Giá gốc phải lớn hơn 0"
+                }))
+                return false;
+            }
+        }
 
         if (categoryOne === undefined) {
             setError(prevState => ({
