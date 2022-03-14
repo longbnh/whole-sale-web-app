@@ -166,6 +166,16 @@ const AddCampaign = () => {
                 }))
                 return false;
             } else {
+                if (requiredSaleQuantity > quantity) {
+                    setError(prevState => ({
+                        ...prevState,
+                        status: true,
+                        errorLabel: "requiredSaleQuantity",
+                        optionalId: i,
+                        errorContent: "Mốc mua phải nhỏ hơn số lượng bán"
+                    }))
+                    return false;
+                }
                 if (i === 0) {
                     if (requiredSaleQuantity <= 0) {
                         setError(prevState => ({

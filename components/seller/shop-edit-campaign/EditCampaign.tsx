@@ -135,7 +135,6 @@ const EditCampaign = () => {
                 return false;
             } else {
                 if (i === 0) {
-                    console.log(campaign!.mileStones[0].price)
                     if (price >= campaign!.mileStones[0].price) {
                         setError(prevState => ({
                             ...prevState,
@@ -170,6 +169,16 @@ const EditCampaign = () => {
                 }))
                 return false;
             } else {
+                if (requiredSaleQuantity > quantity) {
+                    setError(prevState => ({
+                        ...prevState,
+                        status: true,
+                        errorLabel: "requiredSaleQuantity",
+                        optionalId: i,
+                        errorContent: "Mốc mua phải nhỏ hơn số lượng bán"
+                    }))
+                    return false;
+                }
                 if (i === 0) {
                     if (requiredSaleQuantity <= 0) {
                         setError(prevState => ({
@@ -192,7 +201,6 @@ const EditCampaign = () => {
                             errorContent: "Mốc mua phải lớn hơn mốc trước"
                         }))
                         return false;
-
                     }
                 }
             }
@@ -243,7 +251,6 @@ const EditCampaign = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        console.log(campaign)
         if (!handleError()) {
             return;
         }
