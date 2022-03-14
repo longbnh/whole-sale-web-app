@@ -24,7 +24,7 @@ import Link from "next/link";
 import {
   APP_PATH,
   LOCAL_STORAGE,
-  POPUP_CREATE_PRODUCT,
+  POPUP_PRODUCT,
 } from "../../../shared/enum/enum";
 import cartApi from "../../../api/cartApi";
 import { CustomAlertDialog } from "../../commons/CustomAlertDialog";

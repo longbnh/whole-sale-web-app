@@ -17,7 +17,7 @@ import promotionPlanApi from "../../../api/promotionPlanApi";
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import {APP_PATH, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
+import {APP_PATH, POPUP_PRODUCT} from "../../../shared/enum/enum";
 import NumberFormat from "../../../utils/NumberFormat";
 import {ICampaign as ICampaignRequest} from "../../../shared/models/modifyApi/ICampaign";
 import campaignApi from "../../../api/campaignApi";
@@ -279,7 +279,7 @@ const AddCampaign = () => {
                 </Backdrop>
                 {error && error.errorLabel === "product" && <CustomAlertDialog title="Thông báo"
                                                                                content={error.errorContent as string}
-                                                                               btName={POPUP_CREATE_PRODUCT.Ok}
+                                                                               btName={POPUP_PRODUCT.Ok}
                                                                                open={true}
                                                                                handleClickClose={() => router.push("/seller")}/>}
             </>
@@ -295,7 +295,7 @@ const AddCampaign = () => {
             </div>
             <CustomAlertDialog title="Thông báo"
                                content="Đăng bán sản phẩm thành công"
-                               btName={POPUP_CREATE_PRODUCT.Ok}
+                               btName={POPUP_PRODUCT.Ok}
                                open={open}
                                handleClickClose={handleClose}/>
             {product &&

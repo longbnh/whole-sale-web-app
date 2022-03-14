@@ -18,7 +18,7 @@ import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
 import ICategory, {ISubCategory} from "../../../shared/models/ICategory";
 import IBrand from "../../../shared/models/IBrand";
 import IOrigin from "../../../shared/models/IOrigin";
-import {APP_PATH, BRAND_VALUE, ORIGIN_VALUE, POPUP_CREATE_PRODUCT} from "../../../shared/enum/enum";
+import {APP_PATH, BRAND_VALUE, ORIGIN_VALUE, POPUP_PRODUCT} from "../../../shared/enum/enum";
 import {IProduct as IProductRequest} from "../../../shared/models/modifyApi/IProduct";
 import {IProduct} from "../../../shared/models/IProduct";
 import imageApi from "../../../api/imageApi";
@@ -55,7 +55,9 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     const router = useRouter();
 
     const handleClose = async () => {
-        await router.push(`${APP_PATH.SELLER.PRODUCT}/${product?.id}`);
+        if (notiContent === POPUP_PRODUCT.Success) {
+            await router.push(`${APP_PATH.SELLER.PRODUCT}/${product?.id}`);
+        }
         setOpen(false);
     };
 
@@ -78,8 +80,8 @@ const AddProduct: React.FC<IListCategory> = (props) => {
 
     const handleCategoryOne = (e: any) => {
         let categoryItem = e.target.value;
-        let item = props.categories.filter((cate) => cate.name === categoryItem);
-        setChoice(item[0]);
+        let item = props.categories.find((cate) => cate.name === categoryItem);
+        setChoice(item);
         setCategoryOne(categoryItem);
         setCategoryTwo(undefined);
     };
@@ -128,7 +130,6 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     }
 
     function handleError(): boolean {
-        console.log('CALLED')
         //Name error
         if (name === undefined) {
             setError(prevState => ({
@@ -226,9 +227,9 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             }
             let productResponse = await productApi.createProduct(product, 1);
             setProduct(productResponse.data);
-            setNotiContent(POPUP_CREATE_PRODUCT.Success);
+            setNotiContent(POPUP_PRODUCT.Success);
         } catch (error) {
-            setNotiContent(POPUP_CREATE_PRODUCT.Failed);
+            setNotiContent(POPUP_PRODUCT.Failed);
         } finally {
             setLoading(false);
             setOpen(true);
@@ -241,9 +242,9 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         >
             <div className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl">
                 <div className="text-xl font-semibold p-4 ml-5">Thêm sản phẩm</div>
-                <CustomAlertDialog title={POPUP_CREATE_PRODUCT.Title}
+                <CustomAlertDialog title={POPUP_PRODUCT.Title}
                                    content={notiContent}
-                                   btName={POPUP_CREATE_PRODUCT.Ok}
+                                   btName={POPUP_PRODUCT.Ok}
                                    open={open}
                                    handleClickClose={handleClose}/>
                 <div className="flex align-center gap-5 justify-start p-4 mt-5 ml-5">
@@ -285,12 +286,12 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                     <TextField
                         id="name"
                         label="Tên sản phẩm"
-                        inputProps={{maxLength: 100}}
                         error={error.errorLabel === "name"}
                         helperText={error.errorLabel === "name" ? error.errorContent : ""}
                         className="w-full"
                         size="small"
                         onChange={handleNameChange}
+                        inputProps={{maxLength: 100}}
                         InputProps={{
                             endAdornment: <InputAdornment position="end">
                                 {name !== undefined ? name.length : 0 } / 100
@@ -354,7 +355,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={categoryTwo?.name}
+                            value={categoryTwo && categoryTwo.name}
                             disabled={categoryOne === ""}
                             label="Danh mục"
                             onChange={handleCategoryTwo}
