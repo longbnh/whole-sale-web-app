@@ -24,6 +24,7 @@ const Hotdeal: React.FC<HotdealProps> = (props) => {
           className={"rounded-l-lg align-top"}
           width={280}
           height={400}
+          alt={"hotDeal"}
         />
 
         {props.title}

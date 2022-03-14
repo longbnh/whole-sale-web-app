@@ -17,7 +17,7 @@ const Sidebar = () => {
       <div className="block">
         <div className="flex flex-col pt-5">
           <div className="flex pb-1.5">
-            <Image src={"/ShopIcon.svg"} width={22} height={22} />
+            <Image src={"/ShopIcon.svg"} width={22} height={22} alt={"shopIcon"} />
             <h4 className="ml-2 text-lg font-medium justify-end pt-1">
               Quản lí cửa hàng
             </h4>
@@ -33,7 +33,7 @@ const Sidebar = () => {
         </div>
         <div className="flex flex-col pt-5">
           <div className="flex pb-1.5">
-            <Image src={"/ProductIcon.svg"} width={22} height={22} />
+            <Image src={"/ProductIcon.svg"} width={22} height={22} alt={"productIcon"} />
             <h4 className="ml-2 text-lg font-medium justify-end pt-1">
               Quản lí sản phẩm
             </h4>
@@ -60,7 +60,7 @@ const Sidebar = () => {
 
         <div className="flex flex-col pt-5">
           <div className="flex pb-1.5">
-            <Image src={"/Price.svg"} width={22} height={22} />
+            <Image src={"/Price.svg"} width={22} height={22} alt={"price"} />
             <h4 className="ml-2 text-lg font-medium justify-end pt-1">
               Quản lí mua chung
             </h4>

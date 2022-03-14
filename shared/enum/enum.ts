@@ -46,12 +46,13 @@ export enum ADDRESS {
   WARD = "/wards",
 }
 
-export enum POPUP_CREATE_PRODUCT {
+export enum POPUP_PRODUCT {
   Title = "Thông báo",
   Ok = "Ok",
   Cancel = "Hủy",
   Success = "Bạn đã tạo sản phẩm thành công",
   Failed = "Đã có lỗi xảy ra",
+  Edit_Success = "Bạn đã cập nhật sản phẩm thành công",
 }
 
 export enum URL_LINK {

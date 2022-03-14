@@ -4,8 +4,8 @@ import {
     Backdrop,
     Button,
     CircularProgress,
-    FormControl,
-    IconButton,
+    FormControl, FormHelperText,
+    IconButton, InputAdornment,
     InputLabel,
     MenuItem,
     Select,
@@ -13,13 +13,13 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
-import {isString} from "../../../commons/CustomAutoComplete";
+import CustomAutoComplete, {isString} from "../../../commons/CustomAutoComplete";
 import productApi from "../../../../api/productApi";
 import {CustomAlertDialog} from "../../../commons/CustomAlertDialog";
-import ICategory from "../../../../shared/models/ICategory";
+import ICategory, {ISubCategory} from "../../../../shared/models/ICategory";
 import IBrand from "../../../../shared/models/IBrand";
 import IOrigin from "../../../../shared/models/IOrigin";
-import {APP_PATH, BRAND_VALUE, ORIGIN_VALUE, PAGE_REQUEST, POPUP_CREATE_PRODUCT} from "../../../../shared/enum/enum";
+import {APP_PATH, BRAND_VALUE, ORIGIN_VALUE, PAGE_REQUEST, POPUP_PRODUCT} from "../../../../shared/enum/enum";
 import {IProduct as IProductRequest} from "../../../../shared/models/modifyApi/IProduct";
 import {useRouter} from "next/router";
 import {IImage} from "../../../../shared/models/IImage";
@@ -27,6 +27,9 @@ import Autocomplete from "@mui/material/Autocomplete";
 import imageApi from "../../../../api/imageApi";
 import {matchProductStatusDisplayType} from "../../../../utils/PageRequestUtils";
 import PRODUCT_DISPLAY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_DISPLAY;
+import Image from 'next/image'
+import {IErrorResponse} from "../../../../shared/models/IErrorResponse";
+import NumberFormat from "../../../../utils/NumberFormat";
 
 interface IListCategory {
     categories: ICategory[];
@@ -48,49 +51,52 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
     const [notiContent, setNotiContent] = useState<string>("");
     const [productRequest, setProductRequest] = useState<IProductRequest>();
     const [categoryOne, setCategoryOne] = useState<string>("");
+    const [categoryTwo, setCategoryTwo] = useState<ISubCategory | ''>('');
+    const [brand, setBrand] = useState<IBrand | undefined>(undefined);
+    const [origin, setOrigin] = useState<IOrigin | undefined>(undefined);
     const [choice, setChoice] = useState<ICategory>();
+    const [error, setError] = useState<IErrorResponse>({status: false});
     const router = useRouter();
     const {id} = router.query;
 
-    const handleClose = () => {
+    const handleClose = async() => {
+        if (notiContent === POPUP_PRODUCT.Edit_Success) {
+            await router.push(`${APP_PATH.SELLER.PRODUCT}/${id}`);
+        }
         setOpen(false);
     };
 
     useEffect(() => {
-        try {
-            if (id) {
-                productApi.getProduct(parseInt(id as string))
-                    .then(res => {
-                        if (matchProductStatusDisplayType(res.data.status, PRODUCT_DISPLAY.ON_SALE)) {
-                            router.push(`${APP_PATH.SELLER.SHOP_LIST_PRODUCT}`)
-                        }
-                        setProductRequest({
-                            originalPrice: res.data.originalPrice,
-                            description: res.data.description,
-                            brandId: res.data.brand.id,
-                            originId: 1,
-                            name: res.data.name,
-                            categoryId: res.data.category.id,
-                            newImages: [],
-                            removeImages: [],
-                        });
-                        setOldPictures(res.data.productImages);
+        if (id) {
+            productApi.getProduct(parseInt(id as string))
+                .then(res => {
+                    if (matchProductStatusDisplayType(res.data.status, PRODUCT_DISPLAY.ON_SALE)) {
+                        router.push(`${APP_PATH.SELLER.SHOP_LIST_PRODUCT}`)
+                    }
+                    setProductRequest({
+                        originalPrice: res.data.originalPrice,
+                        description: res.data.description,
+                        name: res.data.name,
+                        newImages: [],
+                        removeImages: [],
+                    });
+                    let defaultCateOne = props.categories
+                        .find(cate => cate.subCategories
+                            .find((subCate) => subCate.id === res.data.category.id))
+                    setCategoryOne(defaultCateOne!.name)
+                    setChoice(defaultCateOne);
+                    setCategoryTwo(res.data.category)
+                    setOrigin(res.data.origin);
+                    setBrand(res.data.brand);
+                    setOldPictures(res.data.productImages);
 
-                        let defaultCateOne = props.categories
-                            .find(cate => cate.subCategories
-                                .find((subCate) => subCate.id === res.data.category.id))
-                        setCategoryOne(defaultCateOne!.name)
-                        setChoice(defaultCateOne);
-                    })
+                })
 
-                    .catch(err => {
-                        console.log(err)
-                    })
-            }
-        } catch (err) {
-            console.log(err);
+                .catch(err => {
+                    console.log(err)
+                })
         }
-    }, [id, props]);
+    }, [id, props, router]);
 
     const onChangePicture = (e: any) => {
         let updatePictures = [...newPictures] as File[];
@@ -125,29 +131,126 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
 
     const handleCategoryOne = (e: any) => {
         let categoryItem = e.target.value;
-        console.log(categoryItem)
-        let item = props.categories.filter((cate) => cate.name === categoryItem);
+        let item = props.categories.find((cate) => cate.name === categoryItem);
         setCategoryOne(categoryItem);
-        setChoice(item[0]);
+        setChoice(item);
+        setCategoryTwo('');
     };
 
     const handleCategoryTwo = (e: any) => {
-        let id = e.target.value;
-        setProductRequest(prevState => ({...prevState, categoryId: id}))
+        let selectedCateTwoId = parseInt(e.target.value);
+        let selectedCateTwo = choice?.subCategories.find(
+            (value) => value.id === selectedCateTwoId
+        )
+
+        if (selectedCateTwo !== undefined) {
+            setCategoryTwo(selectedCateTwo);
+        } else {
+            setCategoryTwo('');
+        }
     }
 
     const handleBrand = (value: any) => {
-        const brand: IBrand = value;
-        setProductRequest(prevState => ({...prevState, brandId: brand.id}))
+        setBrand(value);
     }
 
     const handleOrigin = (value: any) => {
-        const origin: IOrigin = value;
-        setProductRequest(prevState => ({...prevState, originId: origin.id}))
+        setOrigin(value)
+    }
+
+    function handleError(): boolean {
+        //Name error
+        if (productRequest?.name === undefined) {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "name",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        }
+
+        if (productRequest?.originalPrice === undefined) {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "price",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        }
+        else {
+            if (productRequest?.originalPrice === 0) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "price",
+                    errorContent: "Giá gốc phải lớn hơn 0"
+                }))
+                return false;
+            }
+        }
+
+        if (categoryOne === undefined) {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "categoryOne",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        }
+
+        if (categoryTwo === '') {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "categoryTwo",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        }
+
+        //NOT CATCH DES
+        // if (des === undefined) {
+        //     setError(prevState => ({
+        //         ...prevState,
+        //         status: true,
+        //         errorLabel: "des",
+        //         errorContent: "Trường này bị trống"
+        //     }))
+        //     return false;
+        // }
+
+        if (brand === undefined || brand === null) {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "brand",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        }
+
+        if (origin === undefined || origin === null) {
+            setError(prevState => ({
+                ...prevState,
+                status: true,
+                errorLabel: "origin",
+                errorContent: "Trường này bị trống"
+            }))
+            return false;
+        }
+
+        setError({status: false})
+        return true;
     }
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        if (!handleError()) {
+            return;
+        }
         setLoading(true);
         try {
             let response = await imageApi.uploadImage(newPictures);
@@ -156,13 +259,15 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                 ...productRequest,
                 newImages: newImages,
                 removeImages: removedPictures,
+                brandId: brand?.id,
+                originId: origin?.id,
+                categoryId: (categoryTwo as ISubCategory).id,
             }
             await productApi.updateProduct(product, parseInt(id as string))
-            setNotiContent(POPUP_CREATE_PRODUCT.Success);
-            console.log(product);
+            setNotiContent(POPUP_PRODUCT.Edit_Success);
         }
         catch (error) {
-            setNotiContent(POPUP_CREATE_PRODUCT.Failed);
+            setNotiContent(POPUP_PRODUCT.Failed);
         }
         finally {
             setLoading(false);
@@ -170,44 +275,34 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
         }
     };
 
-    function getCategoryTwo() {
-        if (choice && productRequest) {
-            const cateTwo = choice.subCategories.find(
-                (value) => value.id === productRequest.categoryId
-            )?.id;
-            if (cateTwo !== undefined) {
-                return cateTwo;
-            }
-            else {
-                return choice.subCategories[0].id
-            }
-        }
-        return null;
+    if (!productRequest) {
+        return (
+            <Backdrop
+                sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+                open={true}
+            >
+                <CircularProgress color="inherit"/>
+            </Backdrop>
+        )
     }
 
     return (
         <div
             className="w-full relative flex bg-gray-100 ml-56 h-full"
         >
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={!productRequest}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
             <div className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl">
                 <div className="text-xl font-semibold p-4 ml-5">Cập nhật sản phẩm</div>
-                <CustomAlertDialog title={POPUP_CREATE_PRODUCT.Title}
+                <CustomAlertDialog title={POPUP_PRODUCT.Title}
                                    content={notiContent}
-                                   btName={POPUP_CREATE_PRODUCT.Ok}
+                                   btName={POPUP_PRODUCT.Ok}
                                    open={open}
                                    handleClickClose={handleClose}/>
-                {productRequest && choice && <form onSubmit={handleSubmit}>
+                 <div>
                     <div className="flex align-center gap-5 justify-start p-4 mt-5 ml-5">
                         {Array.from(newPictures).map((picture, index) => {
                             return (
                                 <div key={index} className="w-32 h-32 relative">
-                                    <img
+                                    <Image
                                         alt="product"
                                         src={URL.createObjectURL(picture)}
                                         className="w-32 h-32"
@@ -224,10 +319,11 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                         {Array.from(oldPictures).map((picture, index) => {
                             return (
                                 <div key={index} className="w-32 h-32 relative">
-                                    <img
+                                    <Image
                                         alt="product"
                                         src={picture.url}
-                                        className="w-32 h-32"
+                                        width={200}
+                                        height={200}
                                     />
                                     <IconButton
                                         className="absolute top-0 right-0 p-0 bg-gray-600"
@@ -254,30 +350,48 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             </Button>}
                         </label>
                     </div>
-                    <div className="w-8/12 p-4 mt-5 ml-5">
+                    <div className="flex flex-col gap-y-5 w-8/12 p-4 mt-5 ml-5">
                         <TextField
-                            // required
                             id="name"
                             value={productRequest?.name}
                             label="Tên sản phẩm"
-                            className="w-full mb-5"
+                            error={error.errorLabel === "name"}
+                            helperText={error.errorLabel === "name" ? error.errorContent : ""}
+                            className="w-full"
                             size="small"
-                            InputLabelProps={{shrink: (productRequest?.name !== undefined ? productRequest.name.length > 0 : false)}}
-                            onChange={e => setProductRequest(prevState => ({
-                                ...prevState,
-                                name: e.target.value as string
-                            }))}
+                            inputProps={{maxLength: 100}}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">
+                                    {productRequest?.name !== undefined ? productRequest.name.length : 0 } / 100
+                                </InputAdornment>,
+                            }}
+                            onChange={e => {
+                                let newValue = e.target.value;
+                                if (newValue !== "") {
+                                    setProductRequest(prevState => ({
+                                        ...prevState,
+                                        name: e.target.value as string
+                                    }))
+                                }
+                                else {
+                                    setProductRequest(prevState => ({
+                                        ...prevState,
+                                        name: undefined
+                                    }))
+                                }
+                            }}
                         />
                         <TextField
-                            // required
                             id="name"
                             label="Giá gốc"
-                            className="w-full mb-5"
-                            value={productRequest?.originalPrice}
+                            className="w-full"
+                            value={(productRequest?.originalPrice !== undefined
+                                && NumberFormat(productRequest.originalPrice)) || ''}
+                            error={error.errorLabel === "price"}
+                            helperText={error.errorLabel === "price" ? error.errorContent : ""}
                             inputMode="numeric"
                             size="small"
                             autoComplete="off"
-                            InputLabelProps={{shrink: (productRequest?.originalPrice !== undefined ? productRequest.originalPrice >= 0 : false)}}
                             onKeyPress={event => {
                                 const regex = /\d/
                                 if (!regex.test(event.key)) {
@@ -291,87 +405,100 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                                 }
                             }}
                             onChange={e => {
-                                let price = e.target.value.length > 0 ? parseInt(e.target.value) : 0;
-                                setProductRequest(prevState => ({...prevState, originalPrice: price}))
+                                let newValue = e.target.value;
+                                if (newValue !== "") {
+                                    setProductRequest(prevState =>
+                                        ({...prevState, originalPrice: parseInt(newValue.replace(/,/g, ''))}))
+                                } else {
+                                    setProductRequest(prevState =>
+                                        ({...prevState, originalPrice: undefined}))
+                                }
                             }}
                             type="text"
-                            InputProps={{inputProps: {min: 0, step: 500}}}
+                            InputProps={{inputProps: {maxLength: 14},
+                                endAdornment: <InputAdornment position="end">
+                                    đ (Dưới {NumberFormat(100000000000)}đ)
+                                </InputAdornment>,}}
                         />
-                        <Box sx={{minWidth: 120}}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label" required>
-                                    Ngành hàng
-                                </InputLabel>
-                                <Select
-                                    // required
-                                    className="mb-5"
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={categoryOne}
-                                    label="Ngành hàng"
-                                    onChange={handleCategoryOne}
-                                >
-                                    {props.categories.map((cate) => {
-                                        return (
-                                            <MenuItem key={cate.name} value={cate.name}>
-                                                {cate.name}
-                                            </MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        <Box sx={{minWidth: 120}}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label" required>
-                                    Danh mục
-                                </InputLabel>
-                                <Select
-                                    required
-                                    className="mb-5"
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={getCategoryTwo()}
-                                    disabled={categoryOne === ""}
-                                    label="Danh mục"
-                                    onChange={handleCategoryTwo}
-                                >
-                                    {choice?.subCategories.map((categoryTwo) => {
-                                        return (
-                                            <MenuItem key={categoryTwo.id} value={categoryTwo.id}>
-                                                {categoryTwo.name}
-                                            </MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
-                        </Box>
+                        <FormControl fullWidth error={error.errorLabel === "categoryOne"}>
+                            <InputLabel id="demo-simple-select-label">
+                                Ngành hàng
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={categoryOne}
+                                label="Ngành hàng"
+                                onChange={handleCategoryOne}
+                            >
+                                {props.categories.map((cate) => {
+                                    return (
+                                        <MenuItem key={cate.name} value={cate.name}>
+                                            {cate.name}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                            {error.errorLabel === "categoryOne"
+                            && <FormHelperText>{error.errorContent}</FormHelperText>}
+                        </FormControl>
+                        <FormControl fullWidth error={error.errorLabel === "categoryTwo"}>
+                            <InputLabel id="demo-simple-select-label">
+                                Danh mục
+                            </InputLabel>
+                            <Select
+                                required
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={categoryTwo}
+                                renderValue={value => value !== '' ? value.name : ''}
+                                disabled={categoryOne === ""}
+                                label="Danh mục"
+                                onChange={handleCategoryTwo}
+                            >
+                                {choice?.subCategories.map((categoryTwo) => {
+                                    return (
+                                        <MenuItem key={categoryTwo.id} value={categoryTwo.id}>
+                                            {categoryTwo.name}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                            {error.errorLabel === "categoryTwo"
+                            && <FormHelperText>{error.errorContent}</FormHelperText>}
+                        </FormControl>
                         <TextField
                             id="description"
                             label="Mô tả sản phẩm"
-                            className="w-full mb-5"
+                            className="w-full"
                             multiline
                             rows={4}
                             size="small"
                             value={productRequest?.description}
-                            InputLabelProps={{shrink: (productRequest?.description !== undefined ? productRequest.description.length > 0 : false)}}
+                            inputProps={{maxLength: 5000}}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">
+                                    {productRequest?.description !== undefined ? productRequest.description.length : 0 } / 5000
+                                </InputAdornment>,
+                            }}
                             onChange={e => setProductRequest(prevState => ({
                                 ...prevState,
                                 description: e.target.value
                             }))}
                         />
                         <Autocomplete
-                            disableClearable
                             autoComplete
                             autoHighlight
-                            value={props.brands.find(brand => brand.id === productRequest?.brandId)}
+                            value={brand ?? null}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
                                     label={"Thương hiệu"}
+                                    error={error.errorLabel === "brand"}
+                                    helperText={error.errorLabel === "brand" ? error.errorContent : ""}
                                     InputProps={{
                                         ...params.InputProps,
-                                        type: 'search',
+                                        type: 'text',
                                     }}
                                 />
                             )}
@@ -381,21 +508,20 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                                 isString(option[BRAND_VALUE.Name]) ? option[BRAND_VALUE.Name] : ""
                             }
                         />
-                        <div className="mb-5"/>
                         <Autocomplete
-                            disableClearable
                             autoComplete
                             autoHighlight
-                            defaultValue={props.origins.find(origin => origin.id === productRequest?.originId)}
-                            value={props.origins.find(origin => origin.id === productRequest?.originId)}
+                            value={origin ?? null}
                             renderInput={(params) => {
                                 return (
                                     <TextField
                                         {...params}
                                         label={"Xuất xứ"}
+                                        error={error.errorLabel === "origin"}
+                                        helperText={error.errorLabel === "origin" ? error.errorContent : ""}
                                         InputProps={{
                                             ...params.InputProps,
-                                            type: 'search',
+                                            type: 'text',
                                         }}
                                     />
                                 )
@@ -417,22 +543,20 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                                     <span className="text-xl">Hủy</span>
                                 }
                             </Button>
-                            <label htmlFor="submit-button">
-                                <Input id="submit-button" type="submit"/>
-                                <Button variant="outlined"
-                                        className="text-white w-32 h-16 bg-red-600 hover:bg-red-500"
-                                        component="span"
-                                        disabled={loading}>
-                                    {
-                                        loading
-                                            ? <CircularProgress size={30} className="text-white"/>
-                                            : <span className="text-xl">Thay đổi</span>
-                                    }
-                                </Button>
-                            </label>
+                            <Button variant="outlined"
+                                    className="text-white w-32 h-16 bg-red-600 hover:bg-red-500"
+                                    component="span"
+                                    onClick={handleSubmit}
+                                    disabled={loading}>
+                                {
+                                    loading
+                                        ? <CircularProgress size={30} className="text-white"/>
+                                        : <span className="text-xl">Thay đổi</span>
+                                }
+                            </Button>
                         </div>
                     </div>
-                </form>}
+                </div>
             </div>
         </div>
     );

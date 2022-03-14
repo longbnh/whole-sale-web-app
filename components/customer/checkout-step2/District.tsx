@@ -19,7 +19,7 @@ export const District: React.FC<AddressUnitProps> = ({handleClick, unit, id}) =>
                     //TODO handle error here
                 })
         }
-    }, [])
+    }, [unit])
 
     const handleSearchDistrict = (e:any) => {
         const value = e.target.value;

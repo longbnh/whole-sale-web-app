@@ -11,7 +11,7 @@ const Content = () => {
     <div className=" w-full h-screen bg-gray-100 pt-4">
       <div className=" w-5/6 mx-auto bg-white ">
         <div className="flex justify-center">
-          <Image src={"/Welcome.svg"} width={500} height={500} />
+          <Image src={"/Welcome.svg"} width={500} height={500} alt={"welcome"} />
         </div>
         <div className="flex justify-center">
           <h3 className="text-base">Bắt đầu bán hàng qua XATAJP</h3>

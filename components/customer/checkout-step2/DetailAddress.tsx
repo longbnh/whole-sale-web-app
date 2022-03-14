@@ -10,6 +10,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import parse from 'autosuggest-highlight/parse';
 import throttle from 'lodash/throttle';
 import {AxiosResponse} from "axios";
+import Image from 'next/image'
 
 
 interface DetailAddressProps {
@@ -41,13 +42,13 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
     const [options, setOptions] = useState<readonly IPlace[]>([]);
     const [value, setValue] = React.useState<IPlace | null>(null);
     const [open, setOpen] = React.useState(false);
-    let loading = false;
+    const [loading, setLoading] = useState<boolean>(false);
 
     const fetch = React.useMemo(
         () =>
             throttle((input: string,) => goongMapApi.searchByKeyword(
                 `${input} ${ward.name} ${district.name} ${city.name}`
-            ), 2000,), [],
+            ), 2000,), [ward, district, city],
     );
 
     useEffect(() => {
@@ -56,7 +57,7 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
             setOptions(value ? [value] : []);
             return undefined;
         }
-        loading = true;
+        setLoading(true)
         const promise: Promise<AxiosResponse<IPrediction, any>> = fetch(searchValue);
         promise.then(response => {
                 const predictions = response.data;
@@ -73,7 +74,7 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
                 }
             }
         )
-        loading = false;
+        setLoading(false)
 
         return () => {
             active = false;
@@ -234,7 +235,7 @@ export const DetailAddress: React.FC<DetailAddressProps> = (
                     </Marker>}
                 </ReactMapGL>}
                 {viewport === undefined &&
-                <img className="hover:cursor-not-allowed"
+                <Image className="hover:cursor-not-allowed" alt="defaultMap"
                      src="/world.svg" width={600} height={400}/>
                 }
             </div>

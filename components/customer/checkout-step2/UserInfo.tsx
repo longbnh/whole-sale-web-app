@@ -43,7 +43,7 @@ const UserInfo: React.FC<UserInfoProps> = ({setPhoneNumber, setReceiverName, pho
                         onChange={handlePhoneChange}
                     />
                     <div className="absolute right-5 bottom-1/2 text-gray-500 w-100" style={{pointerEvents: "none"}}>
-                        {receiverName.length} / 20
+                        {phoneNumber.length} / 20
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 module.exports = {
-  important: true,
+  // important: true,
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
@@ -15,6 +15,7 @@ module.exports = {
       height: {
         "22/25": "88%",
         155: "155px",
+        "all-but-header": "calc(100vh - 6.25rem)",
       },
       width: {
         "22%": "22%",

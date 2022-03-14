@@ -26,7 +26,7 @@ const ItemCartOutDated: React.FC<ItemCartOutDatedProps> = (props) => {
 
   return (
     <div className="flex mx-1 pl-10">
-      <Image src={props.item.imageUrl} width={90} height={90} />
+      <Image src={props.item.imageUrl} width={90} height={90} alt="outdated" />
       <div className="w-1/3 text-sm mx-3 hover:text-red-400 cursor-pointer">
         {props.item.name}
       </div>

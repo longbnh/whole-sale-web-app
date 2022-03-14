@@ -31,6 +31,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
             <span className="sr-only">Workflow</span>
             <Image
               src={welcome ? "/Logo.svg" : "/LogoRed.svg"}
+              alt={"logo"}
               width={50}
               height={50}
             />
@@ -51,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
                 "text-white": welcome,
               })}
             >
-              <Image width={5} height={5} src="/User.svg" />
+              <Image width={5} height={5} src="/User.svg" alt={"user"} />
               <span className="whitespace-nowrap font-medium">User123</span>
               <span className="whitespace-nowrap font-medium">|</span>
               <a

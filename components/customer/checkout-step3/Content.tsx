@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import request from "axios";
 import {
   Alert,
@@ -67,16 +68,14 @@ const Content = () => {
   const handleCloseSnackBar = () => {
     setOpen({ ...open, open: false });
   };
-
   const handlePayment = async () => {
     const aId: number = parseInt(addressInfo);
     const order: IOrder = {
       campaigns: orderInfo,
       addressId: aId,
-      returnUrl: "http://localhost:3000/cart",
+      returnUrl: "http://localhost:3000/transaction-result",
       paymentType: paymentType,
     };
-
     try {
       const response = await orderApi.createOrder(order);
       const paymentData = response.data;
@@ -95,7 +94,6 @@ const Content = () => {
       }
     }
   };
-
   return (
     <div className="w-full relative bg-gray-100 max-h-full">
       {campaignsInfo && (
@@ -135,11 +133,11 @@ const Content = () => {
                                     value={paymentType.id}
                                     control={<Radio />}
                                     label={
-                                      <img
+                                      <Image
                                         alt={`logo-${paymentType.name}`}
                                         width={120}
                                         height={60}
-                                        src={`${paymentType.name}Logo.svg`}
+                                        src={`/${paymentType.name}Logo.svg`}
                                       />
                                     }
                                   />

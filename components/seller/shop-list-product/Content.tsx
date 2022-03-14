@@ -21,6 +21,7 @@ import PRODUCT = PAGE_REQUEST.SORT.PRODUCT;
 import PRODUCT_DISPLAY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_DISPLAY;
 import PRODUCT_QUERY = PAGE_REQUEST.STATUS.PRODUCT.PRODUCT_QUERY;
 import {useRouter} from "next/router";
+import Image from 'next/image'
 
 interface IProductStatus {
     id: StatusQueryType;
@@ -170,7 +171,7 @@ const Content = () => {
                                       className="my-5 p-5 relative flex gap-16">
                                 {product.productImages &&
                                 <Avatar sx={{width: 100, height: 100}} variant="square">
-                                    <img src={(product.productImages as IImage[])[0].url}/>
+                                    <Image src={(product.productImages as IImage[])[0].url} alt={"productImage"} width={100} height={100}/>
                                 </Avatar>}
                                 <div className="grid grid-cols-1">
                                     <div className="font-bold text-2xl">
