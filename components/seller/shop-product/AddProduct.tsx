@@ -285,11 +285,17 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                     <TextField
                         id="name"
                         label="Tên sản phẩm"
+                        inputProps={{maxLength: 100}}
                         error={error.errorLabel === "name"}
                         helperText={error.errorLabel === "name" ? error.errorContent : ""}
                         className="w-full"
                         size="small"
                         onChange={handleNameChange}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">
+                                {name !== undefined ? name.length : 0 } / 100
+                            </InputAdornment>,
+                        }}
                     />
                     <TextField
                         id="name"
@@ -367,6 +373,12 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         id="description"
                         label="Mô tả sản phẩm"
                         className="w-full"
+                        inputProps={{maxLength: 5000}}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">
+                                {des !== undefined ? des.length : 0 } / 5000
+                            </InputAdornment>,
+                        }}
                         multiline
                         value={des}
                         rows={4}
