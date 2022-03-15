@@ -96,7 +96,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                     console.log(err)
                 })
         }
-    }, [id, props, router]);
+    }, [id, props]);
 
     const onChangePicture = (e: any) => {
         let updatePictures = [...newPictures] as File[];
