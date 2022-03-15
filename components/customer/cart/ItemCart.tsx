@@ -24,6 +24,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface ItemCartProps {
+  itemKey: number;
   item: ICartItem;
   setListTotal: React.Dispatch<React.SetStateAction<ITotal[]>>;
   swr: SWRInfiniteResponse<IPagination<ICartItem>, any>;
@@ -36,7 +37,9 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {}, [props.listTotal]);
+  useEffect(() => {
+    setQuantity(props.item.quantity);
+  }, [props.listTotal, props.item]);
 
   let currentPrice = props.item
     .campaign!.mileStones.sort(
@@ -143,7 +146,7 @@ const ItemCart: React.FC<ItemCartProps> = (props) => {
             <div className="font-normal text-base box-border cursor-text inline-flex text-center w-full leading-4 relative">
               <input
                 type="text"
-                id="quantity"
+                key={props.itemKey}
                 onChange={handleChangeQuantity}
                 onBlur={updateItemQuantity}
                 value={quantity}

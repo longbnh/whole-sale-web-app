@@ -65,7 +65,7 @@ const OrderListItem: React.FC<OrderListItemProps> = ({ order, page }) => {
                     className="mr-2"
                   />
                 </Tooltip>
-                ₫{NumberFormat(refund)}
+                ₫{NumberFormat(refund * order.quantity)}
               </div>
             </div>
           </div>

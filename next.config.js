@@ -14,6 +14,9 @@ const nextConfig = {
   images: {
     domains: ["i.imgur.com", "firebasestorage.googleapis.com"],
   },
+  experimental: {
+    styledComponents: true,
+  },
 };
 
 module.exports = nextConfig;

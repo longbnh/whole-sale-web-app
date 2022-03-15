@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 import { Checkbox, Divider, Skeleton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -27,6 +27,10 @@ const Cart: React.FC<CartProps> = (props) => {
   const swr = useSWRInfinite(getKey, cartApi.getCart, {
     refreshInterval: 5000,
   });
+
+  useEffect(() => {
+    swr.mutate();
+  }, []);
 
   return (
     <div className="w-full px-2">
@@ -59,7 +63,7 @@ const Cart: React.FC<CartProps> = (props) => {
           }
           isReachingEnd={(swr) => {
             return (
-              (swr.data && swr.data.at(0).isLastPage) ||
+              (swr.data && swr.data.at(swr.data.length - 1).isLastPage) ||
               (swr.data && swr.data.at(0).totalElements === 0)
             );
           }}
@@ -73,6 +77,7 @@ const Cart: React.FC<CartProps> = (props) => {
                     {item.hasCampaign ? (
                       <ItemCart
                         key={key}
+                        itemKey={key}
                         item={item}
                         setListTotal={props.setListTotal}
                         listTotal={props.listTotal}
