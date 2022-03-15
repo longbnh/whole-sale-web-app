@@ -48,9 +48,9 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
-    const [notiContent, setNotiContent] = useState<string>("");
+    const [notiContent, setNotiContent] = useState<string>('');
     const [productRequest, setProductRequest] = useState<IProductRequest>();
-    const [categoryOne, setCategoryOne] = useState<string>("");
+    const [categoryOne, setCategoryOne] = useState<string>('');
     const [categoryTwo, setCategoryTwo] = useState<ISubCategory | ''>('');
     const [brand, setBrand] = useState<IBrand | undefined>(undefined);
     const [origin, setOrigin] = useState<IOrigin | undefined>(undefined);

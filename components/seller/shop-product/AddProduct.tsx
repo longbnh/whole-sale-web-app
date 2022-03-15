@@ -50,7 +50,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     const [des, setDes] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
-    const [notiContent, setNotiContent] = useState<string>("");
+    const [notiContent, setNotiContent] = useState<string>('');
     const [product, setProduct] = useState<IProduct>();
     const [error, setError] = useState<IErrorResponse>({status: false});
     const router = useRouter();
