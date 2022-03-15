@@ -40,8 +40,8 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     });
 
     const [pictures, setPictures] = useState<File[]>([]);
-    const [categoryOne, setCategoryOne] = useState<string | undefined>(undefined);
-    const [categoryTwo, setCategoryTwo] = useState<ISubCategory | undefined>(undefined);
+    const [categoryOne, setCategoryOne] = useState<string | undefined>('');
+    const [categoryTwo, setCategoryTwo] = useState<ISubCategory | ''>('');
     const [price, setPrice] = useState<number | undefined>();
     const [choice, setChoice] = useState<ICategory>();
     const [brand, setBrand] = useState<IBrand | undefined>(undefined);
@@ -84,7 +84,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         let item = props.categories.find((cate) => cate.name === categoryItem);
         setChoice(item);
         setCategoryOne(categoryItem);
-        setCategoryTwo(undefined);
+        setCategoryTwo('');
     };
 
     const handleCategoryTwo = (e: any) => {
@@ -92,11 +92,10 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         let selectedCateTwo = choice?.subCategories.find(
             (value) => value.id === selectedCateTwoId
         )
-
         if (selectedCateTwo !== undefined) {
             setCategoryTwo(selectedCateTwo);
         } else {
-            setCategoryTwo(undefined);
+            setCategoryTwo('');
         }
     };
 
@@ -232,7 +231,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                 originalPrice: price,
                 originId: origin?.id,
                 brandId: brand?.id,
-                categoryId: categoryTwo?.id,
+                categoryId: (categoryTwo as ISubCategory).id,
                 productImages: imgArr,
             }
             let productResponse = await productApi.createProduct(product, 1);
@@ -365,7 +364,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={categoryTwo && categoryTwo.name}
+                            value={categoryTwo && categoryTwo.id}
                             disabled={categoryOne === ""}
                             label="Danh mục"
                             onChange={handleCategoryTwo}
