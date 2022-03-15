@@ -42,6 +42,7 @@ const AddCampaign = () => {
     const [isPromoted, setIsPromoted] = useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [notiContent, setNotiContent] = useState<string>('');
     const [promotionPlanId, setPromotionPlanId] = useState<number | undefined>();
     const [inputList, setInputList] = useState<InputFieldProps[]>([{}, {}]);
     const [startDate, setStartDate] = React.useState<Date | null>(
@@ -248,6 +249,9 @@ const AddCampaign = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        if (loading) {
+            return;
+        }
         if (!handleError()) {
             return;
         }
@@ -264,18 +268,24 @@ const AddCampaign = () => {
                 }
                 let response = await campaignApi.createCampaign(parseInt(id as string), campaignRequest);
                 setCampaign(response.data);
-                setOpen(true)
+                setNotiContent("Đăng bán sản phẩm thành công")
             }
         } catch (error) {
-            //TODO handle error
+            setNotiContent("Đã có lỗi xảy ra")
         } finally {
             setLoading(false)
+            setOpen(true)
         }
     }
 
     const handleClose = async () => {
-        let id = campaign!.id
-        await router.push(`${APP_PATH.SELLER.CAMPAIGN}/${id}`)
+        if (notiContent === "Đăng bán sản phẩm thành công") {
+            let id = campaign!.id
+            await router.push(`${APP_PATH.SELLER.CAMPAIGN}/${id}`)
+        }
+        else {
+            setOpen(false)
+        }
     }
 
     if (!product) {
@@ -304,7 +314,7 @@ const AddCampaign = () => {
                 <div className="text-xl font-semibold p-4 ml-5">Đăng bán</div>
             </div>
             <CustomAlertDialog title="Thông báo"
-                               content="Đăng bán sản phẩm thành công"
+                               content={notiContent}
                                btName={POPUP_PRODUCT.Ok}
                                open={open}
                                handleClickClose={handleClose}/>
@@ -535,11 +545,21 @@ const AddCampaign = () => {
                     </div>
                     <div className="flex justify-end gap-x-5 mt-10">
                         <Button className="w-1/6 bg-red-600 hover:bg-red-500 text-white"
+                                disabled={loading}
                                 onClick={handleSubmit}>
-                            Đăng bán
+                            {
+                                loading
+                                    ? <CircularProgress size={30} className="text-white"/>
+                                    : <span className="text-xl">Đăng bán</span>
+                            }
                         </Button>
-                        <Button className="w-1/6 bg-gray-500 hover:bg-gray-400 text-white"
-                                onClick={() => router.push(`${APP_PATH.SELLER.PRODUCT}/${id}`)}>
+                        <Button className="w-1/6 bg-gray-500 hover:bg-gray-400 text-white text-xl"
+                                disabled={loading}
+                                onClick={() => {
+                                    if (!loading){
+                                        router.push(`${APP_PATH.SELLER.PRODUCT}/${id}`)
+                                    }
+                                }}>
                             Hủy
                         </Button>
                     </div>

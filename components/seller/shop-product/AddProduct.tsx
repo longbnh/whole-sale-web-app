@@ -40,8 +40,8 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     });
 
     const [pictures, setPictures] = useState<File[]>([]);
-    const [categoryOne, setCategoryOne] = useState<string | undefined>(undefined);
-    const [categoryTwo, setCategoryTwo] = useState<ISubCategory | undefined>(undefined);
+    const [categoryOne, setCategoryOne] = useState<string>('');
+    const [categoryTwo, setCategoryTwo] = useState<ISubCategory | ''>('');
     const [price, setPrice] = useState<number | undefined>();
     const [choice, setChoice] = useState<ICategory>();
     const [brand, setBrand] = useState<IBrand | undefined>(undefined);
@@ -50,7 +50,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     const [des, setDes] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
-    const [notiContent, setNotiContent] = useState<string>("");
+    const [notiContent, setNotiContent] = useState<string>('');
     const [product, setProduct] = useState<IProduct>();
     const [error, setError] = useState<IErrorResponse>({status: false});
     const router = useRouter();
@@ -84,7 +84,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         let item = props.categories.find((cate) => cate.name === categoryItem);
         setChoice(item);
         setCategoryOne(categoryItem);
-        setCategoryTwo(undefined);
+        setCategoryTwo('');
     };
 
     const handleCategoryTwo = (e: any) => {
@@ -92,11 +92,10 @@ const AddProduct: React.FC<IListCategory> = (props) => {
         let selectedCateTwo = choice?.subCategories.find(
             (value) => value.id === selectedCateTwoId
         )
-
         if (selectedCateTwo !== undefined) {
             setCategoryTwo(selectedCateTwo);
         } else {
-            setCategoryTwo(undefined);
+            setCategoryTwo('');
         }
     };
 
@@ -161,7 +160,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             }
         }
 
-        if (categoryOne === undefined) {
+        if (categoryOne === '') {
             setError(prevState => ({
                 ...prevState,
                 status: true,
@@ -171,7 +170,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             return false;
         }
 
-        if (categoryTwo === undefined) {
+        if (categoryTwo === '') {
             setError(prevState => ({
                 ...prevState,
                 status: true,
@@ -232,7 +231,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                 originalPrice: price,
                 originId: origin?.id,
                 brandId: brand?.id,
-                categoryId: categoryTwo?.id,
+                categoryId: (categoryTwo as ISubCategory).id,
                 productImages: imgArr,
             }
             let productResponse = await productApi.createProduct(product, 1);
@@ -349,7 +348,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         >
                             {props.categories.map((cate) => {
                                 return (
-                                    <MenuItem key={cate.name} value={cate.name}>
+                                    <MenuItem key={cate.priority} value={cate.name}>
                                         {cate.name}
                                     </MenuItem>
                                 );
@@ -365,7 +364,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            value={categoryTwo && categoryTwo.name}
+                            value={categoryTwo && categoryTwo.id}
                             disabled={categoryOne === ""}
                             label="Danh mục"
                             onChange={handleCategoryTwo}

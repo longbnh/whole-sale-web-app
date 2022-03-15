@@ -4,8 +4,10 @@ import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {PencilAltIcon} from "@heroicons/react/solid";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {APP_PATH} from "../../../shared/enum/enum";
+import {APP_PATH, PAGE_REQUEST} from "../../../shared/enum/enum";
 import {useRouter} from "next/router";
+import {matchCampaignStatusDisplayType} from "../../../utils/PageRequestUtils";
+import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
 
 const slideShowProps = {
     indicators: true,
@@ -48,7 +50,12 @@ const Setting: React.FC<CampaignProps> = (props) => {
                                     <div className="flex justify-end">
                                         <Button variant="contained"
                                                 className="bg-blue-500 text-white w-60"
-                                            onClick={() => router.push(`${APP_PATH.SELLER.CAMPAIGN_EDIT}/${data.id}`)}
+                                                disabled={matchCampaignStatusDisplayType(props.data.status, CAMPAIGN_DISPLAY.ACTIVE)}
+                                                onClick={() => {
+                                                    if (!matchCampaignStatusDisplayType(props.data.status, CAMPAIGN_DISPLAY.ACTIVE)) {
+                                                        router.push(`${APP_PATH.SELLER.CAMPAIGN_EDIT}/${data.id}`)
+                                                    }
+                                                }}
                                                 startIcon={
                                                     <PencilAltIcon
                                                         className="h-10 w-10"

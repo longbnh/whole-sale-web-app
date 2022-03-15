@@ -4,7 +4,10 @@ export function DateFormat(date: string) {
             weekday: 'long',
             year: 'numeric',
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
         })
     }
     catch (error) {

@@ -48,9 +48,9 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = React.useState(false);
-    const [notiContent, setNotiContent] = useState<string>("");
+    const [notiContent, setNotiContent] = useState<string>('');
     const [productRequest, setProductRequest] = useState<IProductRequest>();
-    const [categoryOne, setCategoryOne] = useState<string>("");
+    const [categoryOne, setCategoryOne] = useState<string>('');
     const [categoryTwo, setCategoryTwo] = useState<ISubCategory | ''>('');
     const [brand, setBrand] = useState<IBrand | undefined>(undefined);
     const [origin, setOrigin] = useState<IOrigin | undefined>(undefined);
@@ -96,7 +96,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                     console.log(err)
                 })
         }
-    }, [id, props, router]);
+    }, [id, props]);
 
     const onChangePicture = (e: any) => {
         let updatePictures = [...newPictures] as File[];
@@ -433,7 +433,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             >
                                 {props.categories.map((cate) => {
                                     return (
-                                        <MenuItem key={cate.name} value={cate.name}>
+                                        <MenuItem key={cate.priority} value={cate.name}>
                                             {cate.name}
                                         </MenuItem>
                                     );
@@ -450,8 +450,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                                 required
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={categoryTwo}
-                                renderValue={value => value !== '' ? value.name : ''}
+                                value={categoryTwo && categoryTwo.id}
                                 disabled={categoryOne === ""}
                                 label="Danh mục"
                                 onChange={handleCategoryTwo}
@@ -490,6 +489,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             autoComplete
                             autoHighlight
                             value={brand ?? null}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -512,6 +512,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             autoComplete
                             autoHighlight
                             value={origin ?? null}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
                             renderInput={(params) => {
                                 return (
                                     <TextField

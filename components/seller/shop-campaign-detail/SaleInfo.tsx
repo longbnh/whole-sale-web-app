@@ -167,11 +167,11 @@ const SaleInfo: React.FC<CampaignProps> = (props) => {
                     })}
                 </div>
 
-                <div className="grid grid-cols-4 my-16 grid-rows-2 items-center gap-y-5">
+                <div className="grid grid-cols-8 my-16 grid-rows-2 items-center gap-y-5">
                     <div className="col-span-1 text-2xl font-bold">
                         Thời gian bán:
                     </div>
-                    <div className="col-span-3">
+                    <div className="col-span-7">
                         <Tooltip title={myTooltip.date}>
                             <IconButton
                                 disableRipple
@@ -186,17 +186,17 @@ const SaleInfo: React.FC<CampaignProps> = (props) => {
                             </IconButton>
                         </Tooltip>
                     </div>
-                    <div>
+                    <div className="col-span-1">
                         <span className="text-xl">Ngày bắt đầu:</span>
                     </div>
                     <CustomDisableInput disabled
-                                        className="w-4/5"
+                                        className="col-span-3 w-4/5"
                                         value={DateFormat(data.startDate)}/>
-                    <div>
+                    <div className="col-span-1">
                         <span className="text-xl">Ngày kết thúc:</span>
                     </div>
                     <CustomDisableInput disabled
-                                        className="w-4/5"
+                                        className="col-span-3 w-4/5"
                                         value={DateFormat(data.endDate)}/>
                 </div>
             </div>
