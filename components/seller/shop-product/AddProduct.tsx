@@ -40,7 +40,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
     });
 
     const [pictures, setPictures] = useState<File[]>([]);
-    const [categoryOne, setCategoryOne] = useState<string | undefined>('');
+    const [categoryOne, setCategoryOne] = useState<string>('');
     const [categoryTwo, setCategoryTwo] = useState<ISubCategory | ''>('');
     const [price, setPrice] = useState<number | undefined>();
     const [choice, setChoice] = useState<ICategory>();
@@ -160,7 +160,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             }
         }
 
-        if (categoryOne === undefined) {
+        if (categoryOne === '') {
             setError(prevState => ({
                 ...prevState,
                 status: true,
@@ -170,7 +170,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
             return false;
         }
 
-        if (categoryTwo === undefined) {
+        if (categoryTwo === '') {
             setError(prevState => ({
                 ...prevState,
                 status: true,

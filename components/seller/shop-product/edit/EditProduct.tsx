@@ -450,8 +450,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                                 required
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={categoryTwo}
-                                renderValue={value => value !== '' ? value.name : ''}
+                                value={categoryTwo && categoryTwo.id}
                                 disabled={categoryOne === ""}
                                 label="Danh mục"
                                 onChange={handleCategoryTwo}
@@ -490,6 +489,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             autoComplete
                             autoHighlight
                             value={brand ?? null}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -512,6 +512,7 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                             autoComplete
                             autoHighlight
                             value={origin ?? null}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
                             renderInput={(params) => {
                                 return (
                                     <TextField
