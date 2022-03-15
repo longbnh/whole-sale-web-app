@@ -1,0 +1,30 @@
+stages:
+  - build-app
+  - build-image
+
+build app:
+  stage: build-app
+  image: node:16
+  script:
+    - yarn
+    - yarn lint
+    - yarn build
+  cache:
+    paths:
+      - node_modules
+
+build image:
+  stage: build-image
+  image: docker:latest
+  services:
+   - docker:dind
+  script:
+    - docker info
+    - echo $CI_REGISTRY_PASSWORD | docker login --username $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - docker pull $CI_REGISTRY_IMAGE
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --cache-from=$CI_REGISTRY_IMAGE --shm-size 512M .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE
+    - docker push $CI_REGISTRY_IMAGE
+  only: 
+    - develop
