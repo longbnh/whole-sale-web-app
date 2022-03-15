@@ -348,7 +348,7 @@ const AddProduct: React.FC<IListCategory> = (props) => {
                         >
                             {props.categories.map((cate) => {
                                 return (
-                                    <MenuItem key={cate.name} value={cate.name}>
+                                    <MenuItem key={cate.priority} value={cate.name}>
                                         {cate.name}
                                     </MenuItem>
                                 );
