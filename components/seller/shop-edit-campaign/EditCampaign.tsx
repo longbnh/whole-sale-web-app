@@ -251,6 +251,9 @@ const EditCampaign = () => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+        if (loading) {
+            return;
+        }
         if (!handleError()) {
             return;
         }
@@ -290,10 +293,10 @@ const EditCampaign = () => {
                     <CircularProgress color="inherit"/>
                 </Backdrop>
                 {error && error.errorLabel === "campaign" && <CustomAlertDialog title="Thông báo"
-                                                                               content={error.errorContent as string}
-                                                                               btName={POPUP_PRODUCT.Ok}
-                                                                               open={true}
-                                                                               handleClickClose={() => router.push("/seller")}/>}
+                                                                                content={error.errorContent as string}
+                                                                                btName={POPUP_PRODUCT.Ok}
+                                                                                open={true}
+                                                                                handleClickClose={() => router.push("/seller")}/>}
             </>
         )
     }
@@ -532,11 +535,19 @@ const EditCampaign = () => {
                     </div>
                     <div className="flex justify-end gap-x-5 mt-10">
                         <Button className="w-1/6 bg-red-600 hover:bg-red-500 text-white"
+                                disabled={loading}
                                 onClick={handleSubmit}>
-                            Thay đổi
+                            loading
+                            ? <CircularProgress size={30} className="text-white"/>
+                            : <span className="text-xl">Thay đổi</span>
                         </Button>
-                        <Button className="w-1/6 bg-gray-500 hover:bg-gray-400 text-white"
-                                onClick={() => router.push(`${APP_PATH.SELLER.PRODUCT}/${id}`)}>
+                        <Button className="w-1/6 bg-gray-500 hover:bg-gray-400 text-white text-xl"
+                                disabled={loading}
+                                onClick={() => {
+                                    if (!loading) {
+                                        router.push(`${APP_PATH.SELLER.PRODUCT}/${id}`)
+                                    }
+                                }}>
                             Hủy
                         </Button>
                     </div>
