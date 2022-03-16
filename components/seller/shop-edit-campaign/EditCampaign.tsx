@@ -547,7 +547,7 @@ const EditCampaign = () => {
                                 disabled={loading}
                                 onClick={() => {
                                     if (!loading) {
-                                        router.push(`${APP_PATH.SELLER.PRODUCT}/${id}`)
+                                        router.push(`${APP_PATH.SELLER.CAMPAIGN}/${id}`)
                                     }
                                 }}>
                             Hủy
