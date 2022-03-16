@@ -73,23 +73,24 @@ const UpdateProduct: React.FC<IListCategory> = (props) => {
                     if (matchProductStatusDisplayType(res.data.status, PRODUCT_DISPLAY.ON_SALE)) {
                         router.push(`${APP_PATH.SELLER.SHOP_LIST_PRODUCT}`)
                     }
-                    setProductRequest({
-                        originalPrice: res.data.originalPrice,
-                        description: res.data.description,
-                        name: res.data.name,
-                        newImages: [],
-                        removeImages: [],
-                    });
-                    let defaultCateOne = props.categories
-                        .find(cate => cate.subCategories
-                            .find((subCate) => subCate.id === res.data.category.id))
-                    setCategoryOne(defaultCateOne!.name)
-                    setChoice(defaultCateOne);
-                    setCategoryTwo(res.data.category)
-                    setOrigin(res.data.origin);
-                    setBrand(res.data.brand);
-                    setOldPictures(res.data.productImages);
-
+                    else {
+                        setProductRequest({
+                            originalPrice: res.data.originalPrice,
+                            description: res.data.description,
+                            name: res.data.name,
+                            newImages: [],
+                            removeImages: [],
+                        });
+                        let defaultCateOne = props.categories
+                            .find(cate => cate.subCategories
+                                .find((subCate) => subCate.id === res.data.category.id))
+                        setCategoryOne(defaultCateOne!.name)
+                        setChoice(defaultCateOne);
+                        setCategoryTwo(res.data.category)
+                        setOrigin(res.data.origin);
+                        setBrand(res.data.brand);
+                        setOldPictures(res.data.productImages);
+                    }
                 })
 
                 .catch(err => {
