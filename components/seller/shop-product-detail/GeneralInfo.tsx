@@ -1,9 +1,5 @@
 import React from "react";
-//@ts-ignore
 import {Slide} from 'react-slideshow-image';
-//@ts-ignore
-import ShowMoreText from "react-show-more-text";
-//@ts-ignore
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-slideshow-image/dist/styles.css'
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
