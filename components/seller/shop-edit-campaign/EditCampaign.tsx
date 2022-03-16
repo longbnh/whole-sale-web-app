@@ -15,7 +15,7 @@ import promotionPlanApi from "../../../api/promotionPlanApi";
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import {APP_PATH, POPUP_PRODUCT} from "../../../shared/enum/enum";
+import {APP_PATH, PAGE_REQUEST, POPUP_PRODUCT} from "../../../shared/enum/enum";
 import NumberFormat from "../../../utils/NumberFormat";
 import {ICampaign as ICampaignRequest} from "../../../shared/models/modifyApi/ICampaign";
 import campaignApi from "../../../api/campaignApi";
@@ -26,6 +26,8 @@ import AddIcon from '@mui/icons-material/Add';
 import {toISOLocal} from "../../../utils/LocalDateTimeUtil";
 import {IErrorResponse} from "../../../shared/models/IErrorResponse";
 import Image from 'next/image'
+import {matchCampaignStatusDisplayType} from "../../../utils/PageRequestUtils";
+import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
 
 interface InputFieldProps {
     price?: number,
@@ -57,11 +59,15 @@ const EditCampaign = () => {
             campaignApi.getCampaignForSeller(parseInt(id as string))
                 .then(response => {
                     let data = response.data;
-                    setCampaign(data);
-                    setQuantity(data.currentSaleQuantity);
-                    setInputList(data.mileStones.filter(milestone => milestone.requiredSaleQuantity !== 0));
-                    setStartDate(new Date(data.startDate));
-                    setEndDate(new Date(data.endDate));
+                    if (matchCampaignStatusDisplayType(data.status, CAMPAIGN_DISPLAY.ACTIVE)) {
+                        router.push(`${APP_PATH.SELLER.SHOP_CAMPAIGN}`)
+                    } else {
+                        setCampaign(data);
+                        setQuantity(data.currentSaleQuantity);
+                        setInputList(data.mileStones.filter(milestone => milestone.requiredSaleQuantity !== 0));
+                        setStartDate(new Date(data.startDate));
+                        setEndDate(new Date(data.endDate));
+                    }
                 })
                 .catch(error => {
                     if (error.status === 404) {
