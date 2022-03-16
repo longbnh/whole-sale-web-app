@@ -23,12 +23,20 @@ export function getMaxMilestone(campaign: ICampaign): number {
 }
 
 export function getCurrentPrice(campaign: ICampaign): number {
-    console.log(campaign)
     return getMergedMilestone(campaign)[getLastActiveMilestone(campaign)].price
 }
 
 export function getPercentageSaleOff(campaign: ICampaign, currentPrice: number) {
-    console.log(currentPrice)
-    console.log(getMergedMilestone(campaign)[0].price)
     return (100 - (currentPrice / getMergedMilestone(campaign)[0].price * 100)).toFixed(2);
+}
+
+export function getMaxMilestoneNumber(campaign: ICampaign): number {
+    const mergedMilestone = getMergedMilestone(campaign);
+    const sortedMilestonesNumber = mergedMilestone.map(milestone => milestone.milestoneNumber).sort();
+    return Math.max.apply(Math, sortedMilestonesNumber);
+}
+
+export function getCurrentMilestoneNumber(campaign: ICampaign): number {
+    const mergedMilestone = getMergedMilestone(campaign);
+    return mergedMilestone[getLastActiveMilestone(campaign)].milestoneNumber;
 }

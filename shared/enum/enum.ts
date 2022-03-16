@@ -112,6 +112,7 @@ export namespace PAGE_REQUEST {
       }
       export enum CAMPAIGN_DISPLAY {
         ACTIVE = 0,
+        DELETE = 1,
         HIDDEN = 2,
         COMPLETE = 3,
       }

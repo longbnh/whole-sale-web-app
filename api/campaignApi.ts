@@ -5,6 +5,14 @@ import { ICampaign } from "../shared/models/ICampaign";
 import { IRequestPage } from "../shared/models/IRequestPage";
 import { ICampaign as ICampaignRequest } from "../shared/models/modifyApi/ICampaign";
 import { IOrderSeller } from "../shared/models/IOrder";
+import {CampaignDisplayStatus} from "../shared/type/paginationTypes";
+
+const config = {
+  headers: {
+    "content-type": "application/json",
+    accountId: 2,
+  },
+};
 
 const campaignApi = {
   getCampaign: (campaignId: number) => {
@@ -75,12 +83,7 @@ const campaignApi = {
   },
   updateCampaign: (campaignId: number, campaign: ICampaignRequest) => {
     const url = `${SHOP_API.Campaign}/${campaignId}`;
-    const config = {
-      headers: {
-        "content-type": "application/json",
-        accountId: 2,
-      },
-    };
+
     return axiosClient.put<ICampaign>(url, campaign, config);
   },
   getAllCampaign: (search: string, pageRequest?: IRequestPage) => {
@@ -88,6 +91,10 @@ const campaignApi = {
     const param = { ...pageRequest, search: search };
     return axiosClient.get(url, { params: param });
   },
+  updateCampaignStatus: (id: number, newStatus: CampaignDisplayStatus) => {
+    const url = `${SHOP_API.Campaign}${id}${SHOP_API.Status}`;
+    return axiosClient.put(url, newStatus, config);
+  }
 };
 
 export default campaignApi;
