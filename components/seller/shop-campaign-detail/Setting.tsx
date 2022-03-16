@@ -66,9 +66,9 @@ const Setting: React.FC<CampaignProps> = (props) => {
                                     <div className="flex justify-end">
                                         <Button variant="contained"
                                                 className="bg-blue-500 text-white w-60"
-                                                disabled={matchCampaignStatusDisplayType(props.data.status, CAMPAIGN_DISPLAY.ACTIVE)}
+                                                disabled={data.currentSaleQuantity !== 0}
                                                 onClick={() => {
-                                                    if (!matchCampaignStatusDisplayType(props.data.status, CAMPAIGN_DISPLAY.ACTIVE)) {
+                                                    if (data.currentSaleQuantity === 0) {
                                                         router.push(`${APP_PATH.SELLER.CAMPAIGN_EDIT}/${data.id}`)
                                                     }
                                                 }}
