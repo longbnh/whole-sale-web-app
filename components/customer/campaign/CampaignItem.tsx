@@ -13,11 +13,8 @@ import useSWR from "swr";
 import campaignApi from "../../../api/campaignApi";
 import { useRouter } from "next/router";
 import "react-slideshow-image/dist/styles.css";
-//@ts-ignore
 import { Slide } from "react-slideshow-image";
-//@ts-ignore
 import ShowMoreText from "react-show-more-text";
-//@ts-ignore
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import Link from "next/link";
