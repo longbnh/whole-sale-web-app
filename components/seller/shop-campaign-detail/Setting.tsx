@@ -33,13 +33,13 @@ const Setting: React.FC<CampaignProps> = (props) => {
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon/>}
                             aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
+                            id="panel1a-header">
                             <Typography
+                                component={'span'}
                                 className="text-blue-600 font-bold text-xl">{"THAY ĐỔI".toUpperCase()}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
+                            <Typography component={'span'}>
                                 <div className="flex flex-col">
                                     <div>
                                         <span>Thay đổi thông tin đợt bán.&nbsp;</span>
@@ -73,10 +73,12 @@ const Setting: React.FC<CampaignProps> = (props) => {
                             aria-controls="panel1a-content"
                             id="panel1a-header"
                         >
-                            <Typography className="text-red-600 font-bold text-xl">{"Xóa".toUpperCase()}</Typography>
+                            <Typography
+                                component={'span'}
+                                className="text-red-600 font-bold text-xl">{"Xóa".toUpperCase()}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
+                            <Typography component={'span'}>
                                 <div className="flex flex-col">
                                     <div>
                                         <span>Xóa dữ liệu đợt bán.&nbsp;</span>

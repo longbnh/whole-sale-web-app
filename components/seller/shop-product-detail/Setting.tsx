@@ -35,10 +35,11 @@ const Setting: React.FC<ProductProps> = (props) => {
                             id="panel1a-header"
                         >
                             <Typography
+                                component={'span'}
                                 className="text-blue-600 font-bold text-xl">{"THAY ĐỔI".toUpperCase()}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
+                            <Typography component={'span'}>
                                 <div className="flex flex-col">
                                     <div>
                                         <span>Thay đổi thông tin đợt bán.&nbsp;</span>
@@ -73,10 +74,11 @@ const Setting: React.FC<ProductProps> = (props) => {
                             id="panel1a-header"
                         >
                             <Typography
+                                component={'span'}
                                 className="text-green-600 font-bold text-xl">{"Đăng bán".toUpperCase()}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
+                            <Typography component={'span'}>
                                 <div className="flex flex-col">
                                     <div>
                                         <span>Đăng bán sản phẩm.&nbsp;</span>
@@ -111,10 +113,10 @@ const Setting: React.FC<ProductProps> = (props) => {
                             aria-controls="panel1a-content"
                             id="panel1a-header"
                         >
-                            <Typography className="text-red-600 font-bold text-xl">{"Xóa".toUpperCase()}</Typography>
+                            <Typography component={'span'} className="text-red-600 font-bold text-xl">{"Xóa".toUpperCase()}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
+                            <Typography component={'span'}>
                                 <div className="flex flex-col">
                                     <div>
                                         <span>Xóa sản phẩm.&nbsp;</span>
