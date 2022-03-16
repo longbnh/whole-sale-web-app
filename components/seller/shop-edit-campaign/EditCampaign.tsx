@@ -44,6 +44,7 @@ const EditCampaign = () => {
     const [loading, setLoading] = React.useState(false);
     const [promotionPlanId, setPromotionPlanId] = useState<number | undefined>();
     const [inputList, setInputList] = useState<InputFieldProps[]>([]);
+    const [notiContent, setNotiContent] = useState<string>("");
     const [startDate, setStartDate] = React.useState<Date | null>(
         new Date('2014-08-18T21:11:54'),
     );
@@ -275,9 +276,10 @@ const EditCampaign = () => {
                     isPublish: true,
                 }
                 await campaignApi.updateCampaign(parseInt(id as string), campaignRequest);
+                setNotiContent("Cập nhật sản phẩm thành công")
             }
         } catch (error) {
-            //TODO handle error
+            setNotiContent("Đã có lỗi xảy ra")
         } finally {
             setLoading(false)
             setOpen(true)
@@ -315,7 +317,7 @@ const EditCampaign = () => {
                 <div className="text-2xl font-semibold p-4 ml-5">Đăng bán</div>
             </div>
             <CustomAlertDialog title="Thông báo"
-                               content="Cập nhật sản phẩm thành công"
+                               content={notiContent}
                                btName={POPUP_PRODUCT.Ok}
                                open={open}
                                handleClickClose={handleClose}/>
