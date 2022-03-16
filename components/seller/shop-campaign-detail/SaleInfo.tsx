@@ -141,7 +141,7 @@ const SaleInfo: React.FC<CampaignProps> = (props) => {
                     <div className="col-span-2"/>
                     {data.mileStones.map((mileStone: IMilestone, index: number) => {
                         return (
-                            <>
+                            <div key={mileStone.milestoneNumber}>
                                 <div className="col-start-2 col-span-2 w-1/2">
                                     <CustomDisableInput disabled
                                                         className={index === getLastActiveMilestone(data)
@@ -162,7 +162,7 @@ const SaleInfo: React.FC<CampaignProps> = (props) => {
                                     </div>}
                                 </div>
                                 <div className="col-span-2"/>
-                            </>
+                            </div>
                         )
                     })}
                 </div>
