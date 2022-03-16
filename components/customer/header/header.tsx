@@ -73,17 +73,19 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
           <div
             className={classNames("w-1/6 flex justify-end items-center pr-16")}
           >
-            <Link href={"/"}>
-              <Image
-                src={"/LogoRed.svg"}
-                className="cursor-pointer"
-                width={50}
-                height={50 / logoRatio}
-                layout="fixed"
-                onLoadingComplete={({ naturalWidth, naturalHeight }) =>
-                  setLogoRatio(naturalWidth / naturalHeight)
-                }
-              />
+            <Link href={"/"} passHref>
+              <a>
+                <Image
+                  src={"/LogoRed.svg"}
+                  className="cursor-pointer"
+                  width={50}
+                  height={50 / logoRatio}
+                  layout="fixed"
+                  onLoadingComplete={({ naturalWidth, naturalHeight }) =>
+                    setLogoRatio(naturalWidth / naturalHeight)
+                  }
+                />
+              </a>
             </Link>
           </div>
           <div className="w-full xl:w-2/4 lg:w-1/3 flex justify-start items-center">
@@ -122,7 +124,7 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
           <div className="md:flex w-1/6 items-center justify-end md:flex-1 xl:w-1/4 lg:w-1/3">
             <div className="flex items-center justify-start w-full my-auto text-lg">
               {data?.totalElements !== 0 ? (
-                <Link href={"/cart"}>
+                <Link href={"/cart"} passHref>
                   <div
                     className={classNames(
                       "w-1/4 md:flex relative items-center gap-1 mt-3 px-3 cursor-pointer hover:opacity-75"
@@ -190,10 +192,12 @@ const Header = (props: HeaderProps & WithStyles<typeof styles>) => {
                     <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer border-b-2 border-slate-200">
                       Tài khoản
                     </div>
-                    <Link href={APP_PATH.CUSTOMER.PURCHASE}>
-                      <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer border-b-2 border-slate-200">
-                        Đơn mua
-                      </div>
+                    <Link href={APP_PATH.CUSTOMER.PURCHASE} passHref>
+                      <a>
+                        <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer border-b-2 border-slate-200">
+                          Đơn mua
+                        </div>
+                      </a>
                     </Link>
                     <div className="py-1.5 pl-2 hover:bg-slate-100 cursor-pointer">
                       Đăng xuất

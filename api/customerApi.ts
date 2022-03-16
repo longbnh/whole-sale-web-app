@@ -26,6 +26,10 @@ const customerApi = {
     const url = `${CUSTOMER_API.Customer}${CUSTOMER_API.Order}/${orderNumber}`;
     return axiosClient.get(url);
   },
+  cancelOrder: (orderNumber: string) => {
+    const url = `${CUSTOMER_API.Customer}${CUSTOMER_API.Order}/${orderNumber}/${CUSTOMER_API.Cancel}`;
+    return axiosClient.put(url);
+  },
 };
 
 export default customerApi;

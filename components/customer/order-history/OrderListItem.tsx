@@ -80,6 +80,7 @@ const OrderListItem: React.FC<OrderListItemProps> = ({ order, page }) => {
       </div>
       <div className="mt-2 flex w-full justify-end text-lg">
         <CustomButtons
+          disable={order.status !== 12}
           content={"Đánh giá"}
           color="#EF4444"
           onClick={() => console.log("ok")}

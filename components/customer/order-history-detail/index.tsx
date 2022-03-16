@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 import Divider from "@mui/material/Divider";
@@ -7,13 +8,14 @@ import customerApi from "../../../api/customerApi";
 import { IOrderCustomer } from "../../../shared/models/IOrder";
 import InformationOrder from "./InformationOrder";
 import PriceOrder from "./PriceOrder";
-import Link from "next/link";
+import orderStatus from "../../../public/json/orderStatus.json";
 
 interface OrderHistoryDetailProps {}
 
 const OrderHistoryDetail: React.FC<OrderHistoryDetailProps> = ({}) => {
   const router = useRouter();
   const [orderHistory, setOrderHistory] = useState<IOrderCustomer>();
+  const [click, setClick] = useState<boolean>(true);
   const id = router.query;
 
   const orderNumber = id.id && (id.id as string[]).join("/");
@@ -32,13 +34,13 @@ const OrderHistoryDetail: React.FC<OrderHistoryDetailProps> = ({}) => {
 
   useEffect(() => {
     getOrderHistory();
-  }, [orderNumber]);
+  }, [orderNumber, click]);
 
   return (
     <div className="mx-auto flex flex-col" style={{ width: "73%" }}>
       <div className=" bg-white rounded-lg p-6">
         <div className="flex mb-5 justify-between">
-          <Link href={`/purchase?page=${page}`}>
+          <Link href={`/purchase?page=${page}`} passHref>
             <div className="flex items-center cursor-pointer hover:opacity-75">
               <ArrowBackIosOutlinedIcon fontSize="small" />
               <div className="ml-3">Trở lại</div>
@@ -46,10 +48,18 @@ const OrderHistoryDetail: React.FC<OrderHistoryDetailProps> = ({}) => {
           </Link>
           <div className="text-base flex">
             <div className="mr-2 text-red-400">Đơn hàng : {orderNumber}</div>
+            <Divider orientation="vertical" className="mr-2" />
+            {orderHistory &&
+              orderStatus.find((item) => item.statusId === orderHistory.status)!
+                .vn}
           </div>
         </div>
         <Divider />
-        <InformationOrder orderHistory={orderHistory} />
+        <InformationOrder
+          orderHistory={orderHistory}
+          setClick={setClick}
+          click={click}
+        />
         <Divider />
         {orderHistory && (
           <PriceOrder orderHistory={orderHistory as IOrderCustomer} />

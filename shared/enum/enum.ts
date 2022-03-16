@@ -12,6 +12,7 @@ export enum CUSTOMER_API {
   Customer = "/customers",
   Cart = "/cart",
   Order = "/orders",
+  Cancel = "/cancel",
 }
 
 export enum SHOP_API {
@@ -27,6 +28,12 @@ export enum SHOP_API {
   Image = "/images",
   Template = "/importTemplate",
   PromotionPlan = "/promotions",
+  Status = "/status",
+  Packaged = "/packaged",
+  OnDelivery = "/onDelivery",
+  Delivered = "/delivered",
+  PackageReturned = "/packageReturned",
+  Received = "/received",
 }
 
 export namespace GOONG_PATH {

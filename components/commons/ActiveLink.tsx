@@ -16,7 +16,7 @@ const ActiveLink: React.FC<ActiveLinkProps> = ({
   activeKey = "",
 }) => {
   return (
-    <Link href={`/seller/${href}`} replace={true}>
+    <Link href={`/seller/${href}`} replace={true} passHref>
       <div
         // onClick={() => router.replace(`${href}`)}
         className={classNames(
