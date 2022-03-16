@@ -1,0 +1,109 @@
+import React from "react";
+import {ICampaign} from "../../../shared/models/ICampaign";
+import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {PencilAltIcon} from "@heroicons/react/solid";
+import DeleteIcon from '@mui/icons-material/Delete';
+import {APP_PATH, PAGE_REQUEST} from "../../../shared/enum/enum";
+import {useRouter} from "next/router";
+import {matchCampaignStatusDisplayType} from "../../../utils/PageRequestUtils";
+import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
+
+const slideShowProps = {
+    indicators: true,
+    scale: 2
+}
+
+interface CampaignProps {
+    data: ICampaign;
+}
+
+// function checkUpdateCondition(campaign: ICampaign): boolean {
+//     if (campaign.currentSaleQuantity > 0) return false;
+//     return true;
+// }
+const Setting: React.FC<CampaignProps> = (props) => {
+    const {data} = props;
+    const router = useRouter();
+    return (
+        <div className="mx-4 overflow-y-auto overflow-x-hidden">
+            <div className="bg-white mx-4 mt-5 p-5 border rounded-xl">
+                <div className="flex flex-col gap-y-16">
+                    <Accordion defaultExpanded className="bg-gray-300">
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography
+                                className="text-blue-600 font-bold text-xl">{"THAY ĐỔI".toUpperCase()}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                <div className="flex flex-col">
+                                    <div>
+                                        <span>Thay đổi thông tin đợt bán.&nbsp;</span>
+                                        <span className="text-red-600">
+                                            (Nếu sản phẩm hiện đang đăng bán sẽ không thể thực hiện thay đổi)
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <Button variant="contained"
+                                                className="bg-blue-500 text-white w-60"
+                                                disabled={matchCampaignStatusDisplayType(props.data.status, CAMPAIGN_DISPLAY.ACTIVE)}
+                                                onClick={() => {
+                                                    if (!matchCampaignStatusDisplayType(props.data.status, CAMPAIGN_DISPLAY.ACTIVE)) {
+                                                        router.push(`${APP_PATH.SELLER.CAMPAIGN_EDIT}/${data.id}`)
+                                                    }
+                                                }}
+                                                startIcon={
+                                                    <PencilAltIcon
+                                                        className="h-10 w-10"
+                                                    />}>
+                                            <span className="text-xl">Thay đổi</span>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion defaultExpanded className="bg-gray-300">
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography className="text-red-600 font-bold text-xl">{"Xóa".toUpperCase()}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                <div className="flex flex-col">
+                                    <div>
+                                        <span>Xóa dữ liệu đợt bán.&nbsp;</span>
+                                        <span className="text-red-600">
+                                            (Nếu sản phẩm đang được đăng bán sẽ không thể xóa cho tới khi nó kết thúc)
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <Button variant="contained"
+                                                color="error"
+                                                className="bg-red-500 text-white w-60"
+                                            // onClick={() => router.back()}
+                                                startIcon={
+                                                    <DeleteIcon
+                                                        className="h-10 w-10"
+                                                    />}>
+                                            <span className="text-xl">Xóa đợt bán</span>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default Setting;

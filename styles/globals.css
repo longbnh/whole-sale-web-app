@@ -1,3 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;400&display=swap");
 @tailwind base;
+body {
+  font-family: Source Sans Pro;
+}
+
+/* Progress bar */
+#nprogress .bar {
+  background: rgba(211, 47, 47) !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px rgba(211, 47, 47), 0 0 5px rgba(211, 47, 47);
+}
+
+#nprogress .spinner-icon {
+  border-top-color: rgba(211, 47, 47);
+  border-left-color: rgba(211, 47, 47);
+}
+
+.stepLabel {
+  margin-top: 3px !important;
+}
+
 @tailwind components;
 @tailwind utilities;
+
+.required:after {
+  content: "*";
+  color: #ff0000;
+}
+
+/* Scrollbar UI */
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 1000vh;
+  background: initial;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 6px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 1000vh;
+}

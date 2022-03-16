@@ -1,0 +1,4 @@
+[
+  { "title": "QuantityValidationError", "vn": "Không đủ số lượng trong kho" },
+  { "title": "CampaignNotFound", "vn": "Deal dã hết hạn" }
+]
