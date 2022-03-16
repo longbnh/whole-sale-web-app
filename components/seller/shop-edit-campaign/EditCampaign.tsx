@@ -537,9 +537,11 @@ const EditCampaign = () => {
                         <Button className="w-1/6 bg-red-600 hover:bg-red-500 text-white"
                                 disabled={loading}
                                 onClick={handleSubmit}>
-                            loading
-                            ? <CircularProgress size={30} className="text-white"/>
-                            : <span className="text-xl">Thay đổi</span>
+                            {
+                                loading
+                                    ? <CircularProgress size={30} className="text-white"/>
+                                    : <span className="text-xl">Thay đổi</span>
+                            }
                         </Button>
                         <Button className="w-1/6 bg-gray-500 hover:bg-gray-400 text-white text-xl"
                                 disabled={loading}
