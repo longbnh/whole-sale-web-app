@@ -7,11 +7,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {APP_PATH, PAGE_REQUEST, POPUP_PRODUCT} from "../../../shared/enum/enum";
 import {useRouter} from "next/router";
 import {matchCampaignStatusDisplayType} from "../../../utils/PageRequestUtils";
-import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
 import {StopCircle} from "@mui/icons-material";
 import {getCurrentMilestoneNumber, getMaxMilestone, getMaxMilestoneNumber} from "../../../utils/CampaignUtils";
 import campaignApi from "../../../api/campaignApi";
 import {CustomAlertDialog} from "../../commons/CustomAlertDialog";
+import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
 
 interface CampaignProps {
     data: ICampaign;
@@ -20,7 +20,8 @@ interface CampaignProps {
 function isAvailableToCancel(campaign: ICampaign): boolean {
     const first_cond = campaign.currentSaleQuantity / getMaxMilestone(campaign) < 0.5;
     const second_cond = Math.ceil(2 / 3 * getMaxMilestoneNumber(campaign)) > getCurrentMilestoneNumber(campaign);
-    return first_cond && second_cond;
+    const third_cond = matchCampaignStatusDisplayType(campaign.status, CAMPAIGN_DISPLAY.ACTIVE);
+    return first_cond && second_cond && third_cond;
 }
 
 const Setting: React.FC<CampaignProps> = (props) => {
