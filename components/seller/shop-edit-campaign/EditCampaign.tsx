@@ -28,6 +28,7 @@ import {IErrorResponse} from "../../../shared/models/IErrorResponse";
 import Image from 'next/image'
 import {matchCampaignStatusDisplayType} from "../../../utils/PageRequestUtils";
 import CAMPAIGN_DISPLAY = PAGE_REQUEST.STATUS.CAMPAIGN.CAMPAIGN_DISPLAY;
+import Typography from "@mui/material/Typography";
 
 interface InputFieldProps {
     price?: number,
@@ -130,42 +131,7 @@ const EditCampaign = () => {
             let price = inputList[i].price;
             let requiredSaleQuantity = inputList[i].requiredSaleQuantity;
 
-            //price error
-            if (price === undefined) {
-                setError(prevState => ({
-                    ...prevState,
-                    status: true,
-                    errorLabel: "price",
-                    optionalId: i,
-                    errorContent: "Trường này bị trống"
-                }))
-                return false;
-            } else {
-                if (i === 0) {
-                    if (price >= campaign!.mileStones[0].price) {
-                        setError(prevState => ({
-                            ...prevState,
-                            status: true,
-                            errorLabel: "price",
-                            optionalId: i,
-                            errorContent: "Giá phải bé hơn giá gốc"
-                        }))
-                        return false;
-                    }
-                } else {
-                    let prevPrice = inputList[i - 1].price;
-                    if (prevPrice !== undefined && (price >= prevPrice)) {
-                        setError(prevState => ({
-                            ...prevState,
-                            status: true,
-                            errorLabel: "price",
-                            optionalId: i,
-                            errorContent: "Giá phải bé hơn giá trước"
-                        }))
-                        return false;
-                    }
-                }
-            }
+            //quantity error
             if (requiredSaleQuantity === undefined) {
                 setError(prevState => ({
                     ...prevState,
@@ -206,6 +172,43 @@ const EditCampaign = () => {
                             errorLabel: "requiredSaleQuantity",
                             optionalId: i,
                             errorContent: "Mốc mua phải lớn hơn mốc trước"
+                        }))
+                        return false;
+                    }
+                }
+            }
+
+            //price error
+            if (price === undefined) {
+                setError(prevState => ({
+                    ...prevState,
+                    status: true,
+                    errorLabel: "price",
+                    optionalId: i,
+                    errorContent: "Trường này bị trống"
+                }))
+                return false;
+            } else {
+                if (i === 0) {
+                    if (price >= campaign!.mileStones[0].price) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "price",
+                            optionalId: i,
+                            errorContent: "Giá phải bé hơn giá gốc"
+                        }))
+                        return false;
+                    }
+                } else {
+                    let prevPrice = inputList[i - 1].price;
+                    if (prevPrice !== undefined && (price >= prevPrice)) {
+                        setError(prevState => ({
+                            ...prevState,
+                            status: true,
+                            errorLabel: "price",
+                            optionalId: i,
+                            errorContent: "Giá phải bé hơn giá trước"
                         }))
                         return false;
                     }
@@ -410,21 +413,48 @@ const EditCampaign = () => {
 
                     <div className="flex flex-col gap-y-10 mt-10">
                         <div className="col-span-12 text-2xl font-bold">Cài đặt số lượng bán</div>
-                        <div className="grid grid-cols-12">
-                            <TextField label="Mốc giá"
-                                       className="col-span-3"
-                                       value={NumberFormat(campaign.mileStones[0].price)}
-                                       disabled/>
-                            <TextField label="Số lượng cần đạt"
-                                       className="col-start-6 col-span-3"
+                        <div className="grid grid-cols-12 gap-y-5">
+                            <Typography className="col-span-3 justify-self-center" component={'span'}>
+                                Mốc bán
+                            </Typography>
+                            <Typography className="col-start-6 col-span-3 justify-self-center" component={'span'}>
+                                Giá bán
+                            </Typography>
+                            <div className="col-span-4"/>
+                            <TextField className="col-span-3"
                                        value={0}
                                        disabled/>
+                            <TextField className="col-start-6 col-span-3"
+                                       value={NumberFormat(campaign.mileStones[0].price)}
+                                       disabled/>
+
                         </div>
                         {inputList.map((input, index) => {
                             return (
                                 <div key={index} className="grid grid-cols-12">
-                                    <TextField label="Mốc giá"
-                                               className="col-span-3"
+                                    <TextField className="col-span-3"
+                                               value={(input.requiredSaleQuantity !== undefined
+                                                   && NumberFormat(input.requiredSaleQuantity)) || ""}
+                                               onKeyPress={event => {
+                                                   const regex = /\d/
+                                                   if (!regex.test(event.key)) {
+                                                       event.preventDefault();
+                                                   }
+                                               }}
+                                               error={error.errorLabel === "requiredSaleQuantity"
+                                                   && index === error.optionalId}
+                                               helperText={error.errorLabel === "requiredSaleQuantity"
+                                               && index === error.optionalId ? error.errorContent : ""}
+                                               onChange={(e) => {
+                                                   let newValue = e.target.value;
+                                                   if (newValue !== "") {
+                                                       input.requiredSaleQuantity = parseInt((newValue as string).replace(/,/g, ''));
+                                                   } else {
+                                                       input.requiredSaleQuantity = undefined;
+                                                   }
+                                                   setInputList([...inputList])
+                                               }}/>
+                                    <TextField className="col-start-6 col-span-3"
                                                onKeyPress={event => {
                                                    const regex = /\d/
                                                    if (!regex.test(event.key)) {
@@ -444,29 +474,6 @@ const EditCampaign = () => {
                                                        input.price = parseInt((newValue as string).replace(/,/g, ''));
                                                    } else {
                                                        input.price = undefined;
-                                                   }
-                                                   setInputList([...inputList])
-                                               }}/>
-                                    <TextField label="Số lượng cần đạt"
-                                               className="col-start-6 col-span-3"
-                                               value={(input.requiredSaleQuantity !== undefined
-                                                   && NumberFormat(input.requiredSaleQuantity)) || ""}
-                                               onKeyPress={event => {
-                                                   const regex = /\d/
-                                                   if (!regex.test(event.key)) {
-                                                       event.preventDefault();
-                                                   }
-                                               }}
-                                               error={error.errorLabel === "requiredSaleQuantity"
-                                               && index === error.optionalId}
-                                               helperText={error.errorLabel === "requiredSaleQuantity"
-                                               && index === error.optionalId ? error.errorContent : ""}
-                                               onChange={(e) => {
-                                                   let newValue = e.target.value;
-                                                   if (newValue !== "") {
-                                                       input.requiredSaleQuantity = parseInt((newValue as string).replace(/,/g, ''));
-                                                   } else {
-                                                       input.requiredSaleQuantity = undefined;
                                                    }
                                                    setInputList([...inputList])
                                                }}/>
