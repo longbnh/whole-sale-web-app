@@ -13,7 +13,8 @@ const Content = () => {
   const router = useRouter();
   const { id } = router.query;
   const [tabIndex, setTabIndex] = useState<number>(0);
-  const { data, error } = useSWR([id], campaignApi.getCampaignForSeller, {
+  const { data, error } = useSWR(id !== undefined ? [id] : null
+      , campaignApi.getCampaignForSeller, {
     revalidateOnFocus: true,
     refreshInterval: 5000,
   });
