@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ICampaign} from "../../../shared/models/ICampaign";
 import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -28,10 +28,23 @@ const Setting: React.FC<CampaignProps> = (props) => {
     const {data} = props;
     const router = useRouter();
     const [open, setOpen] = useState<boolean>(false);
+    const [openConfirm, setOpenConfirm] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (loading) {
+            setLoading(false)
+        }
+    }, [data])
+    const confirmForcedCancel = () => {
+        setOpenConfirm(true);
+    }
 
     const handleForcedCancel = async () => {
         try {
-            await campaignApi.updateCampaignStatus(data.id, data.status);
+            setOpenConfirm(false)
+            setLoading(true)
+            await campaignApi.updateCampaignStatus(data.id, CAMPAIGN_DISPLAY.COMPLETE);
         }
         catch(error) {
             setOpen(true)
@@ -40,6 +53,13 @@ const Setting: React.FC<CampaignProps> = (props) => {
     return (
         <div className="mx-4 overflow-y-auto overflow-x-hidden">
             <div className="bg-white mx-4 mt-5 p-5 border rounded-xl">
+                <CustomAlertDialog title="Thông báo"
+                                   content="Bạn có chắc muốn ngừng bán"
+                                   btName="Không"
+                                   open={openConfirm}
+                                   btConfirmName="Có"
+                                   handleConfirm={() => handleForcedCancel()}
+                                   handleClickClose={() => setOpenConfirm(false)}/>
                 <CustomAlertDialog title="Thông báo"
                                    content="Đã có lỗi xảy ra"
                                    btName={POPUP_PRODUCT.Ok}
@@ -67,9 +87,9 @@ const Setting: React.FC<CampaignProps> = (props) => {
                                     <div className="flex justify-end">
                                         <Button variant="contained"
                                                 className="bg-blue-500 text-white w-60"
-                                                disabled={data.currentSaleQuantity !== 0}
+                                                disabled={data.currentSaleQuantity !== 0 || loading}
                                                 onClick={() => {
-                                                    if (data.currentSaleQuantity === 0) {
+                                                    if (data.currentSaleQuantity === 0 && !loading) {
                                                         router.push(`${APP_PATH.SELLER.CAMPAIGN_EDIT}/${data.id}`)
                                                     }
                                                 }}
@@ -107,10 +127,10 @@ const Setting: React.FC<CampaignProps> = (props) => {
                                         <Button variant="contained"
                                                 color="error"
                                                 className="bg-red-500 text-white w-60"
-                                                disabled={!isAvailableToCancel(data)}
+                                                disabled={!isAvailableToCancel(data) || loading}
                                                 onClick={() => {
-                                                    if (isAvailableToCancel(data)) {
-                                                        handleForcedCancel()
+                                                    if (isAvailableToCancel(data) && !loading) {
+                                                        confirmForcedCancel()
                                                     }
                                                 }}
                                                 startIcon={

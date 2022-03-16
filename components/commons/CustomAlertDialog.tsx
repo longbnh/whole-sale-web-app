@@ -12,7 +12,9 @@ interface AlertDialogProps {
     content: string;
     btName: string;
     open: boolean;
-    handleClickClose: any
+    handleClickClose: any;
+    btConfirmName?: string;
+    handleConfirm?: any;
 }
 
 export const CustomAlertDialog: React.FC<AlertDialogProps> = ({
@@ -20,7 +22,9 @@ export const CustomAlertDialog: React.FC<AlertDialogProps> = ({
                                                                   content,
                                                                   btName,
                                                                   open,
-                                                                  handleClickClose
+                                                                  handleClickClose,
+                                                                  btConfirmName,
+                                                                  handleConfirm
                                                               }) => {
 
 
@@ -41,6 +45,11 @@ export const CustomAlertDialog: React.FC<AlertDialogProps> = ({
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
+                    {btConfirmName !== undefined &&
+                        <Button onClick={handleConfirm} color="error">
+                            {btConfirmName}
+                        </Button>
+                    }
                     <Button onClick={handleClickClose} autoFocus>
                         {btName}
                     </Button>

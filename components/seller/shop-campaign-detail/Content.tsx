@@ -8,6 +8,7 @@ import GeneralInfo from "./GeneralInfo";
 import SaleInfo from "./SaleInfo";
 import Setting from "./Setting";
 import Order from "./order";
+import {APP_PATH} from "../../../shared/enum/enum";
 
 const Content = () => {
   const router = useRouter();
@@ -35,7 +36,7 @@ const Content = () => {
         <div className="flex bg-white mx-4 mt-5 max-h-full border rounded-xl px-5 py-2 items-center justify-start gap-5">
           <Button
             variant="text"
-            onClick={() => router.back()}
+            onClick={() => router.push(`${APP_PATH.SELLER.SHOP_CAMPAIGN}`)}
             startIcon={
               <ArrowCircleLeftIcon className="h-10 w-10 text-red-500" />
             }

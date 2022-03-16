@@ -92,8 +92,11 @@ const campaignApi = {
     return axiosClient.get(url, { params: param });
   },
   updateCampaignStatus: (id: number, newStatus: CampaignDisplayStatus) => {
-    const url = `${SHOP_API.Campaign}${id}${SHOP_API.Status}`;
-    return axiosClient.put(url, newStatus, config);
+    const url = `${SHOP_API.Campaign}/${id}${SHOP_API.Status}?newStatus=${newStatus}`;
+    // const param = {
+    //   newStatus: newStatus,
+    // }
+    return axiosClient.put(url, {}, config);
   }
 };
 
