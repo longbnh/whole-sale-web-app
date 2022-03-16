@@ -117,7 +117,7 @@ const SaleInfo: React.FC<CampaignProps> = (props) => {
                     </>}
                 </div>
 
-                <div className="grid grid-cols-8 my-16 justify-items-center gap-y-5">
+                <div className="grid grid-cols-8 my-16 gap-y-5">
                     <div className="col-start-1 col-span-2 justify-self-start text-2xl font-bold">
                         Các mốc giá:
                     </div>
@@ -141,27 +141,27 @@ const SaleInfo: React.FC<CampaignProps> = (props) => {
                     <div className="col-span-2"/>
                     {data.mileStones.map((mileStone: IMilestone, index: number) => {
                         return (
-                            <div key={mileStone.milestoneNumber}>
-                                <div className="col-start-2 col-span-2 w-1/2">
-                                    <CustomDisableInput disabled
-                                                        className={index === getLastActiveMilestone(data)
-                                                            ? "bg-green-400"
-                                                            : (index > getLastActiveMilestone(data) ? "bg-white" : "bg-gray-400")}
-                                                        inputProps={{min: 0, style: {textAlign: 'right'}}}
-                                                        value={mileStone.requiredSaleQuantity}/>
-                                </div>
-                                <div className="col-start-5 col-span-2 w-1/2">
-                                    <CustomDisableInput disabled
-                                                        className={index === getLastActiveMilestone(data)
-                                                            ? "bg-green-400"
-                                                            : (index > getLastActiveMilestone(data) ? "bg-white" : "bg-gray-400")}
-                                                        inputProps={{min: 0, style: {textAlign: 'right'}}}
-                                                        value={mileStone.price.toLocaleString()}/>
-                                    {index !== 0 && <div className="text-red-500 font-bold text-right text-xl">
-                                        Giảm {getPercentageSaleOff(data, mileStone.price)} %
-                                    </div>}
-                                </div>
-                                <div className="col-span-2"/>
+                            <div className="grid col-span-8 grid-cols-8 grid-rows-1 h-20" key={mileStone.milestoneNumber}>
+                                    <div className="col-start-2 col-span-2 w-1/2">
+                                        <CustomDisableInput disabled
+                                                            className={index === getLastActiveMilestone(data)
+                                                                ? "bg-green-400"
+                                                                : (index > getLastActiveMilestone(data) ? "bg-white" : "bg-gray-400")}
+                                                            inputProps={{min: 0, style: {textAlign: 'right'}}}
+                                                            value={mileStone.requiredSaleQuantity}/>
+                                    </div>
+                                    <div className="col-start-5 col-span-2 w-1/2">
+                                        <CustomDisableInput disabled
+                                                            className={index === getLastActiveMilestone(data)
+                                                                ? "bg-green-400"
+                                                                : (index > getLastActiveMilestone(data) ? "bg-white" : "bg-gray-400")}
+                                                            inputProps={{min: 0, style: {textAlign: 'right'}}}
+                                                            value={mileStone.price.toLocaleString()}/>
+                                        {index !== 0 && <div className="text-red-500 font-bold text-right text-xl">
+                                            Giảm {getPercentageSaleOff(data, mileStone.price)} %
+                                        </div>}
+                                    </div>
+                                    <div className="col-span-2"/>
                             </div>
                         )
                     })}
