@@ -325,251 +325,258 @@ const EditCampaign = () => {
                                open={open}
                                handleClickClose={handleClose}/>
             {campaign &&
-            <div>
-                <div
-                    className="bg-white flex mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl p-5 gap-x-56">
-                    <Image src={campaign.images[0].url} alt={"campaignImage"} width={200} height={200}/>
-                    <div className="flex flex-col gap-y-3">
-                        <div className="flex flex-row text-2xl font-bold">
-                            {campaign.name}
-                        </div>
-                        <div className="flex flex-row text-xl justify-between gap-x-20">
-                            <div>
-                                Danh mục:
+                <div>
+                    <div
+                        className="bg-white flex mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden rounded-xl p-5 gap-x-56">
+                        <Image src={campaign.images[0].url} alt={"campaignImage"} width={200} height={200}/>
+                        <div className="flex flex-col gap-y-3">
+                            <div className="flex flex-row text-2xl font-bold">
+                                {campaign.name}
                             </div>
-                            <div>
-                                {campaign.category.name}
+                            <div className="flex flex-row text-xl justify-between gap-x-20">
+                                <div>
+                                    Danh mục:
+                                </div>
+                                <div>
+                                    {campaign.category.name}
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex flex-row text-xl justify-between">
-                            <div>
-                                Giá gốc:
+                            <div className="flex flex-row text-xl justify-between">
+                                <div>
+                                    Giá gốc:
+                                </div>
+                                <div>
+                                    {NumberFormat(campaign.mileStones[0].price)}đ
+                                </div>
                             </div>
-                            <div>
-                                {NumberFormat(campaign.mileStones[0].price)}đ
+                            <div className="flex flex-row text-xl justify-between">
+                                <div>
+                                    Xuất xứ:
+                                </div>
+                                <div>
+                                    {campaign.origin}
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex flex-row text-xl justify-between">
-                            <div>
-                                Xuất xứ:
-                            </div>
-                            <div>
-                                {campaign.origin}
-                            </div>
-                        </div>
-                        <div className="flex flex-row text-xl justify-between">
-                            <div>
-                                Thương hiệu:
-                            </div>
-                            <div>
-                                {campaign.brand?.name}
+                            <div className="flex flex-row text-xl justify-between">
+                                <div>
+                                    Thương hiệu:
+                                </div>
+                                <div>
+                                    {campaign.brand?.name}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div
-                    className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden flex flex-col rounded-xl p-5 gap-y-5">
-                    <div className="grid grid-cols-12 gap-y-5">
-                        <div className="col-span-12 text-2xl font-bold">Cài đặt số lượng bán</div>
-                        <TextField label="Số lượng bán ra"
-                                   value={(quantity !== undefined && NumberFormat(quantity)) || ''}
-                                   error={error.errorLabel === "quantity"}
-                                   onKeyPress={event => {
-                                       const regex = /\d/
-                                       if (!regex.test(event.key)) {
-                                           event.preventDefault();
-                                       }
-                                   }}
-                                   helperText={error.errorLabel === "quantity" ? error.errorContent : ""}
-                                   onChange={(e) => {
-                                       let newValue = e.target.value;
-                                       if (newValue !== "") {
-                                           setQuantity(parseInt(newValue.replace(/,/g, '')))
-                                       } else {
-                                           setQuantity(undefined)
-                                       }
-                                   }}
-                                   className="w-2/5 col-span-12"
-                        />
-                    </div>
+                    <div
+                        className="bg-white mt-5 mx-auto w-1200 overflow-y-auto overflow-x-hidden flex flex-col rounded-xl p-5 gap-y-5">
+                        <div className="grid grid-cols-12 gap-y-5">
+                            <div className="col-span-12 text-2xl font-bold">Cài đặt số lượng bán</div>
+                            <TextField label="Số lượng bán ra"
+                                       value={(quantity !== undefined && NumberFormat(quantity)) || ''}
+                                       error={error.errorLabel === "quantity"}
+                                       onKeyPress={event => {
+                                           const regex = /\d/
+                                           if (!regex.test(event.key)) {
+                                               event.preventDefault();
+                                           }
+                                       }}
+                                       helperText={error.errorLabel === "quantity" ? error.errorContent : ""}
+                                       onChange={(e) => {
+                                           let newValue = e.target.value;
+                                           if (newValue !== "") {
+                                               setQuantity(parseInt(newValue.replace(/,/g, '')))
+                                           } else {
+                                               setQuantity(undefined)
+                                           }
+                                       }}
+                                       className="w-2/5 col-span-12"
+                            />
+                        </div>
 
-                    <div className="grid grid-cols-12 gap-y-5 mt-10">
-                        <div className="col-span-12 text-2xl font-bold">Cài đặt khuyến mãi</div>
-                        <FormGroup>
-                            <FormControlLabel control={<Switch onChange={() => setIsPromoted(!isPromoted)}/>}
-                                              label="Khuyến mãi"/>
-                        </FormGroup>
-                        {isPromoted && <div>
-                            {promotionPlans.map(plan => {
+                        <div className="grid grid-cols-12 gap-y-5 mt-10">
+                            <div className="col-span-12 text-2xl font-bold">Cài đặt khuyến mãi</div>
+                            <FormGroup>
+                                <FormControlLabel control={<Switch onChange={() => setIsPromoted(!isPromoted)}/>}
+                                                  label="Khuyến mãi"/>
+                            </FormGroup>
+                            {isPromoted && <div>
+                                {promotionPlans.map(plan => {
+                                    return (
+                                        <div key={plan.id}>
+                                            {plan.name}
+                                        </div>
+                                    )
+                                })}
+                            </div>}
+                        </div>
+
+                        <div className="flex flex-col gap-y-10 mt-10">
+                            <div className="col-span-12 text-2xl font-bold">Cài đặt số lượng bán</div>
+                            <div className="grid grid-cols-12 gap-y-5">
+                                <Typography className="col-span-3 justify-self-center" component={'span'}>
+                                    Mốc bán
+                                </Typography>
+                                <Typography className="col-start-6 col-span-3 justify-self-center" component={'span'}>
+                                    Giá bán
+                                </Typography>
+                                <div className="col-span-4"/>
+                                <TextField className="col-span-3"
+                                           value={0}
+                                           disabled/>
+                                <TextField className="col-start-6 col-span-3"
+                                           value={NumberFormat(campaign.mileStones[0].price)}
+                                           disabled/>
+
+                            </div>
+                            {inputList.map((input, index) => {
                                 return (
-                                    <div key={plan.id}>
-                                        {plan.name}
+                                    <div key={index} className="grid grid-cols-12">
+                                        <TextField className="col-span-3"
+                                                   value={(input.requiredSaleQuantity !== undefined
+                                                       && NumberFormat(input.requiredSaleQuantity)) || ""}
+                                                   onKeyPress={event => {
+                                                       const regex = /\d/
+                                                       if (!regex.test(event.key)) {
+                                                           event.preventDefault();
+                                                       }
+                                                   }}
+                                                   error={error.errorLabel === "requiredSaleQuantity"
+                                                       && index === error.optionalId}
+                                                   helperText={error.errorLabel === "requiredSaleQuantity"
+                                                   && index === error.optionalId ? error.errorContent : ""}
+                                                   onChange={(e) => {
+                                                       let newValue = e.target.value;
+                                                       if (newValue !== "") {
+                                                           input.requiredSaleQuantity = parseInt((newValue as string).replace(/,/g, ''));
+                                                       } else {
+                                                           input.requiredSaleQuantity = undefined;
+                                                       }
+                                                       setInputList([...inputList])
+                                                   }}/>
+                                        <TextField className="col-start-6 col-span-3"
+                                                   onKeyPress={event => {
+                                                       const regex = /\d/
+                                                       if (!regex.test(event.key)) {
+                                                           event.preventDefault();
+                                                       }
+                                                   }}
+                                                   error={error.errorLabel === "price" && index === error.optionalId}
+                                                   helperText={error.errorLabel === "price"
+                                                   && index === error.optionalId ? error.errorContent : ""}
+                                                   value={(input.price !== undefined && NumberFormat(input.price)) || ''}
+                                                   InputProps={{
+                                                       endAdornment: <InputAdornment position="end">đ</InputAdornment>,
+                                                   }}
+                                                   onChange={(e) => {
+                                                       let newValue = e.target.value;
+                                                       if (newValue !== "") {
+                                                           input.price = parseInt((newValue as string).replace(/,/g, ''));
+                                                       } else {
+                                                           input.price = undefined;
+                                                       }
+                                                       setInputList([...inputList])
+                                                   }}/>
+                                        {(index + 1 === inputList.length)
+                                            && (index + 1 >= parseInt(process.env.MIN_MILESTONE as string))
+                                            &&
+                                            <Button
+                                                size="small"
+                                                sx={{
+                                                    ml: 1,
+                                                    "&.MuiButtonBase-root:hover": {
+                                                        bgcolor: "transparent"
+                                                    }
+                                                }}
+                                                onClick={() => {
+                                                    setInputList(inputList
+                                                        .filter((_, i) => i + 1 !== inputList.length))
+                                                }
+                                                }>
+
+                                                <DeleteForeverIcon fontSize="large"
+                                                                   className="text-red-600"/>
+
+                                            </Button>}
                                     </div>
                                 )
                             })}
-                        </div>}
-                    </div>
-
-                    <div className="flex flex-col gap-y-10 mt-10">
-                        <div className="col-span-12 text-2xl font-bold">Cài đặt số lượng bán</div>
-                        <div className="grid grid-cols-12 gap-y-5">
-                            <Typography className="col-span-3 justify-self-center" component={'span'}>
-                                Mốc bán
-                            </Typography>
-                            <Typography className="col-start-6 col-span-3 justify-self-center" component={'span'}>
-                                Giá bán
-                            </Typography>
-                            <div className="col-span-4"/>
-                            <TextField className="col-span-3"
-                                       value={0}
-                                       disabled/>
-                            <TextField className="col-start-6 col-span-3"
-                                       value={NumberFormat(campaign.mileStones[0].price)}
-                                       disabled/>
-
-                        </div>
-                        {inputList.map((input, index) => {
-                            return (
-                                <div key={index} className="grid grid-cols-12">
-                                    <TextField className="col-span-3"
-                                               value={(input.requiredSaleQuantity !== undefined
-                                                   && NumberFormat(input.requiredSaleQuantity)) || ""}
-                                               onKeyPress={event => {
-                                                   const regex = /\d/
-                                                   if (!regex.test(event.key)) {
-                                                       event.preventDefault();
-                                                   }
-                                               }}
-                                               error={error.errorLabel === "requiredSaleQuantity"
-                                                   && index === error.optionalId}
-                                               helperText={error.errorLabel === "requiredSaleQuantity"
-                                               && index === error.optionalId ? error.errorContent : ""}
-                                               onChange={(e) => {
-                                                   let newValue = e.target.value;
-                                                   if (newValue !== "") {
-                                                       input.requiredSaleQuantity = parseInt((newValue as string).replace(/,/g, ''));
-                                                   } else {
-                                                       input.requiredSaleQuantity = undefined;
-                                                   }
-                                                   setInputList([...inputList])
-                                               }}/>
-                                    <TextField className="col-start-6 col-span-3"
-                                               onKeyPress={event => {
-                                                   const regex = /\d/
-                                                   if (!regex.test(event.key)) {
-                                                       event.preventDefault();
-                                                   }
-                                               }}
-                                               error={error.errorLabel === "price" && index === error.optionalId}
-                                               helperText={error.errorLabel === "price"
-                                               && index === error.optionalId ? error.errorContent : ""}
-                                               value={(input.price !== undefined && NumberFormat(input.price)) || ''}
-                                               InputProps={{
-                                                   endAdornment: <InputAdornment position="end">đ</InputAdornment>,
-                                               }}
-                                               onChange={(e) => {
-                                                   let newValue = e.target.value;
-                                                   if (newValue !== "") {
-                                                       input.price = parseInt((newValue as string).replace(/,/g, ''));
-                                                   } else {
-                                                       input.price = undefined;
-                                                   }
-                                                   setInputList([...inputList])
-                                               }}/>
-                                    {(index + 1 === inputList.length)
-                                    && (index + 1 >= parseInt(process.env.MIN_MILESTONE as string))
-                                    &&
-                                    <Button
-                                        size="small"
-                                        sx={{
-                                            ml: 1,
-                                            "&.MuiButtonBase-root:hover": {
-                                                bgcolor: "transparent"
-                                            }
-                                        }}
-                                        onClick={() => {
-                                            setInputList(inputList
-                                                .filter((_, i) => i + 1 !== inputList.length))
-                                        }
-                                        }>
-
-                                        <DeleteForeverIcon fontSize="large"
-                                                           className="text-red-600"/>
-
-                                    </Button>}
-                                </div>
-                            )
-                        })}
-                        <div className="grid grid-cols-12">
-                            {(inputList.length + 1 < parseInt(process.env.MAX_MILESTONE as string)) &&
-                            <Button className="text-red-500 text-xl col-span-8"
-                                    variant="text"
-                                    startIcon={<AddIcon/>}
-                                    onClick={() => {
-                                        let newInput = {}
-                                        setInputList(inputList => [...inputList, newInput])
-                                    }}>
-                                Thêm mốc
-                            </Button>
-                            }
-                        </div>
-                    </div>
-
-                    <div>
-                        <LocalizationProvider dateAdapter={DateAdapter}>
-                            <div className="grid grid-cols-12 gap-y-10 mt-10">
-                                <div className="col-span-12 text-2xl font-bold">Cài đặt thời gian bán</div>
-                                <DateTimePicker
-                                    label="Ngày bắt đầu"
-                                    value={startDate}
-                                    inputFormat="dd/MM/yyyy HH:mm"
-                                    onChange={handleStartDate}
-                                    renderInput={(params) =>
-                                        <TextField className="col-span-3" {...params}
-                                                   onCut={(e) => e.preventDefault()}
-                                                   onPaste={(e) => e.preventDefault()}
-                                                   onKeyDown={(e) => e.preventDefault()}
-                                                   onDrop={(e) => e.preventDefault()}
-                                        />}
-                                />
-                                <DateTimePicker
-                                    label="Ngày kết thúc"
-                                    value={endDate}
-                                    inputFormat="dd/MM/yyyy HH:mm"
-                                    onChange={handleEndDate}
-                                    renderInput={(params) =>
-                                        <TextField onKeyDown={(e) => e.preventDefault()}
-                                                   onPaste={(e) => e.preventDefault()}
-                                                   onCut={(e) => e.preventDefault()}
-                                                   onDrop={(e) => e.preventDefault()}
-                                                   className="col-span-3 col-start-6" {...params} />}
-                                />
+                            <div className="grid grid-cols-12">
+                                {(inputList.length + 1 < parseInt(process.env.MAX_MILESTONE as string)) &&
+                                    <Button className="text-red-500 text-xl col-span-8"
+                                            variant="text"
+                                            startIcon={<AddIcon/>}
+                                            onClick={() => {
+                                                let newInput = {}
+                                                setInputList(inputList => [...inputList, newInput])
+                                            }}>
+                                        Thêm mốc
+                                    </Button>
+                                }
                             </div>
-                        </LocalizationProvider>
+                        </div>
+
+                        <div>
+                            <LocalizationProvider dateAdapter={DateAdapter}>
+                                <div className="grid grid-cols-12 gap-y-10 mt-10">
+                                    <div className="col-span-12 text-2xl font-bold">Cài đặt thời gian bán</div>
+                                    <DateTimePicker
+                                        label="Ngày bắt đầu"
+                                        value={startDate}
+                                        inputFormat="dd/MM/yyyy HH:mm"
+                                        onChange={handleStartDate}
+                                        renderInput={(params) =>
+                                            <TextField className="col-span-3" {...params}
+                                                       error={error.errorLabel === "startDate"}
+                                                       helperText={error.errorLabel === "startDate"
+                                                           && error.errorContent}
+                                                       onCut={(e) => e.preventDefault()}
+                                                       onPaste={(e) => e.preventDefault()}
+                                                       onKeyDown={(e) => e.preventDefault()}
+                                                       onDrop={(e) => e.preventDefault()}
+                                            />}
+                                    />
+                                    <DateTimePicker
+                                        label="Ngày kết thúc"
+                                        value={endDate}
+                                        inputFormat="dd/MM/yyyy HH:mm"
+                                        onChange={handleEndDate}
+                                        renderInput={(params) =>
+                                            <TextField className="col-span-3 col-start-6" {...params}
+                                                       error={error.errorLabel === "endDate"}
+                                                       helperText={error.errorLabel === "endDate"
+                                                           && error.errorContent}
+                                                       onKeyDown={(e) => e.preventDefault()}
+                                                       onPaste={(e) => e.preventDefault()}
+                                                       onCut={(e) => e.preventDefault()}
+                                                       onDrop={(e) => e.preventDefault()}
+                                            />}
+                                    />
+                                </div>
+                            </LocalizationProvider>
+                        </div>
+                        <div className="flex justify-end gap-x-5 mt-10">
+                            <Button className="w-1/6 bg-red-600 hover:bg-red-500 text-white"
+                                    disabled={loading}
+                                    onClick={handleSubmit}>
+                                {
+                                    loading
+                                        ? <CircularProgress size={30} className="text-white"/>
+                                        : <span className="text-xl">Thay đổi</span>
+                                }
+                            </Button>
+                            <Button className="w-1/6 bg-gray-500 hover:bg-gray-400 text-white text-xl"
+                                    disabled={loading}
+                                    onClick={() => {
+                                        if (!loading) {
+                                            router.push(`${APP_PATH.SELLER.CAMPAIGN}/${id}`)
+                                        }
+                                    }}>
+                                Hủy
+                            </Button>
+                        </div>
                     </div>
-                    <div className="flex justify-end gap-x-5 mt-10">
-                        <Button className="w-1/6 bg-red-600 hover:bg-red-500 text-white"
-                                disabled={loading}
-                                onClick={handleSubmit}>
-                            {
-                                loading
-                                    ? <CircularProgress size={30} className="text-white"/>
-                                    : <span className="text-xl">Thay đổi</span>
-                            }
-                        </Button>
-                        <Button className="w-1/6 bg-gray-500 hover:bg-gray-400 text-white text-xl"
-                                disabled={loading}
-                                onClick={() => {
-                                    if (!loading) {
-                                        router.push(`${APP_PATH.SELLER.CAMPAIGN}/${id}`)
-                                    }
-                                }}>
-                            Hủy
-                        </Button>
-                    </div>
-                </div>
-            </div>}
+                </div>}
         </div>
     );
 };
